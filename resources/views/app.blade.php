@@ -9,15 +9,22 @@
 
         <!-- Fonts -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
-
+        <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet" type="text/css">
+        <link href="https://unpkg.com/primevue/resources/themes/saga-blue/theme.css" rel="stylesheet">
+        <link href="https://unpkg.com/primevue/resources/primevue.min.css" rel="stylesheet">
+        <link href="https://unpkg.com/primeicons/primeicons.css" rel="stylesheet">
         <!-- Styles -->
         <link rel="stylesheet" href="{{ asset(mix('css/app.css')) }}">
 
-        <!-- Scripts -->
-        @routes
-        <script src="{{ asset(mix('js/app.js')) }}" defer></script>
     </head>
     <body class="font-sans antialiased">
+
+    <!-- Scripts -->
+    @routes
+    <script src="{{ asset(mix('js/app.js')) }}" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js" defer></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/quasar@2.0.0-beta.12/dist/quasar.umd.prod.js" defer></script>
         @inertia
     </body>
 </html>

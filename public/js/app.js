@@ -18419,6 +18419,97 @@ __webpack_require__.r(__webpack_exports__);
     canRegister: Boolean,
     laravelVersion: String,
     phpVersion: String
+  },
+  data: function data() {
+    return {
+      items: [{
+        label: 'File',
+        icon: 'pi pi-fw pi-file',
+        items: [{
+          label: 'New',
+          icon: 'pi pi-fw pi-plus',
+          items: [{
+            label: 'Bookmark',
+            icon: 'pi pi-fw pi-bookmark'
+          }, {
+            label: 'Video',
+            icon: 'pi pi-fw pi-video'
+          }]
+        }, {
+          label: 'Delete',
+          icon: 'pi pi-fw pi-trash'
+        }, {
+          separator: true
+        }, {
+          label: 'Export',
+          icon: 'pi pi-fw pi-external-link'
+        }]
+      }, {
+        label: 'Edit',
+        icon: 'pi pi-fw pi-pencil',
+        items: [{
+          label: 'Left',
+          icon: 'pi pi-fw pi-align-left'
+        }, {
+          label: 'Right',
+          icon: 'pi pi-fw pi-align-right'
+        }, {
+          label: 'Center',
+          icon: 'pi pi-fw pi-align-center'
+        }, {
+          label: 'Justify',
+          icon: 'pi pi-fw pi-align-justify'
+        }]
+      }, {
+        label: 'Users',
+        icon: 'pi pi-fw pi-user',
+        items: [{
+          label: 'New',
+          icon: 'pi pi-fw pi-user-plus'
+        }, {
+          label: 'Delete',
+          icon: 'pi pi-fw pi-user-minus'
+        }, {
+          label: 'Search',
+          icon: 'pi pi-fw pi-users',
+          items: [{
+            label: 'Filter',
+            icon: 'pi pi-fw pi-filter',
+            items: [{
+              label: 'Print',
+              icon: 'pi pi-fw pi-print'
+            }]
+          }, {
+            icon: 'pi pi-fw pi-bars',
+            label: 'List'
+          }]
+        }]
+      }, {
+        label: 'Events',
+        icon: 'pi pi-fw pi-calendar',
+        items: [{
+          label: 'Edit',
+          icon: 'pi pi-fw pi-pencil',
+          items: [{
+            label: 'Save',
+            icon: 'pi pi-fw pi-calendar-plus'
+          }, {
+            label: 'Delete',
+            icon: 'pi pi-fw pi-calendar-minus'
+          }]
+        }, {
+          label: 'Archieve',
+          icon: 'pi pi-fw pi-calendar-times',
+          items: [{
+            label: 'Remove',
+            icon: 'pi pi-fw pi-calendar-minus'
+          }]
+        }]
+      }, {
+        label: 'Quit',
+        icon: 'pi pi-fw pi-power-off'
+      }]
+    };
   }
 });
 
@@ -23059,9 +23150,19 @@ var _hoisted_11 = {
 (0,vue__WEBPACK_IMPORTED_MODULE_0__.popScopeId)();
 
 var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data, $options) {
+  var _component_Button = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Button");
+
+  var _component_Menubar = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Menubar");
+
   var _component_inertia_link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("inertia-link");
 
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_1, [$props.canLogin ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_2, [_ctx.$page.props.user ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_inertia_link, {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Button, {
+    label: "Submit"
+  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Menubar, {
+    model: $data.items
+  }, null, 8
+  /* PROPS */
+  , ["model"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_1, [$props.canLogin ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_2, [_ctx.$page.props.user ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_inertia_link, {
     key: 0,
     href: "/dashboard",
     "class": "text-sm text-gray-700 underline"
@@ -23103,7 +23204,9 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
   /* STABLE_FRAGMENT */
   ))])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_6, [_hoisted_7, _hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_9, [_hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_11, " Laravel v" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.laravelVersion) + " (PHP v" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.phpVersion) + ") ", 1
   /* TEXT */
-  )])])]);
+  )])])])], 64
+  /* STABLE_FRAGMENT */
+  );
 });
 
 /***/ }),
@@ -23119,11 +23222,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 /* harmony import */ var _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @inertiajs/inertia-vue3 */ "./node_modules/@inertiajs/inertia-vue3/dist/index.js");
 /* harmony import */ var _inertiajs_progress__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @inertiajs/progress */ "./node_modules/@inertiajs/progress/dist/index.js");
+/* harmony import */ var primevue_config__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! primevue/config */ "./node_modules/primevue/config/config.esm.js");
+/* harmony import */ var primevue_button__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! primevue/button */ "./node_modules/primevue/button/button.esm.js");
+/* harmony import */ var primevue_menubar__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! primevue/menubar */ "./node_modules/primevue/menubar/menubar.esm.js");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js"); // Import modules...
 
 
 
 
+
+
+
+ //import Quasar from 'quasar/dist/quasar.umd.prod.js';
 
 var el = document.getElementById('app');
 (0,vue__WEBPACK_IMPORTED_MODULE_0__.createApp)({
@@ -23139,7 +23249,7 @@ var el = document.getElementById('app');
   methods: {
     route: route
   }
-}).use(_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.plugin).mount(el);
+}).use(_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.plugin).use(primevue_config__WEBPACK_IMPORTED_MODULE_3__.default).component('Menubar', primevue_menubar__WEBPACK_IMPORTED_MODULE_5__.default).component('Button', primevue_button__WEBPACK_IMPORTED_MODULE_4__.default).mount(el);
 _inertiajs_progress__WEBPACK_IMPORTED_MODULE_2__.InertiaProgress.init({
   color: '#4B5563'
 });
@@ -43947,6 +44057,2097 @@ function arrObjKeys(obj, inspect) {
     }
     return xs;
 }
+
+
+/***/ }),
+
+/***/ "./node_modules/primevue/api/api.esm.js":
+/*!**********************************************!*\
+  !*** ./node_modules/primevue/api/api.esm.js ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "FilterMatchMode": () => (/* binding */ FilterMatchMode),
+/* harmony export */   "FilterOperator": () => (/* binding */ FilterOperator),
+/* harmony export */   "FilterService": () => (/* binding */ FilterService),
+/* harmony export */   "PrimeIcons": () => (/* binding */ PrimeIcons)
+/* harmony export */ });
+/* harmony import */ var primevue_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! primevue/utils */ "./node_modules/primevue/utils/utils.esm.js");
+
+
+const FilterMatchMode = {
+    STARTS_WITH : 'startsWith',
+    CONTAINS : 'contains',
+    NOT_CONTAINS : 'notContains',
+    ENDS_WITH : 'endsWith',
+    EQUALS : 'equals',
+    NOT_EQUALS : 'notEquals',
+    IN : 'in',
+    LESS_THAN : 'lt',
+    LESS_THAN_OR_EQUAL_TO : 'lte',
+    GREATER_THAN : 'gt',
+    GREATER_THAN_OR_EQUAL_TO : 'gte',
+    BETWEEN : 'between',
+    DATE_IS : 'dateIs',
+    DATE_IS_NOT : 'dateIsNot',
+    DATE_BEFORE : 'dateBefore',
+    DATE_AFTER : 'dateAfter'
+};
+
+const FilterOperator = {
+    AND: 'and',
+    OR: 'or'
+};
+
+const FilterService = {
+    filter(value, fields, filterValue, filterMatchMode, filterLocale) {
+        let filteredItems = [];
+
+        if (value) {
+            for (let item of value) {
+                for (let field of fields) {
+                    let fieldValue = primevue_utils__WEBPACK_IMPORTED_MODULE_0__.ObjectUtils.resolveFieldData(item, field);
+
+                    if (this.filters[filterMatchMode](fieldValue, filterValue, filterLocale)) {
+                        filteredItems.push(item);
+                        break;
+                    }
+                }
+            }
+        }
+
+        return filteredItems;
+    },
+    filters: {
+        startsWith(value, filter, filterLocale)  {
+            if (filter === undefined || filter === null || filter.trim() === '') {
+                return true;
+            }
+    
+            if (value === undefined || value === null) {
+                return false;
+            }
+    
+            let filterValue = primevue_utils__WEBPACK_IMPORTED_MODULE_0__.ObjectUtils.removeAccents(filter.toString()).toLocaleLowerCase(filterLocale);
+            let stringValue = primevue_utils__WEBPACK_IMPORTED_MODULE_0__.ObjectUtils.removeAccents(value.toString()).toLocaleLowerCase(filterLocale);
+    
+            return stringValue.slice(0, filterValue.length) === filterValue;
+        },
+        contains(value, filter, filterLocale) {
+            if (filter === undefined || filter === null || (typeof filter === 'string' && filter.trim() === '')) {
+                return true;
+            }
+    
+            if (value === undefined || value === null) {
+                return false;
+            }
+    
+            let filterValue = primevue_utils__WEBPACK_IMPORTED_MODULE_0__.ObjectUtils.removeAccents(filter.toString()).toLocaleLowerCase(filterLocale);
+            let stringValue = primevue_utils__WEBPACK_IMPORTED_MODULE_0__.ObjectUtils.removeAccents(value.toString()).toLocaleLowerCase(filterLocale);
+    
+            return stringValue.indexOf(filterValue) !== -1;
+        },
+        notContains(value, filter, filterLocale) {
+            if (filter === undefined || filter === null || (typeof filter === 'string' && filter.trim() === '')) {
+                return true;
+            }
+    
+            if (value === undefined || value === null) {
+                return false;
+            }
+    
+            let filterValue = primevue_utils__WEBPACK_IMPORTED_MODULE_0__.ObjectUtils.removeAccents(filter.toString()).toLocaleLowerCase(filterLocale);
+            let stringValue = primevue_utils__WEBPACK_IMPORTED_MODULE_0__.ObjectUtils.removeAccents(value.toString()).toLocaleLowerCase(filterLocale);
+    
+            return stringValue.indexOf(filterValue) === -1;
+        },
+        endsWith(value, filter, filterLocale) {
+            if (filter === undefined || filter === null || filter.trim() === '') {
+                return true;
+            }
+    
+            if (value === undefined || value === null) {
+                return false;
+            }
+    
+            let filterValue = primevue_utils__WEBPACK_IMPORTED_MODULE_0__.ObjectUtils.removeAccents(filter.toString()).toLocaleLowerCase(filterLocale);
+            let stringValue = primevue_utils__WEBPACK_IMPORTED_MODULE_0__.ObjectUtils.removeAccents(value.toString()).toLocaleLowerCase(filterLocale);
+    
+            return stringValue.indexOf(filterValue, stringValue.length - filterValue.length) !== -1;
+        },
+        equals(value, filter, filterLocale) {
+            if (filter === undefined || filter === null || (typeof filter === 'string' && filter.trim() === '')) {
+                return true;
+            }
+    
+            if (value === undefined || value === null) {
+                return false;
+            }
+    
+            if (value.getTime && filter.getTime)
+                return value.getTime() === filter.getTime();
+            else
+                return primevue_utils__WEBPACK_IMPORTED_MODULE_0__.ObjectUtils.removeAccents(value.toString()).toLocaleLowerCase(filterLocale) == primevue_utils__WEBPACK_IMPORTED_MODULE_0__.ObjectUtils.removeAccents(filter.toString()).toLocaleLowerCase(filterLocale);
+        },
+        notEquals(value, filter, filterLocale) {
+            if (filter === undefined || filter === null || (typeof filter === 'string' && filter.trim() === '')) {
+                return false;
+            }
+    
+            if (value === undefined || value === null) {
+                return true;
+            }
+    
+            if (value.getTime && filter.getTime)
+                return value.getTime() !== filter.getTime();
+            else
+                return primevue_utils__WEBPACK_IMPORTED_MODULE_0__.ObjectUtils.removeAccents(value.toString()).toLocaleLowerCase(filterLocale) != primevue_utils__WEBPACK_IMPORTED_MODULE_0__.ObjectUtils.removeAccents(filter.toString()).toLocaleLowerCase(filterLocale);
+        },
+        in(value, filter) {
+            if (filter === undefined || filter === null || filter.length === 0) {
+                return true;
+            }
+    
+            for (let i = 0; i < filter.length; i++) {
+                if (primevue_utils__WEBPACK_IMPORTED_MODULE_0__.ObjectUtils.equals(value, filter[i])) {
+                    return true;
+                }
+            }
+    
+            return false;
+        },
+        between(value, filter) {
+            if (filter == null || filter[0] == null || filter[1] == null) {
+                return true;
+            }
+    
+            if (value === undefined || value === null) {
+                return false;
+            }
+    
+            if (value.getTime)
+            return filter[0].getTime() <= value.getTime() && value.getTime() <= filter[1].getTime();
+            else
+                return filter[0] <= value && value <= filter[1];
+        },
+        lt(value, filter) {
+            if (filter === undefined || filter === null) {
+                return true;
+            }
+    
+            if (value === undefined || value === null) {
+                return false;
+            }
+    
+            if (value.getTime && filter.getTime)
+                return value.getTime() < filter.getTime();
+            else
+                return value < filter;
+        },
+        lte(value, filter) {
+            if (filter === undefined || filter === null) {
+                return true;
+            }
+    
+            if (value === undefined || value === null) {
+                return false;
+            }
+    
+            if (value.getTime && filter.getTime)
+                return value.getTime() <= filter.getTime();
+            else
+                return value <= filter;
+        },
+        gt(value, filter) {
+            if (filter === undefined || filter === null) {
+                return true;
+            }
+    
+            if (value === undefined || value === null) {
+                return false;
+            }
+    
+            if (value.getTime && filter.getTime)
+                return value.getTime() > filter.getTime();
+            else
+                return value > filter;
+        },
+        gte(value, filter) {
+            if (filter === undefined || filter === null) {
+                return true;
+            }
+    
+            if (value === undefined || value === null) {
+                return false;
+            }
+    
+            if (value.getTime && filter.getTime)
+                return value.getTime() >= filter.getTime();
+            else
+                return value >= filter;
+        },
+        dateIs(value, filter) {
+            if (filter === undefined || filter === null) {
+                return true;
+            }
+    
+            if (value === undefined || value === null) {
+                return false;
+            }
+
+            return value.toDateString() === filter.toDateString();
+        },
+        dateIsNot(value, filter) {
+            if (filter === undefined || filter === null) {
+                return true;
+            }
+    
+            if (value === undefined || value === null) {
+                return false;
+            }
+
+            return value.toDateString() !== filter.toDateString();
+        },
+        dateBefore(value, filter) {
+            if (filter === undefined || filter === null) {
+                return true;
+            }
+    
+            if (value === undefined || value === null) {
+                return false;
+            }
+
+            return value.getTime() < filter.getTime();
+        },
+        dateAfter(value, filter) {
+            if (filter === undefined || filter === null) {
+                return true;
+            }
+    
+            if (value === undefined || value === null) {
+                return false;
+            }
+
+            return value.getTime() > filter.getTime();
+        }
+    },
+    register(rule, fn) {
+        this.filters[rule] = fn;
+    }
+};
+
+const PrimeIcons = {
+    ALIGN_CENTER:'pi pi-align-center',
+    ALIGN_JUSTIFY:'pi pi-align-justify',
+    ALIGN_LEFT:'pi pi-align-left',
+    ALIGN_RIGHT:'pi pi-align-right',
+    AMAZON:'pi pi-amazon',
+    ANDROID:'pi pi-android',
+    ANGLE_DOUBLE_DOWN:'pi pi-angle-double-down',
+    ANGLE_DOUBLE_LEFT:'pi pi-angle-double-left',
+    ANGLE_DOUBLE_RIGHT:'pi pi-angle-double-right',
+    ANGLE_DOUBLE_UP:'pi pi-angle-double-up',
+    ANGLE_DOWN:'pi pi-angle-down',
+    ANGLE_LEFT:'pi pi-angle-left',
+    ANGLE_RIGHT:'pi pi-angle-right',
+    ANGLE_UP:'pi pi-angle-up',
+    APPLE:'pi pi-apple',
+    ARROW_CIRCLE_DOWN:'pi pi-arrow-circle-down',
+    ARROW_CIRCLE_LEFT:'pi pi-arrow-circle-left',
+    ARROW_CIRCLE_RIGHT:'pi pi-arrow-circle-right',
+    ARROW_CIRCLE_UP:'pi pi-arrow-circle-up',
+    ARROW_DOWN:'pi pi-arrow-down',
+    ARROW_LEFT:'pi pi-arrow-left',
+    ARROW_RIGHT:'pi pi-arrow-right',
+    ARROW_UP:'pi pi-arrow-up',
+    BACKWARD:'pi pi-backward',
+    BAN:'pi pi-ban',
+    BARS:'pi pi-bars',
+    BELL:'pi pi-bell',
+    BOOK:'pi pi-book',
+    BOOKMARK:'pi pi-bookmark',
+    BRIEFCASE:'pi pi-briefcase',
+    CALENDAR_MINUS:'pi pi-calendar-minus',
+    CALENDAR_PLUS:'pi pi-calendar-plus',
+    CALENDAR_TIMES:'pi pi-calendar-times',
+    CALENDAR:'pi pi-calendar',
+    CAMERA:'pi pi-camera',
+    CARET_DOWN:'pi pi-caret-down',
+    CARET_LEFT:'pi pi-caret-left',
+    CARET_RIGHT:'pi pi-caret-right',
+    CARET_UP:'pi pi-caret-up',
+    CHART_BAR:'pi pi-chart-bar',
+    CHART_LINE:'pi pi-chart-line',
+    CHECK_CIRCLE:'pi pi-check-circle',
+    CHECK_SQUARE:'pi pi-check-square',
+    CHECK:'pi pi-check',
+    CHEVRON_CIRCLE_DOWN:'pi pi-chevron-circle-down',
+    CHEVRON_CIRCLE_LEFT:'pi pi-chevron-circle-left',
+    CHEVRON_CIRCLE_RIGHT:'pi pi-chevron-circle-right',
+    CHEVRON_CIRCLE_UP:'pi pi-chevron-circle-up',
+    CHEVRON_DOWN:'pi pi-chevron-down',
+    CHEVRON_LEFT:'pi pi-chevron-left',
+    CHEVRON_RIGHT:'pi pi-chevron-right',
+    CHEVRON_UP:'pi pi-chevron-up',
+    CLOCK:'pi pi-clock',
+    CLONE:'pi pi-clone',
+    CLOUD_DOWNLOAD:'pi pi-cloud-download',
+    CLOUD_UPLOAD:'pi pi-cloud-upload',
+    CLOUD:'pi pi-cloud',
+    COG:'pi pi-cog',
+    COMMENT:'pi pi-comment',
+    COMMENTS:'pi pi-comments',
+    COMPASS:'pi pi-compass',
+    COPY:'pi pi-copy',
+    CREDIT_CARD:'pi pi-credit-card',
+    DESKTOP:'pi pi-desktop',
+    DISCORD:'pi pi-discord',
+    DIRECTIONS_ALT:'pi pi-directions-alt',
+    DIRECTIONS:'pi pi-directions',
+    DOLLAR:'pi pi-dollar',
+    DOWNLOAD:'pi pi-download',
+    EJECT:'pi pi-eject',
+    ELLIPSIS_H:'pi pi-ellipsis-h',
+    ELLIPSIS_V:'pi pi-ellipsis-v',
+    ENVELOPE:'pi pi-envelope',
+    EXCLAMATION_CIRCLE:'pi pi-exclamation-circle',
+    EXCLAMATION_TRIANGLE :'pi pi-exclamation-triangle ',
+    EXTERNAL_LINK:'pi pi-external-link',
+    EYE_SLASH:'pi pi-eye-slash',
+    EYE:'pi pi-eye',
+    FACEBOOK:'pi pi-facebook',
+    FAST_BACKWARD:'pi pi-fast-backward',
+    FAST_FORWARD:'pi pi-fast-forward',
+    FILE_EXCEL:'pi pi-file-excel',
+    FILE_O:'pi pi-file-o',
+    FILE_PDF:'pi pi-file-pdf',
+    FILE:'pi pi-file',
+    FILTER:'pi pi-filter',
+    FILTER_SLASH:'pi pi-filter-slash',
+    FLAG:'pi pi-flag',
+    FOLDER_OPEN:'pi pi-folder-open',
+    FOLDER:'pi pi-folder',
+    FORWARD:'pi pi-forward',
+    GITHUB:'pi pi-github',
+    GLOBE:'pi pi-globe',
+    GOOGLE:'pi pi-google',
+    HEART:'pi pi-heart',
+    HOME:'pi pi-home',
+    ID_CARD:'pi pi-id-card',
+    IMAGE:'pi pi-image',
+    IMAGES:'pi pi-images',
+    INBOX:'pi pi-inbox',
+    INFO_CIRCLE:'pi pi-info-circle',
+    INFO:'pi pi-info',
+    KEY:'pi pi-key',
+    LINK:'pi pi-link',
+    LIST:'pi pi-list',
+    LOCK_OPEN:'pi pi-lock-open',
+    LOCK:'pi pi-lock',
+    MAP:'pi pi-map',
+    MAP_MARKER:'pi pi-map-marker',
+    MICROSOFT:'pi pi-microsoft',
+    MINUS_CIRCLE:'pi pi-minus-circle',
+    MINUS:'pi pi-minus',
+    MOBILE:'pi pi-mobile',
+    MONEY_BILL:'pi pi-money-bill',
+    MOON:'pi pi-moon',
+    PALETTE:'pi pi-palette',
+    PAPERCLIP:'pi pi-paperclip',
+    PAUSE:'pi pi-pause',
+    PAYPAL:'pi pi-paypal',
+    PENCIL:'pi pi-pencil',
+    PERCENTAGE:'pi pi-percentage',
+    PHONE:'pi pi-phone',
+    PLAY:'pi pi-play',
+    PLUS_CIRCLE:'pi pi-plus-circle',
+    PLUS:'pi pi-plus',
+    POWER_OFF:'pi pi-power-off',
+    PRINT:'pi pi-print',
+    QUESTION_CIRCLE:'pi pi-question-circle',
+    QUESTION:'pi pi-question',
+    RADIO_OFF:'pi pi-radio-off',
+    RADIO_ON:'pi pi-radio-on',
+    REFRESH:'pi pi-refresh',
+    REPLAY:'pi pi-replay',
+    REPLY:'pi pi-reply',
+    SAVE:'pi pi-save',
+    SEARCH_MINUS:'pi pi-search-minus',
+    SEARCH_PLUS:'pi pi-search-plus',
+    SEARCH:'pi pi-search',
+    SEND:'pi pi-send',
+    SHARE_ALT:'pi pi-share-alt',
+    SHIELD:'pi pi-shield',
+    SHOPPING_CART:'pi pi-shopping-cart',
+    SIGN_IN:'pi pi-sign-in',
+    SIGN_OUT:'pi pi-sign-out',
+    SITEMAP:'pi pi-sitemap',
+    SLACK:'pi pi-slack',
+    SLIDERS_H:'pi pi-sliders-h',
+    SLIDERS_V:'pi pi-sliders-v',
+    SORT_ALPHA_ALT_DOWN:'pi pi-sort-alpha-alt-down',
+    SORT_ALPHA_ALT_UP:'pi pi-sort-alpha-alt-up',
+    SORT_ALPHA_DOWN:'pi pi-sort-alpha-down',
+    SORT_ALPHA_UP:'pi pi-sort-alpha-up',
+    SORT_ALT:'pi pi-sort-alt',
+    SORT_AMOUNT_DOWN_ALT:'pi pi-sort-amount-down-alt',
+    SORT_AMOUNT_DOWN:'pi pi-sort-amount-down',
+    SORT_AMOUNT_UP_ALT:'pi pi-sort-amount-up-alt',
+    SORT_AMOUNT_UP:'pi pi-sort-amount-up',
+    SORT_DOWN:'pi pi-sort-down',
+    SORT_NUMERIC_ALT_DOWN:'pi pi-sort-numeric-alt-down',
+    SORT_NUMERIC_ALT_UP:'pi pi-sort-numeric-alt-up',
+    SORT_NUMERIC_DOWN:'pi pi-sort-numeric-down',
+    SORT_NUMERIC_UP:'pi pi-sort-numeric-up',
+    SORT_UP:'pi pi-sort-up',
+    SORT:'pi pi-sort',
+    SPINNER:'pi pi-spinner',
+    STAR_O:'pi pi-star-o',
+    STAR:'pi pi-star',
+    STEP_BACKWARD_ALT:'pi pi-step-backward-alt',
+    STEP_BACKWARD:'pi pi-step-backward',
+    STEP_FORWARD_ALT:'pi pi-step-forward-alt',
+    STEP_FORWARD:'pi pi-step-forward',
+    SUN:'pi pi-sun',
+    TABLE:'pi pi-table',
+    TABLET:'pi pi-tablet',
+    TAG:'pi pi-tag',
+    TAGS:'pi pi-tags',
+    TH_LARGE:'pi pi-th-large',
+    THUMBS_DOWN:'pi pi-thumbs-down',
+    THUMBS_UP:'pi pi-thumbs-up',
+    TICKET:'pi pi-ticket',
+    TIMES_CIRCLE:'pi pi-times-circle',
+    TIMES:'pi pi-times',
+    TRASH:'pi pi-trash',
+    TWITTER:'pi pi-twitter',
+    UNDO:'pi pi-undo',
+    UNLOCK:'pi pi-unlock',
+    UPLOAD:'pi pi-upload',
+    USER_EDIT:'pi pi-user-edit',
+    USER_MINUS:'pi pi-user-minus',
+    USER_PLUS:'pi pi-user-plus',
+    USER:'pi pi-user',
+    USERS:'pi pi-users',
+    VIDEO:'pi pi-video',
+    VIMEO:'pi pi-vimeo',
+    VOLUME_DOWN:'pi pi-volume-down',
+    VOLUME_OFF:'pi pi-volume-off',
+    VOLUME_UP:'pi pi-volume-up',
+    YOUTUBE:'pi pi-youtube',
+    WALLET:'pi pi-wallet',
+    WIFI:'pi pi-wifi',
+    WINDOW_MAXIMIZE:'pi pi-window-maximize',
+    WINDOW_MINIMIZE:'pi pi-window-minimize'
+};
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/primevue/button/button.esm.js":
+/*!****************************************************!*\
+  !*** ./node_modules/primevue/button/button.esm.js ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var primevue_ripple__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! primevue/ripple */ "./node_modules/primevue/ripple/ripple.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
+
+
+var script = {
+    props: {
+        label: {
+            type: String
+        },
+        icon: {
+            type: String
+        },
+        iconPos: {
+            type: String,
+            default: 'left'
+        },
+        badge: {
+            type: String
+        },
+        badgeClass: {
+            type: String,
+            default: null
+        }
+    },
+    computed: {
+        buttonClass() {
+            return {
+                'p-button p-component': true,
+                'p-button-icon-only': this.icon && !this.label,
+                'p-button-vertical': (this.iconPos === 'top' || this.iconPos === 'bottom') && this.label,
+                'p-disabled': this.$attrs.disabled
+            }
+        },
+        iconClass() {
+            return [
+                this.icon,
+                'p-button-icon',
+                {
+                    'p-button-icon-left': this.iconPos === 'left' && this.label,
+                    'p-button-icon-right': this.iconPos === 'right' && this.label,
+                    'p-button-icon-top': this.iconPos === 'top' && this.label,
+                    'p-button-icon-bottom': this.iconPos === 'bottom' && this.label
+                }
+            ]
+        },
+        badgeStyleClass() {
+            return [
+                'p-badge p-component', this.badgeClass, {
+                    'p-badge-no-gutter': this.badge && String(this.badge).length === 1
+            }]
+        }
+    },
+    directives: {
+        'ripple': primevue_ripple__WEBPACK_IMPORTED_MODULE_0__.default
+    }
+};
+
+const _hoisted_1 = { class: "p-button-label" };
+
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _directive_ripple = (0,vue__WEBPACK_IMPORTED_MODULE_1__.resolveDirective)("ripple");
+
+  return (0,vue__WEBPACK_IMPORTED_MODULE_1__.withDirectives)(((0,vue__WEBPACK_IMPORTED_MODULE_1__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_1__.createBlock)("button", {
+    class: $options.buttonClass,
+    type: "button"
+  }, [
+    (0,vue__WEBPACK_IMPORTED_MODULE_1__.renderSlot)(_ctx.$slots, "default", {}, () => [
+      ($props.icon)
+        ? ((0,vue__WEBPACK_IMPORTED_MODULE_1__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_1__.createBlock)("span", {
+            key: 0,
+            class: $options.iconClass
+          }, null, 2))
+        : (0,vue__WEBPACK_IMPORTED_MODULE_1__.createCommentVNode)("", true),
+      (0,vue__WEBPACK_IMPORTED_MODULE_1__.createVNode)("span", _hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_1__.toDisplayString)($props.label||' '), 1),
+      ($props.badge)
+        ? ((0,vue__WEBPACK_IMPORTED_MODULE_1__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_1__.createBlock)("span", {
+            key: 1,
+            class: $options.badgeStyleClass
+          }, (0,vue__WEBPACK_IMPORTED_MODULE_1__.toDisplayString)($props.badge), 3))
+        : (0,vue__WEBPACK_IMPORTED_MODULE_1__.createCommentVNode)("", true)
+    ])
+  ], 2)), [
+    [_directive_ripple]
+  ])
+}
+
+script.render = render;
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (script);
+
+
+/***/ }),
+
+/***/ "./node_modules/primevue/config/config.esm.js":
+/*!****************************************************!*\
+  !*** ./node_modules/primevue/config/config.esm.js ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   "usePrimeVue": () => (/* binding */ usePrimeVue)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var primevue_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! primevue/api */ "./node_modules/primevue/api/api.esm.js");
+
+
+
+const defaultOptions = {
+    ripple: false,
+    locale: {
+        startsWith: 'Starts with',
+        contains: 'Contains',
+        notContains: 'Not contains',
+        endsWith: 'Ends with',
+        equals: 'Equals',
+        notEquals: 'Not equals',
+        noFilter: 'No Filter',
+        lt: 'Less than',
+        lte: 'Less than or equal to',
+        gt: 'Greater than',
+        gte: 'Greater than or equal to',
+        dateIs: 'Date is',
+        dateIsNot: 'Date is not',
+        dateBefore: 'Date is before',
+        dateAfter: 'Date is after',
+        clear: 'Clear',
+        apply: 'Apply',
+        matchAll: 'Match All',
+        matchAny: 'Match Any',
+        addRule: 'Add Rule',
+        removeRule: 'Remove Rule',
+        accept: 'Yes',
+        reject: 'No',
+        choose: 'Choose',
+        upload: 'Upload',
+        cancel: 'Cancel',
+        dayNames: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        dayNamesShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+        dayNamesMin: ["Su","Mo","Tu","We","Th","Fr","Sa"],
+        monthNames: ["January","February","March","April","May","June","July","August","September","October","November","December"],
+        monthNamesShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun","Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        today: 'Today',
+        weekHeader: 'Wk',
+        firstDayOfWeek: 0,
+        dateFormat: 'mm/dd/yy',
+        weak: 'Weak',
+        medium: 'Medium',
+        strong: 'Strong',
+        passwordPrompt: 'Enter a password',
+        emptyFilterMessage: 'No results found',
+        emptyMessage: 'No available options'
+    },
+    filterMatchModeOptions: {
+        text: [
+            primevue_api__WEBPACK_IMPORTED_MODULE_1__.FilterMatchMode.STARTS_WITH,
+            primevue_api__WEBPACK_IMPORTED_MODULE_1__.FilterMatchMode.CONTAINS,
+            primevue_api__WEBPACK_IMPORTED_MODULE_1__.FilterMatchMode.NOT_CONTAINS,
+            primevue_api__WEBPACK_IMPORTED_MODULE_1__.FilterMatchMode.ENDS_WITH,
+            primevue_api__WEBPACK_IMPORTED_MODULE_1__.FilterMatchMode.EQUALS,
+            primevue_api__WEBPACK_IMPORTED_MODULE_1__.FilterMatchMode.NOT_EQUALS
+        ],
+        numeric: [
+            primevue_api__WEBPACK_IMPORTED_MODULE_1__.FilterMatchMode.EQUALS,
+            primevue_api__WEBPACK_IMPORTED_MODULE_1__.FilterMatchMode.NOT_EQUALS,
+            primevue_api__WEBPACK_IMPORTED_MODULE_1__.FilterMatchMode.LESS_THAN,
+            primevue_api__WEBPACK_IMPORTED_MODULE_1__.FilterMatchMode.LESS_THAN_OR_EQUAL_TO,
+            primevue_api__WEBPACK_IMPORTED_MODULE_1__.FilterMatchMode.GREATER_THAN,
+            primevue_api__WEBPACK_IMPORTED_MODULE_1__.FilterMatchMode.GREATER_THAN_OR_EQUAL_TO
+        ],
+        date: [
+            primevue_api__WEBPACK_IMPORTED_MODULE_1__.FilterMatchMode.DATE_IS,
+            primevue_api__WEBPACK_IMPORTED_MODULE_1__.FilterMatchMode.DATE_IS_NOT,
+            primevue_api__WEBPACK_IMPORTED_MODULE_1__.FilterMatchMode.DATE_BEFORE,
+            primevue_api__WEBPACK_IMPORTED_MODULE_1__.FilterMatchMode.DATE_AFTER
+        ]
+    }
+};
+
+const PrimeVueSymbol = Symbol();
+
+function usePrimeVue() {
+    const PrimeVue = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)(PrimeVueSymbol);
+    if (!PrimeVue) {
+        throw new Error('PrimeVue is not installed!');
+    } 
+    
+    return PrimeVue;
+}
+
+var PrimeVue = {
+    install: (app, options) => {
+        let configOptions = options ? {...defaultOptions, ...options} : {...defaultOptions};
+        const PrimeVue = {
+            config: (0,vue__WEBPACK_IMPORTED_MODULE_0__.reactive)(configOptions)
+        };
+        app.config.globalProperties.$primevue = PrimeVue;
+        app.provide(PrimeVueSymbol, PrimeVue);
+    }
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PrimeVue);
+
+
+
+/***/ }),
+
+/***/ "./node_modules/primevue/menubar/menubar.esm.js":
+/*!******************************************************!*\
+  !*** ./node_modules/primevue/menubar/menubar.esm.js ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var primevue_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! primevue/utils */ "./node_modules/primevue/utils/utils.esm.js");
+/* harmony import */ var primevue_ripple__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! primevue/ripple */ "./node_modules/primevue/ripple/ripple.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
+
+
+
+var script = {
+    name: 'sub-menu',
+    emits: ['keydown-item', 'leaf-click'],
+    props: {
+        model: {
+            type: Array,
+            default: null
+        },
+        root: {
+            type: Boolean,
+            default: false
+        },
+        popup: {
+            type: Boolean,
+            default: false
+        },
+        parentActive: {
+            type: Boolean,
+            default: false
+        },
+        mobileActive: {
+            type: Boolean,
+            default: false
+        }
+    },
+    documentClickListener: null,
+    watch: {
+        parentActive(newValue) {
+            if (!newValue) {
+                this.activeItem = null;
+            }
+        }
+    },
+    data() {
+        return {
+            activeItem: null
+        }
+    },
+    updated() {
+        if (this.root && this.activeItem) {
+            this.bindDocumentClickListener();
+        }
+    },
+    beforeUnmount() {
+        this.unbindDocumentClickListener();
+    },
+    methods: {
+        onItemMouseEnter(event, item) {
+            if (item.disabled || this.mobileActive) {
+                event.preventDefault();
+                return;
+            }
+
+            if (this.root) {
+                if (this.activeItem || this.popup) {
+                    this.activeItem = item;
+                }
+            }
+            else {
+                this.activeItem = item;
+            }
+        },
+        onItemClick(event, item, navigate) {
+            if (item.disabled) {
+                event.preventDefault();
+                return;
+            }
+
+            if (item.command) {
+                item.command({
+                    originalEvent: event,
+                    item: item
+                });
+            }
+
+            if (item.items) {
+                if (this.activeItem && item === this.activeItem)
+                    this.activeItem = null;
+                else
+                   this.activeItem = item;
+            }
+
+            if (!item.items) {
+                this.onLeafClick();
+            }
+
+            if (item.to && navigate) {
+                navigate(event);
+            }
+        },
+        onLeafClick() {
+            this.activeItem = null;
+            this.$emit('leaf-click');
+        },
+        onItemKeyDown(event, item) {
+            let listItem = event.currentTarget.parentElement;
+
+            switch(event.which) {
+                //down
+                case 40:
+                    if (this.root) {
+                        if (item.items) {
+                            this.expandSubmenu(item, listItem);
+                        }
+                    }
+                    else {
+                        this.navigateToNextItem(listItem);
+                    }
+
+                    event.preventDefault();
+                break;
+
+                //up
+                case 38:
+                    if (!this.root) {
+                        this.navigateToPrevItem(listItem);
+                    }
+
+                    event.preventDefault();
+                break;
+
+                //right
+                case 39:
+                    if (this.root) {
+                        var nextItem = this.findNextItem(listItem);
+                        if (nextItem) {
+                            nextItem.children[0].focus();
+                        }
+                    }
+                    else {
+                        if (item.items) {
+                            this.expandSubmenu(item, listItem);
+                        }
+                    }
+
+                    event.preventDefault();
+                break;
+
+                //left
+                case 37:
+                    if (this.root) {
+                        this.navigateToPrevItem(listItem);
+                    }
+
+                    event.preventDefault();
+                break;
+            }
+
+            this.$emit('keydown-item', {
+                originalEvent: event,
+                element: listItem
+            });
+        },
+        onChildItemKeyDown(event) {
+            if (this.root) {
+                //up
+                if (event.originalEvent.which === 38 && event.element.previousElementSibling == null) {
+                    this.collapseMenu(event.element);
+                }
+            }
+            else {
+                //left
+                if (event.originalEvent.which === 37) {
+                    this.collapseMenu(event.element);
+                }
+            }
+        },
+        findNextItem(item) {
+            let nextItem = item.nextElementSibling;
+
+            if (nextItem)
+                return primevue_utils__WEBPACK_IMPORTED_MODULE_0__.DomHandler.hasClass(nextItem, 'p-disabled') || !primevue_utils__WEBPACK_IMPORTED_MODULE_0__.DomHandler.hasClass(nextItem, 'p-menuitem') ? this.findNextItem(nextItem) : nextItem;
+            else
+                return null;
+        },
+        findPrevItem(item) {
+            let prevItem = item.previousElementSibling;
+
+            if (prevItem)
+                return primevue_utils__WEBPACK_IMPORTED_MODULE_0__.DomHandler.hasClass(prevItem, 'p-disabled') || !primevue_utils__WEBPACK_IMPORTED_MODULE_0__.DomHandler.hasClass(prevItem, 'p-menuitem') ? this.findPrevItem(prevItem) : prevItem;
+            else
+                return null;
+        },
+        expandSubmenu(item, listItem) {
+            this.activeItem = item;
+
+            setTimeout(() => {
+                listItem.children[1].children[0].children[0].focus();
+            }, 50);
+        },
+        collapseMenu(listItem) {
+            this.activeItem = null;
+            listItem.parentElement.previousElementSibling.focus();
+        },
+        navigateToNextItem(listItem) {
+            var nextItem = this.findNextItem(listItem);
+            if (nextItem) {
+                nextItem.children[0].focus();
+            }
+        },
+        navigateToPrevItem(listItem) {
+            var prevItem = this.findPrevItem(listItem);
+            if (prevItem) {
+                prevItem.children[0].focus();
+            }
+        },
+        getItemClass(item) {
+            return [
+                'p-menuitem', item.class, {
+                    'p-menuitem-active': this.activeItem === item
+                }
+            ]
+        },
+        getLinkClass(item) {
+            return ['p-menuitem-link', {'p-disabled': item.disabled}];
+        },
+        bindDocumentClickListener() {
+            if (!this.documentClickListener) {
+                this.documentClickListener = (event) => {
+                    if (this.$el && !this.$el.contains(event.target)) {
+                        this.activeItem = null;
+                        this.unbindDocumentClickListener();
+                    }
+                };
+
+                document.addEventListener('click', this.documentClickListener);
+            }
+        },
+        unbindDocumentClickListener() {
+            if (this.documentClickListener) {
+                document.removeEventListener('click', this.documentClickListener);
+                this.documentClickListener = null;
+            }
+        },
+        getSubmenuIcon() {
+            return [
+                'p-submenu-icon pi', {'pi-angle-right': !this.root, 'pi-angle-down': this.root}
+            ];
+        },
+        visible(item) {
+            return (typeof item.visible === 'function' ? item.visible() : item.visible !== false);
+        }
+    },
+    computed: {
+        containerClass() {
+            return {'p-submenu-list': !this.root, 'p-menubar-root-list': this.root};
+        }
+    },
+    directives: {
+        'ripple': primevue_ripple__WEBPACK_IMPORTED_MODULE_1__.default
+    }
+};
+
+const _hoisted_1 = { class: "p-menuitem-text" };
+const _hoisted_2 = { class: "p-menuitem-text" };
+
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_router_link = (0,vue__WEBPACK_IMPORTED_MODULE_2__.resolveComponent)("router-link");
+  const _component_sub_menu = (0,vue__WEBPACK_IMPORTED_MODULE_2__.resolveComponent)("sub-menu");
+  const _directive_ripple = (0,vue__WEBPACK_IMPORTED_MODULE_2__.resolveDirective)("ripple");
+
+  return ((0,vue__WEBPACK_IMPORTED_MODULE_2__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_2__.createBlock)("ul", {
+    class: $options.containerClass,
+    role: $props.root ? 'menubar' : 'menu'
+  }, [
+    ((0,vue__WEBPACK_IMPORTED_MODULE_2__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_2__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_2__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_2__.renderList)($props.model, (item, i) => {
+      return ((0,vue__WEBPACK_IMPORTED_MODULE_2__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_2__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_2__.Fragment, {
+        key: item.label + i.toString()
+      }, [
+        ($options.visible(item) && !item.separator)
+          ? ((0,vue__WEBPACK_IMPORTED_MODULE_2__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_2__.createBlock)("li", {
+              key: 0,
+              role: "none",
+              class: $options.getItemClass(item),
+              style: item.style,
+              onMouseenter: $event => ($options.onItemMouseEnter($event, item))
+            }, [
+              (item.to && !item.disabled)
+                ? ((0,vue__WEBPACK_IMPORTED_MODULE_2__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_2__.createBlock)(_component_router_link, {
+                    key: 0,
+                    to: item.to,
+                    custom: ""
+                  }, {
+                    default: (0,vue__WEBPACK_IMPORTED_MODULE_2__.withCtx)(({navigate, href}) => [
+                      (0,vue__WEBPACK_IMPORTED_MODULE_2__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_2__.createVNode)("a", {
+                        href: href,
+                        onClick: $event => ($options.onItemClick($event, item, navigate)),
+                        class: $options.getLinkClass(item),
+                        onKeydown: $event => ($options.onItemKeyDown($event, item)),
+                        role: "menuitem"
+                      }, [
+                        (0,vue__WEBPACK_IMPORTED_MODULE_2__.createVNode)("span", {
+                          class: ['p-menuitem-icon', item.icon]
+                        }, null, 2),
+                        (0,vue__WEBPACK_IMPORTED_MODULE_2__.createVNode)("span", _hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_2__.toDisplayString)(item.label), 1)
+                      ], 42, ["href", "onClick", "onKeydown"]), [
+                        [_directive_ripple]
+                      ])
+                    ]),
+                    _: 2
+                  }, 1032, ["to"]))
+                : (0,vue__WEBPACK_IMPORTED_MODULE_2__.withDirectives)(((0,vue__WEBPACK_IMPORTED_MODULE_2__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_2__.createBlock)("a", {
+                    key: 1,
+                    href: item.url,
+                    class: $options.getLinkClass(item),
+                    target: item.target,
+                    "aria-haspopup": item.items != null,
+                    "aria-expanded": item === $data.activeItem,
+                    onClick: $event => ($options.onItemClick($event, item)),
+                    onKeydown: $event => ($options.onItemKeyDown($event, item)),
+                    role: "menuitem",
+                    tabindex: item.disabled ? null : '0'
+                  }, [
+                    (0,vue__WEBPACK_IMPORTED_MODULE_2__.createVNode)("span", {
+                      class: ['p-menuitem-icon', item.icon]
+                    }, null, 2),
+                    (0,vue__WEBPACK_IMPORTED_MODULE_2__.createVNode)("span", _hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_2__.toDisplayString)(item.label), 1),
+                    (item.items)
+                      ? ((0,vue__WEBPACK_IMPORTED_MODULE_2__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_2__.createBlock)("span", {
+                          key: 0,
+                          class: $options.getSubmenuIcon()
+                        }, null, 2))
+                      : (0,vue__WEBPACK_IMPORTED_MODULE_2__.createCommentVNode)("", true)
+                  ], 42, ["href", "target", "aria-haspopup", "aria-expanded", "onClick", "onKeydown", "tabindex"])), [
+                    [_directive_ripple]
+                  ]),
+              ($options.visible(item) && item.items)
+                ? ((0,vue__WEBPACK_IMPORTED_MODULE_2__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_2__.createBlock)(_component_sub_menu, {
+                    model: item.items,
+                    key: item.label + '_sub_',
+                    mobileActive: $props.mobileActive,
+                    onLeafClick: $options.onLeafClick,
+                    onKeydownItem: $options.onChildItemKeyDown,
+                    parentActive: item === $data.activeItem
+                  }, null, 8, ["model", "mobileActive", "onLeafClick", "onKeydownItem", "parentActive"]))
+                : (0,vue__WEBPACK_IMPORTED_MODULE_2__.createCommentVNode)("", true)
+            ], 46, ["onMouseenter"]))
+          : (0,vue__WEBPACK_IMPORTED_MODULE_2__.createCommentVNode)("", true),
+        ($options.visible(item) && item.separator)
+          ? ((0,vue__WEBPACK_IMPORTED_MODULE_2__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_2__.createBlock)("li", {
+              class: ['p-menu-separator', item.class],
+              style: item.style,
+              key: 'separator' + i.toString(),
+              role: "separator"
+            }, null, 6))
+          : (0,vue__WEBPACK_IMPORTED_MODULE_2__.createCommentVNode)("", true)
+      ], 64))
+    }), 128))
+  ], 10, ["role"]))
+}
+
+script.render = render;
+
+var script$1 = {
+    props: {
+		model: {
+            type: Array,
+            default: null
+        }
+    },
+    outsideClickListener: null,
+    data() {
+        return {
+            mobileActive: false
+        }
+    },
+    beforeUnmount() {
+        this.mobileActive = false;
+        this.unbindOutsideClickListener();
+    },
+    methods: {
+        toggle(event) {
+            this.mobileActive = !this.mobileActive;
+            this.$refs.rootmenu.$el.style.zIndex = String(primevue_utils__WEBPACK_IMPORTED_MODULE_0__.DomHandler.generateZIndex());
+            this.bindOutsideClickListener();
+            event.preventDefault();
+        },
+        bindOutsideClickListener() {
+            if (!this.outsideClickListener) {
+                this.outsideClickListener = (event) => {
+                    if (this.mobileActive && this.$refs.rootmenu.$el !== event.target && !this.$refs.rootmenu.$el.contains(event.target)
+                        && this.$refs.menubutton !== event.target && !this.$refs.menubutton.contains(event.target)) {
+                        this.mobileActive = false;
+                    }
+                };
+                document.addEventListener('click', this.outsideClickListener);
+            }
+        },
+        unbindOutsideClickListener() {
+            if (this.outsideClickListener) {
+                document.removeEventListener('click', this.outsideClickListener);
+                this.outsideClickListener = null;
+            }
+        },
+        onLeafClick() {
+            this.mobileActive = false;
+        }
+    },
+    computed: {
+        containerClass() {
+            return ['p-menubar p-component', {'p-menubar-mobile-active': this.mobileActive}];
+        }
+    },
+    components: {
+        'MenubarSub': script
+    }
+};
+
+const _hoisted_1$1 = {
+  key: 0,
+  class: "p-menubar-start"
+};
+const _hoisted_2$1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_2__.createVNode)("i", { class: "pi pi-bars" }, null, -1);
+const _hoisted_3 = {
+  key: 1,
+  class: "p-menubar-end"
+};
+
+function render$1(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_MenubarSub = (0,vue__WEBPACK_IMPORTED_MODULE_2__.resolveComponent)("MenubarSub");
+
+  return ((0,vue__WEBPACK_IMPORTED_MODULE_2__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_2__.createBlock)("div", { class: $options.containerClass }, [
+    (_ctx.$slots.start)
+      ? ((0,vue__WEBPACK_IMPORTED_MODULE_2__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_2__.createBlock)("div", _hoisted_1$1, [
+          (0,vue__WEBPACK_IMPORTED_MODULE_2__.renderSlot)(_ctx.$slots, "start")
+        ]))
+      : (0,vue__WEBPACK_IMPORTED_MODULE_2__.createCommentVNode)("", true),
+    (0,vue__WEBPACK_IMPORTED_MODULE_2__.createVNode)("a", {
+      ref: "menubutton",
+      tabindex: "0",
+      class: "p-menubar-button",
+      onClick: _cache[1] || (_cache[1] = $event => ($options.toggle($event)))
+    }, [
+      _hoisted_2$1
+    ], 512),
+    (0,vue__WEBPACK_IMPORTED_MODULE_2__.createVNode)(_component_MenubarSub, {
+      ref: "rootmenu",
+      model: $props.model,
+      root: true,
+      mobileActive: $data.mobileActive,
+      onLeafClick: $options.onLeafClick
+    }, null, 8, ["model", "mobileActive", "onLeafClick"]),
+    (_ctx.$slots.end)
+      ? ((0,vue__WEBPACK_IMPORTED_MODULE_2__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_2__.createBlock)("div", _hoisted_3, [
+          (0,vue__WEBPACK_IMPORTED_MODULE_2__.renderSlot)(_ctx.$slots, "end")
+        ]))
+      : (0,vue__WEBPACK_IMPORTED_MODULE_2__.createCommentVNode)("", true)
+  ], 2))
+}
+
+function styleInject(css, ref) {
+  if ( ref === void 0 ) ref = {};
+  var insertAt = ref.insertAt;
+
+  if (!css || typeof document === 'undefined') { return; }
+
+  var head = document.head || document.getElementsByTagName('head')[0];
+  var style = document.createElement('style');
+  style.type = 'text/css';
+
+  if (insertAt === 'top') {
+    if (head.firstChild) {
+      head.insertBefore(style, head.firstChild);
+    } else {
+      head.appendChild(style);
+    }
+  } else {
+    head.appendChild(style);
+  }
+
+  if (style.styleSheet) {
+    style.styleSheet.cssText = css;
+  } else {
+    style.appendChild(document.createTextNode(css));
+  }
+}
+
+var css_248z = "\n.p-menubar {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n.p-menubar ul {\n    margin: 0;\n    padding: 0;\n    list-style: none;\n}\n.p-menubar .p-menuitem-link {\n    cursor: pointer;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    text-decoration: none;\n    overflow: hidden;\n    position: relative;\n}\n.p-menubar .p-menuitem-text {\n    line-height: 1;\n}\n.p-menubar .p-menuitem {\n    position: relative;\n}\n.p-menubar-root-list {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n.p-menubar-root-list > li ul {\n    display: none;\n    z-index: 1;\n}\n.p-menubar-root-list > .p-menuitem-active > .p-submenu-list {\n    display: block;\n}\n.p-menubar .p-submenu-list {\n    display: none;\n    position: absolute;\n    z-index: 1;\n}\n.p-menubar .p-submenu-list > .p-menuitem-active > .p-submenu-list  {\n    display: block;\n    left: 100%;\n    top: 0;\n}\n.p-menubar .p-submenu-list .p-menuitem-link .p-submenu-icon {\n    margin-left: auto;\n}\n.p-menubar .p-menubar-custom,\n.p-menubar .p-menubar-end {\n    margin-left: auto;\n    -ms-flex-item-align: center;\n        align-self: center;\n}\n.p-menubar-button {\n    display: none;\n    cursor: pointer;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n}\n";
+styleInject(css_248z);
+
+script$1.render = render$1;
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (script$1);
+
+
+/***/ }),
+
+/***/ "./node_modules/primevue/ripple/ripple.esm.js":
+/*!****************************************************!*\
+  !*** ./node_modules/primevue/ripple/ripple.esm.js ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var primevue_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! primevue/utils */ "./node_modules/primevue/utils/utils.esm.js");
+
+
+function bindEvents(el) {
+    el.addEventListener('mousedown', onMouseDown);
+}
+
+function unbindEvents(el) {
+    el.removeEventListener('mousedown', onMouseDown);
+}
+
+function create(el) {
+    let ink = document.createElement('span');
+    ink.className = 'p-ink';
+    el.appendChild(ink);
+
+    ink.addEventListener('animationend', onAnimationEnd);
+}
+
+function remove(el) {
+    let ink = getInk(el);
+    if (ink) {
+        unbindEvents(el);
+        ink.removeEventListener('animationend', onAnimationEnd);
+        ink.remove();
+    }
+}
+
+function onMouseDown(event) {
+    let target = event.currentTarget;
+    let ink = getInk(target);
+    if (!ink || getComputedStyle(ink, null).display === 'none') {
+        return;
+    }
+
+    primevue_utils__WEBPACK_IMPORTED_MODULE_0__.DomHandler.removeClass(ink, 'p-ink-active');
+    if (!primevue_utils__WEBPACK_IMPORTED_MODULE_0__.DomHandler.getHeight(ink) && !primevue_utils__WEBPACK_IMPORTED_MODULE_0__.DomHandler.getWidth(ink)) {
+        let d = Math.max(primevue_utils__WEBPACK_IMPORTED_MODULE_0__.DomHandler.getOuterWidth(target), primevue_utils__WEBPACK_IMPORTED_MODULE_0__.DomHandler.getOuterHeight(target));
+        ink.style.height = d + 'px';
+        ink.style.width = d + 'px';
+    }
+
+    let offset = primevue_utils__WEBPACK_IMPORTED_MODULE_0__.DomHandler.getOffset(target);
+    let x = event.pageX - offset.left + document.body.scrollTop - primevue_utils__WEBPACK_IMPORTED_MODULE_0__.DomHandler.getWidth(ink) / 2;
+    let y = event.pageY - offset.top + document.body.scrollLeft - primevue_utils__WEBPACK_IMPORTED_MODULE_0__.DomHandler.getHeight(ink) / 2;
+
+    ink.style.top = y + 'px';
+    ink.style.left = x + 'px';
+    primevue_utils__WEBPACK_IMPORTED_MODULE_0__.DomHandler.addClass(ink, 'p-ink-active');
+}
+
+function onAnimationEnd(event) {
+    primevue_utils__WEBPACK_IMPORTED_MODULE_0__.DomHandler.removeClass(event.currentTarget, 'p-ink-active');
+}
+
+function getInk(el) {
+    for (let i = 0; i < el.children.length; i++) {
+        if (typeof el.children[i].className === 'string' && el.children[i].className.indexOf('p-ink') !== -1) {
+            return el.children[i];
+        }
+    }
+    return null;
+}
+
+const Ripple = {
+    mounted(el, binding) {
+        if (binding.instance.$primevue && binding.instance.$primevue.config && binding.instance.$primevue.config.ripple) {
+            create(el);
+            bindEvents(el);
+        }
+    },
+    unmounted(el) {
+        remove(el);
+    }
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Ripple);
+
+
+/***/ }),
+
+/***/ "./node_modules/primevue/utils/utils.esm.js":
+/*!**************************************************!*\
+  !*** ./node_modules/primevue/utils/utils.esm.js ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ConnectedOverlayScrollHandler": () => (/* binding */ ConnectedOverlayScrollHandler),
+/* harmony export */   "DomHandler": () => (/* binding */ DomHandler),
+/* harmony export */   "EventBus": () => (/* binding */ EventBus),
+/* harmony export */   "ObjectUtils": () => (/* binding */ ObjectUtils),
+/* harmony export */   "UniqueComponentId": () => (/* binding */ UniqueComponentId)
+/* harmony export */ });
+class DomHandler {
+
+    static innerWidth(el) {
+        let width = el.offsetWidth;
+        let style = getComputedStyle(el);
+
+        width += parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
+        return width;
+    }
+
+    static width(el) {
+        let width = el.offsetWidth;
+        let style = getComputedStyle(el);
+
+        width -= parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
+        return width;
+    }
+
+    static getWindowScrollTop() {
+        let doc = document.documentElement;
+        return (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
+    }
+
+    static getWindowScrollLeft() {
+        let doc = document.documentElement;
+        return (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
+    }
+
+    static getOuterWidth(el, margin) {
+        if (el) {
+            let width = el.offsetWidth;
+
+            if (margin) {
+                let style = getComputedStyle(el);
+                width += parseFloat(style.marginLeft) + parseFloat(style.marginRight);
+            }
+
+            return width;
+        }
+        else {
+            return 0;
+        }
+    }
+
+    static getOuterHeight(el, margin) {
+        if (el) {
+            let height = el.offsetHeight;
+
+            if (margin) {
+                let style = getComputedStyle(el);
+                height += parseFloat(style.marginTop) + parseFloat(style.marginBottom);
+            }
+
+            return height;
+        }
+        else {
+            return 0;
+        }
+    }
+
+    static getClientHeight(el, margin) {
+        if (el) {
+            let height = el.clientHeight;
+
+            if (margin) {
+                let style = getComputedStyle(el);
+                height += parseFloat(style.marginTop) + parseFloat(style.marginBottom);
+            }
+
+            return height;
+        } else {
+            return 0;
+        }
+    }
+
+    static getViewport() {
+        let win = window,
+            d = document,
+            e = d.documentElement,
+            g = d.getElementsByTagName('body')[0],
+            w = win.innerWidth || e.clientWidth || g.clientWidth,
+            h = win.innerHeight || e.clientHeight || g.clientHeight;
+
+        return {width: w, height: h};
+    }
+
+    static getOffset(el) {
+        var rect = el.getBoundingClientRect();
+
+        return {
+            top: rect.top + (window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0),
+            left: rect.left + (window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft || 0),
+        };
+    }
+
+    static generateZIndex() {
+        this.zindex = this.zindex||999;
+        return ++this.zindex;
+    }
+
+    static getCurrentZIndex() {
+        return this.zindex;
+    }
+
+    static index(element) {
+        let children = element.parentNode.childNodes;
+        let num = 0;
+        for (var i = 0; i < children.length; i++) {
+            if (children[i] === element) return num;
+            if (children[i].nodeType === 1) num++;
+        }
+        return -1;
+    }
+
+    static addMultipleClasses(element, className) {
+        if (element.classList) {
+            let styles = className.split(' ');
+            for (let i = 0; i < styles.length; i++) {
+                element.classList.add(styles[i]);
+            }
+
+        }
+        else {
+            let styles = className.split(' ');
+            for (let i = 0; i < styles.length; i++) {
+                element.className += ' ' + styles[i];
+            }
+        }
+    }
+
+    static addClass(element, className) {
+        if (element.classList)
+            element.classList.add(className);
+        else
+            element.className += ' ' + className;
+    }
+
+    static removeClass(element, className) {
+        if (element.classList)
+            element.classList.remove(className);
+        else
+            element.className = element.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+    }
+
+    static hasClass(element, className) {
+        if (element) {
+            if (element.classList)
+                return element.classList.contains(className);
+            else
+                return new RegExp('(^| )' + className + '( |$)', 'gi').test(element.className);
+        }
+        
+        return false;
+    }
+
+    static find(element, selector) {
+        return element.querySelectorAll(selector);
+    }
+
+    static findSingle(element, selector) {
+        return element.querySelector(selector);
+    }
+
+    static getHeight(el) {
+        let height = el.offsetHeight;
+        let style = getComputedStyle(el);
+
+        height -= parseFloat(style.paddingTop) + parseFloat(style.paddingBottom) + parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth);
+
+        return height;
+    }
+
+    static getWidth(el) {
+        let width = el.offsetWidth;
+        let style = getComputedStyle(el);
+
+        width -= parseFloat(style.paddingLeft) + parseFloat(style.paddingRight) + parseFloat(style.borderLeftWidth) + parseFloat(style.borderRightWidth);
+
+        return width;
+    }
+
+    static absolutePosition(element, target) {
+        let elementDimensions = element.offsetParent ? { width: element.offsetWidth, height: element.offsetHeight } : this.getHiddenElementDimensions(element);
+        let elementOuterHeight = elementDimensions.height;
+        let elementOuterWidth = elementDimensions.width;
+        let targetOuterHeight = target.offsetHeight;
+        let targetOuterWidth = target.offsetWidth;
+        let targetOffset = target.getBoundingClientRect();
+        let windowScrollTop = this.getWindowScrollTop();
+        let windowScrollLeft = this.getWindowScrollLeft();
+        let viewport = this.getViewport();
+        let top, left;
+
+        if (targetOffset.top + targetOuterHeight + elementOuterHeight > viewport.height) {
+            top = targetOffset.top + windowScrollTop - elementOuterHeight;
+            element.style.transformOrigin = 'bottom';
+
+            if (top < 0) {
+                top = windowScrollTop;
+            }
+        }
+        else {
+            top = targetOuterHeight + targetOffset.top + windowScrollTop;
+            element.style.transformOrigin = 'top';
+        }
+
+        if (targetOffset.left + elementOuterWidth > viewport.width)
+            left = Math.max(0, targetOffset.left + windowScrollLeft + targetOuterWidth - elementOuterWidth);
+        else
+            left = targetOffset.left + windowScrollLeft;
+
+        element.style.top = top + 'px';
+        element.style.left = left + 'px';
+    }
+
+    static relativePosition(element, target) {
+        let elementDimensions = element.offsetParent ? { width: element.offsetWidth, height: element.offsetHeight } : this.getHiddenElementDimensions(element);
+        const targetHeight = target.offsetHeight;
+        const targetOffset = target.getBoundingClientRect();
+        const viewport = this.getViewport();
+        let top, left;
+
+        if ((targetOffset.top + targetHeight + elementDimensions.height) > viewport.height) {
+            top = -1 * (elementDimensions.height);
+            element.style.transformOrigin = 'bottom';
+            if (targetOffset.top + top < 0) {
+                top = -1 * targetOffset.top;
+            }
+        }
+        else {
+            top = targetHeight;
+            element.style.transformOrigin = 'top';
+        }
+
+        if (elementDimensions.width > viewport.width) {
+            // element wider then viewport and cannot fit on screen (align at left side of viewport)
+            left = targetOffset.left * -1;
+        }
+        else if ((targetOffset.left + elementDimensions.width) > viewport.width) {
+            // element wider then viewport but can be fit on screen (align at right side of viewport)
+            left = (targetOffset.left + elementDimensions.width - viewport.width) * -1;
+        }
+        else {
+            // element fits on screen (align with target)
+            left = 0;
+        }
+
+        element.style.top = top + 'px';
+        element.style.left = left + 'px';
+    }
+
+    static getParents(element, parents = []) {
+        return element['parentNode'] === null ? parents : this.getParents(element.parentNode, parents.concat([element.parentNode]));
+    }
+
+    static getScrollableParents(element) {
+        let scrollableParents = [];
+
+        if (element) {
+            let parents = this.getParents(element);
+            const overflowRegex = /(auto|scroll)/;
+            const overflowCheck = (node) => {
+                let styleDeclaration = window['getComputedStyle'](node, null);
+                return overflowRegex.test(styleDeclaration.getPropertyValue('overflow')) || overflowRegex.test(styleDeclaration.getPropertyValue('overflowX')) || overflowRegex.test(styleDeclaration.getPropertyValue('overflowY'));
+            };
+
+            for (let parent of parents) {
+                let scrollSelectors = parent.nodeType === 1 && parent.dataset['scrollselectors'];
+                if (scrollSelectors) {
+                    let selectors = scrollSelectors.split(',');
+                    for (let selector of selectors) {
+                        let el = this.findSingle(parent, selector);
+                        if (el && overflowCheck(el)) {
+                            scrollableParents.push(el);
+                        }
+                    }
+                }
+
+                if (parent.nodeType !== 9 && overflowCheck(parent)) {
+                    scrollableParents.push(parent);
+                }
+            }
+        }
+
+        return scrollableParents;
+    }
+
+    static getHiddenElementOuterHeight(element) {
+        element.style.visibility = 'hidden';
+        element.style.display = 'block';
+        let elementHeight = element.offsetHeight;
+        element.style.display = 'none';
+        element.style.visibility = 'visible';
+
+        return elementHeight;
+    }
+
+    static getHiddenElementOuterWidth(element) {
+        element.style.visibility = 'hidden';
+        element.style.display = 'block';
+        let elementWidth = element.offsetWidth;
+        element.style.display = 'none';
+        element.style.visibility = 'visible';
+
+        return elementWidth;
+    }
+
+    static getHiddenElementDimensions(element) {
+        var dimensions = {};
+        element.style.visibility = 'hidden';
+        element.style.display = 'block';
+        dimensions.width = element.offsetWidth;
+        dimensions.height = element.offsetHeight;
+        element.style.display = 'none';
+        element.style.visibility = 'visible';
+
+        return dimensions;
+    }
+
+    static fadeIn(element, duration) {
+        element.style.opacity = 0;
+
+        var last = +new Date();
+        var opacity = 0;
+        var tick = function () {
+            opacity = +element.style.opacity + (new Date().getTime() - last) / duration;
+            element.style.opacity = opacity;
+            last = +new Date();
+
+            if (+opacity < 1) {
+                (window.requestAnimationFrame && requestAnimationFrame(tick)) || setTimeout(tick, 16);
+            }
+        };
+
+        tick();
+    }
+
+    static fadeOut(element, ms) {
+        var opacity = 1,
+            interval = 50,
+            duration = ms,
+            gap = interval / duration;
+
+        let fading = setInterval(() => {
+            opacity -= gap;
+
+            if (opacity <= 0) {
+                opacity = 0;
+                clearInterval(fading);
+            }
+
+            element.style.opacity = opacity;
+        }, interval);
+    }
+
+    static getUserAgent() {
+        return navigator.userAgent;
+    }
+
+    static appendChild(element, target) {
+        if(this.isElement(target))
+            target.appendChild(element);
+        else if(target.el && target.elElement)
+            target.elElement.appendChild(element);
+        else
+            throw new Error('Cannot append ' + target + ' to ' + element);
+    }
+
+    static scrollInView(container, item) {
+        let borderTopValue = getComputedStyle(container).getPropertyValue('borderTopWidth');
+        let borderTop = borderTopValue ? parseFloat(borderTopValue) : 0;
+        let paddingTopValue = getComputedStyle(container).getPropertyValue('paddingTop');
+        let paddingTop = paddingTopValue ? parseFloat(paddingTopValue) : 0;
+        let containerRect = container.getBoundingClientRect();
+        let itemRect = item.getBoundingClientRect();
+        let offset = (itemRect.top + document.body.scrollTop) - (containerRect.top + document.body.scrollTop) - borderTop - paddingTop;
+        let scroll = container.scrollTop;
+        let elementHeight = container.clientHeight;
+        let itemHeight = this.getOuterHeight(item);
+
+        if (offset < 0) {
+            container.scrollTop = scroll + offset;
+        }
+        else if ((offset + itemHeight) > elementHeight) {
+            container.scrollTop = scroll + offset - elementHeight + itemHeight;
+        }
+    }
+
+    static clearSelection() {
+        if(window.getSelection) {
+            if(window.getSelection().empty) {
+                window.getSelection().empty();
+            } else if(window.getSelection().removeAllRanges && window.getSelection().rangeCount > 0 && window.getSelection().getRangeAt(0).getClientRects().length > 0) {
+                window.getSelection().removeAllRanges();
+            }
+        }
+        else if(document['selection'] && document['selection'].empty) {
+            try {
+                document['selection'].empty();
+            } catch(error) {
+                //ignore IE bug
+            }
+        }
+    }
+
+    static calculateScrollbarWidth() {
+        if(this.calculatedScrollbarWidth != null)
+            return this.calculatedScrollbarWidth;
+
+        let scrollDiv = document.createElement("div");
+        scrollDiv.className = "p-scrollbar-measure";
+        document.body.appendChild(scrollDiv);
+
+        let scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
+        document.body.removeChild(scrollDiv);
+
+        this.calculatedScrollbarWidth = scrollbarWidth;
+
+        return scrollbarWidth;
+    }
+
+    static getBrowser() {
+        if(!this.browser) {
+            let matched = this.resolveUserAgent();
+            this.browser = {};
+
+            if (matched.browser) {
+                this.browser[matched.browser] = true;
+                this.browser['version'] = matched.version;
+            }
+
+            if (this.browser['chrome']) {
+                this.browser['webkit'] = true;
+            } else if (this.browser['webkit']) {
+                this.browser['safari'] = true;
+            }
+        }
+
+        return this.browser;
+    }
+
+    static resolveUserAgent() {
+        let ua = navigator.userAgent.toLowerCase();
+        let match = /(chrome)[ ]([\w.]+)/.exec(ua) ||
+            /(webkit)[ ]([\w.]+)/.exec(ua) ||
+            /(opera)(?:.*version|)[ ]([\w.]+)/.exec(ua) ||
+            /(msie) ([\w.]+)/.exec(ua) ||
+            (ua.indexOf("compatible") < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec(ua)) ||
+            [];
+
+        return {
+            browser: match[1] || "",
+            version: match[2] || "0"
+        };
+    }
+
+    static isVisible(element) {
+        return element.offsetParent != null;
+    }
+
+    static invokeElementMethod(element, methodName, args) {
+        (element)[methodName].apply(element, args);
+    }
+
+    static getFocusableElements(element) {
+        let focusableElements = DomHandler.find(element, `button:not([tabindex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden]),
+                [href][clientHeight][clientWidth]:not([tabindex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden]),
+                input:not([tabindex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden]), select:not([tabindex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden]),
+                textarea:not([tabindex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden]), [tabIndex]:not([tabIndex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden]),
+                [contenteditable]:not([tabIndex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden])`
+            );
+
+        let visibleFocusableElements = [];
+        for (let focusableElement of focusableElements) {
+            if (getComputedStyle(focusableElement).display != "none" && getComputedStyle(focusableElement).visibility != "hidden")
+                visibleFocusableElements.push(focusableElement);
+        }
+
+        return visibleFocusableElements;
+    }
+
+    static isClickable(element) {
+        const targetNode = element.nodeName;
+        const parentNode = element.parentElement && element.parentElement.nodeName;
+
+        return (targetNode == 'INPUT' || targetNode == 'BUTTON' || targetNode == 'A' ||
+                parentNode == 'INPUT' || parentNode == 'BUTTON' || parentNode == 'A' ||
+                this.hasClass(element, 'p-button') || this.hasClass(element.parentElement, 'p-button') ||
+                this.hasClass(element.parentElement, 'p-checkbox') || this.hasClass(element.parentElement, 'p-radiobutton')
+        );
+    }
+
+    static applyStyle(element, style) {
+        if (typeof style === 'string') {
+            element.style.cssText = this.style;
+        }
+        else {
+            for (let prop in this.style) {
+                element.style[prop] = style[prop];
+            }
+        }
+    }
+}
+
+class ConnectedOverlayScrollHandler {
+
+    constructor(element, listener = () => {}) {
+        this.element = element;
+        this.listener = listener;
+    }
+
+    bindScrollListener() {
+        this.scrollableParents = DomHandler.getScrollableParents(this.element);
+        for (let i = 0; i < this.scrollableParents.length; i++) {
+            this.scrollableParents[i].addEventListener('scroll', this.listener);
+        }
+    }
+
+    unbindScrollListener() {
+        if (this.scrollableParents) {
+            for (let i = 0; i < this.scrollableParents.length; i++) {
+                this.scrollableParents[i].removeEventListener('scroll', this.listener);
+            }
+        }
+    }
+
+    destroy() {
+        this.unbindScrollListener();
+        this.element = null;
+        this.listener = null;
+        this.scrollableParents = null;
+    }
+}
+
+class ObjectUtils {
+
+    static equals(obj1, obj2, field) {
+        if (field)
+            return (this.resolveFieldData(obj1, field) === this.resolveFieldData(obj2, field));
+        else
+            return this.deepEquals(obj1, obj2);
+    }
+
+    static deepEquals(a, b) {
+        if (a === b) return true;
+
+        if (a && b && typeof a == 'object' && typeof b == 'object') {
+            var arrA = Array.isArray(a)
+                , arrB = Array.isArray(b)
+                , i
+                , length
+                , key;
+
+            if (arrA && arrB) {
+                length = a.length;
+                if (length != b.length) return false;
+                for (i = length; i-- !== 0;)
+                    if (!this.deepEquals(a[i], b[i])) return false;
+                return true;
+            }
+
+            if (arrA != arrB) return false;
+
+            var dateA = a instanceof Date
+                , dateB = b instanceof Date;
+            if (dateA != dateB) return false;
+            if (dateA && dateB) return a.getTime() == b.getTime();
+
+            var regexpA = a instanceof RegExp
+                , regexpB = b instanceof RegExp;
+            if (regexpA != regexpB) return false;
+            if (regexpA && regexpB) return a.toString() == b.toString();
+
+            var keys = Object.keys(a);
+            length = keys.length;
+
+            if (length !== Object.keys(b).length)
+                return false;
+
+            for (i = length; i-- !== 0;)
+                if (!Object.prototype.hasOwnProperty.call(b, keys[i])) return false;
+
+            for (i = length; i-- !== 0;) {
+                key = keys[i];
+                if (!this.deepEquals(a[key], b[key])) return false;
+            }
+
+            return true;
+        }
+
+        return a !== a && b !== b;
+    }
+
+    static resolveFieldData(data, field) {
+        if (data && Object.keys(data).length && field) {
+            if (this.isFunction(field)) {
+                return field(data);
+            }
+            else if(field.indexOf('.') === -1) {
+                return data[field];
+            }
+            else {
+                let fields = field.split('.');
+                let value = data;
+                for(var i = 0, len = fields.length; i < len; ++i) {
+                    if (value == null) {
+                        return null;
+                    }
+                    value = value[fields[i]];
+                }
+                return value;
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+    static isFunction(obj) {
+        return !!(obj && obj.constructor && obj.call && obj.apply);
+    }
+
+    static filter(value, fields, filterValue) {
+        var filteredItems = [];
+
+        if (value) {
+            for (let item of value) {
+                for (let field of fields) {
+                    if (String(this.resolveFieldData(item, field)).toLowerCase().indexOf(filterValue.toLowerCase()) > -1) {
+                        filteredItems.push(item);
+                        break;
+                    }
+                }
+            }
+        }
+
+        return filteredItems;
+    }
+
+    static reorderArray(value, from, to) {
+        let target;
+        if (value && (from !== to)) {
+            if (to >= value.length) {
+                target = to - value.length;
+                while ((target--) + 1) {
+                    value.push(undefined);
+                }
+            }
+            value.splice(to, 0, value.splice(from, 1)[0]);
+        }
+    }
+
+    static findIndexInList(value, list) {
+        let index = -1;
+
+        if (list) {
+            for (let i = 0; i < list.length; i++) {
+                if (list[i] === value) {
+                    index = i;
+                    break;
+                }
+            }
+        }
+
+        return index;
+    }
+
+    static contains(value, list) {
+        if (value != null && list && list.length) {
+            for (let val of list) {
+                if (this.equals(value, val))
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    static insertIntoOrderedArray(item, index, arr, sourceArr) {
+        if (arr.length > 0) {
+            let injected = false;
+            for (let i = 0; i < arr.length; i++) {
+                let currentItemIndex = this.findIndexInList(arr[i], sourceArr);
+                if (currentItemIndex > index) {
+                    arr.splice(i, 0, item);
+                    injected = true;
+                    break;
+                }
+            }
+
+            if (!injected) {
+                arr.push(item);
+            }
+        }
+        else {
+            arr.push(item);
+        }
+    }
+
+    static removeAccents(str) {
+        if (str && str.search(/[\xC0-\xFF]/g) > -1) {
+            str = str
+                    .replace(/[\xC0-\xC5]/g, "A")
+                    .replace(/[\xC6]/g, "AE")
+                    .replace(/[\xC7]/g, "C")
+                    .replace(/[\xC8-\xCB]/g, "E")
+                    .replace(/[\xCC-\xCF]/g, "I")
+                    .replace(/[\xD0]/g, "D")
+                    .replace(/[\xD1]/g, "N")
+                    .replace(/[\xD2-\xD6\xD8]/g, "O")
+                    .replace(/[\xD9-\xDC]/g, "U")
+                    .replace(/[\xDD]/g, "Y")
+                    .replace(/[\xDE]/g, "P")
+                    .replace(/[\xE0-\xE5]/g, "a")
+                    .replace(/[\xE6]/g, "ae")
+                    .replace(/[\xE7]/g, "c")
+                    .replace(/[\xE8-\xEB]/g, "e")
+                    .replace(/[\xEC-\xEF]/g, "i")
+                    .replace(/[\xF1]/g, "n")
+                    .replace(/[\xF2-\xF6\xF8]/g, "o")
+                    .replace(/[\xF9-\xFC]/g, "u")
+                    .replace(/[\xFE]/g, "p")
+                    .replace(/[\xFD\xFF]/g, "y");
+        }
+
+        return str;
+    }
+}
+
+var lastId = 0;
+
+function UniqueComponentId (prefix = 'pv_id_') {
+    lastId++;
+    return `${prefix}${lastId}`;
+}
+
+function EventBus() {
+    let eventTarget, eventListener, eventKey;
+
+    return {
+        on(type, listener, key) {
+            eventTarget = eventTarget || document.body.appendChild(document.createComment(''));
+            eventKey = key;
+            eventListener = function(e) { listener(e.detail); };
+            eventTarget.addEventListener(type, eventListener);
+        },
+        once(type, listener, key) {
+            eventTarget = eventTarget || document.body.appendChild(document.createComment(''));
+            eventKey = key;
+            eventListener = function(e) { listener(e.detail); };
+            eventTarget.addEventListener(type, eventListener, { once: true });
+        },
+        off(type, key) {
+            if (eventTarget && eventListener && eventKey === key) {
+                eventTarget.removeEventListener(type, eventListener);
+            }
+        },
+        emit(type, detail) {
+            if (eventTarget) {
+                eventTarget.dispatchEvent(new CustomEvent(type, { detail }));
+            }
+        }
+    }
+}
+
+
 
 
 /***/ }),
