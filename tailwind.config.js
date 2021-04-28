@@ -13,16 +13,34 @@ module.exports = {
         extend: {
             colors: {
                 primary: {
-                    50: '#ffebef',
-                    100: '#ffccd3',
-                    200: '#f1999c',
-                    300: '#e87175',
-                    400: '#f34e53',
-                    500: '#f83b39',
-                    600: '#e93138',
-                    700: '#d72632',
-                    800: '#ca1e2b',
-                    900: '#bb0c1e'
+                    200: '#9e95f5',
+                    500: '#7367f0',
+                    800: '#4839eb',
+                },
+                secondary: {
+                    200: '#9ca0a4',
+                    500: '#82868b',
+                    800: '#696d71',
+                },
+                success: {
+                    200: '#48da89',
+                    500: '#28c76f',
+                    800: '#1f9d57',
+                },
+                warning: {
+                    200: '#ffb976',
+                    500: '#ff9f43',
+                    800: '#ff8510',
+                },
+                danger: {
+                    200: '#f08182',
+                    500: '#ea5455',
+                    800: '#e42728',
+                },
+                info: {
+                    200: '#1ce7ff',
+                    500: '#00cfe8',
+                    800: '#00a1b5',
                 },
                 complementary: {
                     50: '#d6f5f4',
@@ -40,6 +58,10 @@ module.exports = {
             fontFamily: {
                 sans: ['Nunito', ...defaultTheme.fontFamily.sans],
             },
+            boxShadow:{
+                csh1: '0 14px 15px 0 rgb(34 41 47 / 5%)',
+                csh2: '0 4px 24px 0 rgb(34 41 47 / 10%)',
+            }
         },
     },
 

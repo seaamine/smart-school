@@ -17,7 +17,7 @@
         <link rel="stylesheet" href="{{ asset(mix('css/app.css')) }}">
 
     </head>
-    <body class="font-sans antialiased">
+    <body class="bg-gray-100 font-sans antialiased">
 
     <!-- Scripts -->
     @routes
