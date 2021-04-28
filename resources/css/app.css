@@ -2,3 +2,18 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 @import './common-styles.css';
+
+@layer components {
+    .nav-item>a:hover>*{
+        @apply transform translate-x-2;
+    }
+    .nav-item>a:hover>*, .nav-item>a>*{
+        @apply transition-transform duration-300 ease-in-out;
+    }
+    .nav-item>a{
+        box-shadow: 0 0 10px 1px rgba(115, 103, 240, 0.7);
+        border-radius: 4px;
+        margin: 0 15px;
+        padding: 10px 15px 10px 15px;
+    }
+}

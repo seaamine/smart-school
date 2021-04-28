@@ -14,7 +14,7 @@
         </nav>
     </div>
     <div class="flex flex-row">
-            <div class="bg-white h-full min-h-screen shadow-csh1" id="sidebar">
+            <div class="bg-white flex-shrink-0 h-full min-h-screen shadow-csh1" id="sidebar">
                 <side-bar></side-bar>
             </div>
             <div class="h-full min-h-screen w-full p-8">
