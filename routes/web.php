@@ -29,6 +29,11 @@ Route::get('/home', function () {
     ]);
 });
 
+Route::get('/student/create', function () {
+    return Inertia::render('Student/Add', [
+    ]);
+});
+
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->name('dashboard');

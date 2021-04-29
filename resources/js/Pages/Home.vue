@@ -1,24 +1,13 @@
 <template>
     <div class=" containter bg-white px-6 py-4 z-20 shadow-csh2">
-        <nav class="flex items-stretch justify-between h-8">
-            <ul>
-                <li>
-                    <button class="md:hidden"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg></button>
-                </li>
-            </ul>
-            <div>
-                <a>herke</a>
-            </div>
-        </nav>
+        <nav-bar></nav-bar>
     </div>
     <div class="flex flex-row">
             <div class="bg-white flex-shrink-0 h-full min-h-screen shadow-csh1" id="sidebar">
                 <side-bar></side-bar>
             </div>
             <div class="h-full min-h-screen w-full p-8">
-                <p>f</p>
+                <slot />
             </div>
     </div>
 </template>
@@ -26,9 +15,11 @@
 <script>
     import defaultL from '@/Layouts/default.vue';
     import SideBar from "@/Layouts/Partials/SideBar";
+    import NavBar from "@/Layouts/Partials/NavBar";
 export default {
     name: "Home",
     components: {
+        NavBar,
         SideBar,
         defaultL
     }

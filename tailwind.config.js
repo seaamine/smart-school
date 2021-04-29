@@ -13,6 +13,7 @@ module.exports = {
         extend: {
             colors: {
                 primary: {
+                    100: '#7367f01f',
                     200: '#9e95f5',
                     500: '#7367f0',
                     800: '#4839eb',
