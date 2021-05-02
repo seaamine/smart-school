@@ -48,6 +48,12 @@ body {
     color:#d8d6de;
     transition: all 0.2s ease;
 }
+.form-control.is-invalid, .form-control.is-invalid:focus{
+    @apply border-danger-500;
+}
+.form-control.is-valid , .form-control.is-valid:focus{
+    @apply border-success-500;
+}
 .form-control:focus::placeholder {
     transform: translate(5px);
     transition: all 0.2s ease;
