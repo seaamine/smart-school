@@ -27,12 +27,16 @@ Route::get('/', function () {
 Route::get('/home', function () {
     return Inertia::render('Home', [
     ]);
-});
+})->name('home');
 
 Route::get('/student/create', function () {
     return Inertia::render('Student/Add', [
     ]);
-});
+})->name('student.create');
+
+Route::get('/academic-year',  [\App\Http\Controllers\AdminController::class,'indexAcademicYear'])->name('academicYear.index');
+
+Route::post('/student/create', [\App\Http\Controllers\AdminController::class,'storeAcademicYear']);
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');

@@ -18,6 +18,7 @@ module.exports = {
                     100: '#7367f01f',
                     200: '#9e95f5',
                     500: '#7367f0',
+                    600: '#5e50ee',
                     800: '#4839eb',
                 },
                 secondary: {
@@ -71,6 +72,8 @@ module.exports = {
     variants: {
         extend: {
             opacity: ['disabled'],
+            backgroundColor: ['active'],
+            backgroundOpacity: ['active'],
         },
     },
 
