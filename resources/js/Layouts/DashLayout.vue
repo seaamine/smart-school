@@ -1,9 +1,9 @@
 <template>
     <div class=" containter bg-white px-6 py-4 z-20 shadow-csh2">
-        <nav-bar></nav-bar>
+        <nav-bar @toggle-sidebar="toggleSb = !toggleSb"></nav-bar>
     </div>
     <div class="flex flex-row">
-        <div class="bg-white flex-shrink-0 h-full min-h-screen shadow-csh1" id="sidebar">
+        <div :class="{'hidden': !toggleSb}" class="z-20 lg:block absolute lg:relative bg-white flex-shrink-0 h-full min-h-screen shadow-csh1" id="sidebar">
             <side-bar></side-bar>
         </div>
         <div class="h-full min-h-screen w-full p-8">
@@ -22,9 +22,17 @@ export default {
         NavBar,
         SideBar,
     },
+    data () {
+        return {
+            toggleSb: false,
+        }
+    },
     props: {
         user: Object,
     },
+    methods:{
+
+    }
 }
 </script>
 

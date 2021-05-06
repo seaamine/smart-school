@@ -34,10 +34,10 @@ Route::get('/student/create', function () {
     ]);
 })->name('student.create');
 
-Route::get('/academic-year',  [\App\Http\Controllers\AdminController::class,'indexAcademicYear'])->name('academicYear.index');
-
-Route::post('/student/create', [\App\Http\Controllers\AdminController::class,'storeAcademicYear']);
-
+Route::get('/academic-years',  [\App\Http\Controllers\AdminController::class,'indexAcademicYear'])->name('academicYear.index');
+Route::get('/academic-years/create', [\App\Http\Controllers\AdminController::class,'createAcademicYear'])->name('academicYear.create');
+Route::post('/academic-years/create', [\App\Http\Controllers\AdminController::class,'storeAcademicYear'])->name('academicYear.store');
+Route::get('/subjects',  [\App\Http\Controllers\AdminController::class,'indexSubjects'])->name('subject.index');
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->name('dashboard');

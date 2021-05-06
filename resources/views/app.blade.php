@@ -26,6 +26,6 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js" defer></script>
 
     <script src="https://cdn.jsdelivr.net/npm/quasar@2.0.0-beta.12/dist/quasar.umd.prod.js" defer></script>
-        @inertia
+    @inertia
     </body>
 </html>

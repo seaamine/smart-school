@@ -52,7 +52,7 @@ export default {
             validationSchema: schema,
         });
         const onSubmit = handleSubmit(values => {
-            Inertia.post(route('student.create'), values)
+            Inertia.post(route('academicYear.create'), values)
         });
         const { value: title } = useField('title')
         const { value: sdate } = useField('sdate')
@@ -72,9 +72,7 @@ export default {
         }
     },
     methods: {
-        submit(values){
-            this.$inertia.post(this.route('student.create'), values)
-        }
+
     },
 
 

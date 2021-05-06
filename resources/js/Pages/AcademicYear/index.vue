@@ -1,6 +1,6 @@
 <template>
     <div class="content-header mb-5">
-        <h2>New Academic Year</h2>
+        <h2>Academic Years</h2>
     </div>
     <div class="card p-6">
         <DataTable :value="yearsData">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\AcademicYear;
+use App\Models\Subject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
@@ -16,6 +17,9 @@ class AdminController extends Controller
         ]);
     }
     //
+    public function createAcademicYear(){
+        return Inertia::render('AcademicYear/Add', []);
+    }
     public function storeAcademicYear(Request $request)
     {
         $aYear = new AcademicYear;
@@ -31,5 +35,11 @@ class AdminController extends Controller
         );*/
         $aYear->save();
         return Redirect::route('home');
+    }
+
+    public function indexSubjects(){
+        $subjects= Subject::all();
+        return Inertia::render('subject/index', ['subjects'=>$subjects
+        ]);
     }
 }
