@@ -20,6 +20,7 @@ class Subject extends Model
     protected $fillable = [
         'name',
         'status',
+        'image_path',
     ];
 
 }

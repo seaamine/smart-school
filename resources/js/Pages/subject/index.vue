@@ -3,16 +3,15 @@
         <h2>Subjects</h2>
     </div>
     <div class="card p-6">
-        <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-10">
             <Card v-for="subject in subjects">
                 <template #header>
-                    <img alt="user header" src="demo/images/usercard.png">
                 </template>
-                <template #title>
+                <template class="h-10" #title>
                     {{subject.name}}
                 </template>
                 <template #content>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt
+                    <img class="object-center w-48 h-48 mx-auto " alt="user header" :src="subject.image_path">
                 </template>
                 <template #footer>
                     <button>Edit</button>
