@@ -21,6 +21,7 @@ class Subject extends Model
         'name',
         'status',
         'image_path',
+        'level'
     ];
 
 }

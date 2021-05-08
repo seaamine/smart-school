@@ -13,7 +13,7 @@ class AdminController extends Controller
 {
     public function indexAcademicYear(){
         $academicYears=AcademicYear::select('title','start_date','end_date')->get();
-        return Inertia::render('AcademicYear/index', ['yearsData'=>$academicYears
+        return Inertia::render('AcademicYear/Index', ['yearsData'=>$academicYears
         ]);
     }
     //
@@ -39,7 +39,10 @@ class AdminController extends Controller
 
     public function indexSubjects(){
         $subjects= Subject::all();
-        return Inertia::render('subject/index', ['subjects'=>$subjects
+        return Inertia::render('subject/Index', ['subjects'=>$subjects
         ]);
+    }
+    public function addSubject(){
+        return Inertia::render('subject/Add', []);
     }
 }

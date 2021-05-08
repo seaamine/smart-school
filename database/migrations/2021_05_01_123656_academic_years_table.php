@@ -32,6 +32,7 @@ class AcademicYearsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('academic_years');
+
     }
 }
