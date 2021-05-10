@@ -7,6 +7,8 @@
             <side-bar></side-bar>
         </div>
         <div class="h-full min-h-screen w-full p-8">
+            <Toast />
+
             <!-- Page Content -->
             <slot></slot>
         </div>
@@ -16,22 +18,33 @@
 <script>
 import SideBar from "@/Layouts/Partials/SideBar";
 import NavBar from "@/Layouts/Partials/NavBar";
+import Toast from 'primevue/toast';
+
 export default {
     name: "DashLayout",
     components: {
         NavBar,
         SideBar,
+        Toast,
     },
     data () {
         return {
             toggleSb: false,
+
         }
-    },
-    props: {
-        user: Object,
     },
     methods:{
 
+    },
+    computed: {
+        pageToast () {
+            return this.$page.props.toast;
+        },
+    },
+    watch: {
+        pageToast: function(newVal, oldVal) { // watch it
+            this.$toast.add({severity:newVal.type, summary: newVal.message, detail:newVal.detail, life: 3000});
+        }
     }
 }
 </script>
