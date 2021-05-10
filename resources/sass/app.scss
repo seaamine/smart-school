@@ -54,6 +54,15 @@ body {
 .form-control.is-valid , .form-control.is-valid:focus{
     @apply border-success-500;
 }
+.is-invalid .form-group .p-checkbox-box{
+    @apply border-danger-500;
+    &.p-highlight{
+        @apply border-danger-500;
+    }
+}
+.is-invalid .form-group>label{
+    @apply text-danger-500;
+}
 .form-control:focus::placeholder {
     transform: translate(5px);
     transition: all 0.2s ease;
@@ -89,6 +98,9 @@ body {
     box-shadow: 0 4px 24px 0 rgba(34,41,47,0.1);
     transition: all .3s ease-in-out,background 0s,color 0s,border-color 0s;
 
+}
+.card-danger{
+    background-color: #ea5455!important;;
 }
 h1{
     font-size: 2rem;

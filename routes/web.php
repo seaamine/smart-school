@@ -37,8 +37,12 @@ Route::get('/student/create', function () {
 Route::get('/academic-years',  [\App\Http\Controllers\AdminController::class,'indexAcademicYear'])->name('academicYear.index');
 Route::get('/academic-years/create', [\App\Http\Controllers\AdminController::class,'createAcademicYear'])->name('academicYear.create');
 Route::post('/academic-years/create', [\App\Http\Controllers\AdminController::class,'storeAcademicYear'])->name('academicYear.store');
+
 Route::get('/subjects',  [\App\Http\Controllers\AdminController::class,'indexSubjects'])->name('subject.index');
 Route::get('/subjects/add',  [\App\Http\Controllers\AdminController::class,'addSubject'])->name('subject.add');
+Route::post('/subjects/add',  [\App\Http\Controllers\AdminController::class,'storeSubject'])->name('subject.store');
+Route::get('/subjects/edit',  [\App\Http\Controllers\AdminController::class,'editSubject'])->name('subject.edit');
+Route::patch('/subjects/edit',  [\App\Http\Controllers\AdminController::class,'patchSubject'])->name('subject.patch');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');

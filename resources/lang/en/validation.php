@@ -150,6 +150,6 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => ['selectedType'=> 'Type',],
 
 ];

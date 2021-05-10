@@ -45,4 +45,43 @@ class AdminController extends Controller
     public function addSubject(){
         return Inertia::render('subject/Add', []);
     }
+
+    public function storeSubject(Request $request){
+        //dd($request->all());
+        $validated = $request->validate([
+            'name' => 'required|unique:subjects,name|max:255',
+            'levels' => 'required|array|min:1',
+            'levels.*' => 'required|in:1,2,3,4',
+            'selectedType' => 'required|in:1,2',
+        ]);
+        $subject = new Subject();
+        $subject->name=$request->input('name');
+        $subject->type = $request->input('selectedType');
+        $subject->level = implode(',',$request->input('levels'));
+        $subject->save();
+        session()->flash("toast",['type'=>'success','summary'=>'Opération réussie','detail'=>'une nouveau Matière a été ajoutée.']);
+        return redirect()->route('subject.index');
+        return Inertia::render('subject/Add', []);
+    }
+    public function editSubject(Request $request){
+        $subject = Subject::findOrFail($request->input('id'));
+        $subject->level = explode(',',$subject->level);
+        return Inertia::render('subject/Edit', ['subject'=>$subject]);
+    }
+    public function patchSubject(Request $request){
+        $subject = Subject::findOrFail($request->input('id'));
+        $validated = $request->validate([
+            'name' => 'required|unique:subjects,name|max:255',
+            'levels' => 'required|array|min:1',
+            'levels.*' => 'required|in:1,2,3,4',
+            'selectedType' => 'required|in:1,2',
+        ]);
+        $subject->name=$request->input('name');
+        $subject->type = $request->input('selectedType');
+        $subject->level = implode(',',$request->input('levels'));
+        $subject->save();
+        session()->flash("toast",['type'=>'success','summary'=>'Opération réussie','detail'=>'la Matière a été modifée.']);
+
+        return redirect()->route('subject.patch',['id'=>$subject->id]);
+    }
 }
