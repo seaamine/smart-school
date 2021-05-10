@@ -21868,12 +21868,17 @@ __webpack_require__.r(__webpack_exports__);
   watch: {
     pageToast: function pageToast(newVal, oldVal) {
       // watch it
-      this.$toast.add({
-        severity: newVal.type,
-        summary: newVal.message,
-        detail: newVal.detail,
-        life: 3000
-      });
+      console.log(newVal);
+      console.log(oldVal);
+
+      if (Object.keys(newVal).length) {
+        this.$toast.add({
+          severity: newVal.type,
+          summary: newVal.message,
+          detail: newVal.detail,
+          life: 3000
+        });
+      }
     }
   }
 });
