@@ -28,6 +28,5 @@ class SubjectsSeeder extends Seeder
         Subject::create(['name'=>'langue française','status'=>1,'image_path'=>'images/french.jpg']);
         Subject::create(['name'=>'langue anglaise','status'=>1,'image_path'=>'images/english.jpg']);
 
-
     }
 }

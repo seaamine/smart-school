@@ -44,6 +44,11 @@ Route::post('/subjects/add',  [\App\Http\Controllers\AdminController::class,'sto
 Route::get('/subjects/edit',  [\App\Http\Controllers\AdminController::class,'editSubject'])->name('subject.edit');
 Route::patch('/subjects/edit',  [\App\Http\Controllers\AdminController::class,'patchSubject'])->name('subject.patch');
 
+Route::get('/classes',  [\App\Http\Controllers\AdminController::class,'indexClass'])->name('class.index');
+Route::get('/classes/add',  [\App\Http\Controllers\AdminController::class,'addClass'])->name('class.add');
+Route::post('/classes/add',  [\App\Http\Controllers\AdminController::class,'storeClass'])->name('class.store');
+
+
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->name('dashboard');

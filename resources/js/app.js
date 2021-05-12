@@ -1,9 +1,9 @@
 require('./bootstrap');
 
 // Import modules...
-import { createApp, h } from 'vue';
-import { App as InertiaApp, plugin as InertiaPlugin } from '@inertiajs/inertia-vue3';
-import { InertiaProgress } from '@inertiajs/progress';
+import {createApp, h} from 'vue';
+import {App as InertiaApp, plugin as InertiaPlugin} from '@inertiajs/inertia-vue3';
+import {InertiaProgress} from '@inertiajs/progress';
 import PrimeVue from 'primevue/config';
 import ToastService from 'primevue/toastservice';
 
@@ -17,10 +17,21 @@ createApp({
             resolveComponent: (name) => require(`./Pages/${name}`).default,
         }),
 })
-    .mixin({ methods: { route } })
+    .mixin({
+        methods: {
+            route,
+            formatDate(value) {
+                return new Date(value).toLocaleDateString('tzm-Latn-DZ', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                });
+            },
+        }
+    })
     .use(InertiaPlugin)
     .use(PrimeVue)
     .use(ToastService)
     .mount(el);
 
-InertiaProgress.init({ color: '#4B5563' });
+InertiaProgress.init({color: '#4B5563'});

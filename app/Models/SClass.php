@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class SClass extends Model
 {
     use HasFactory;
-
+    protected $table = "classes";
     /**
      * The attributes that are mass assignable.
      *
@@ -17,6 +17,7 @@ class SClass extends Model
     protected $fillable = [
         'name',
         'groups',
+        'level',
         'status',
     ];
 }

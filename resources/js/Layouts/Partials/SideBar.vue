@@ -1,7 +1,7 @@
 <template>
     <ul>
         <li class="nav-item">
-            <inertia-link class="flex items-center" :class="{ 'active': linkIsActive('student.create') }" href="/student/create">
+            <inertia-link class="flex items-center" @click="changeActiveLink('student.*')"  :class="{ 'active': activeLink == 'student.*' }" href="/student/create">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-4 flex-shrink" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
@@ -10,19 +10,27 @@
 
         </li>
         <li class="nav-item">
-            <inertia-link class="flex items-center" :class="{ 'active': linkIsActive('subject.index') }" :href="route('subject.index')">
+            <inertia-link class="flex items-center" @click="changeActiveLink('subject.*')"  :class="{ 'active': activeLink == 'subject.*' }" :href="route('subject.index')">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-4 flex-shrink" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
                 <span>Matieres</span>
             </inertia-link>
         </li>
-        <li class="nav-item">
-            <inertia-link class="flex items-center" :class="{ 'active': linkIsActive('academicYear.index') }" :href="route('academicYear.index')">
+        <li class="nav-item" >
+            <inertia-link class="flex items-center" @click="changeActiveLink('academicYear.*')" :class="{ 'active': activeLink == 'academicYear.*' }" :href="route('academicYear.index')">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-4 flex-shrink" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
                 <span>Années Académiques</span>
+            </inertia-link>
+        </li>
+        <li class="nav-item" @click="changeActiveLink='class.*'" >
+            <inertia-link class="flex items-center" @click="changeActiveLink('class.*')" :class="{ 'active': activeLink == 'class.*' }" :href="route('class.index')">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-4 flex-shrink" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span>Classes</span>
             </inertia-link>
         </li>
     </ul>
@@ -35,10 +43,17 @@
     setup(){
     },
         methods:{
-            linkIsActive: (routeName) => {
-                return route().current(routeName);
+            changeActiveLink: function(routeName) {
+                console.log(routeName);
+                this.activeLink = routeName;
             },
-        }
+        },
+        data() {
+            let routeGroups = ['student.*','subject.*','academicYear.*','class.*'];
+            return {
+                activeLink: routeGroups.find(rt => route().current(rt)),
+            }
+        },
 }
 
 </script>

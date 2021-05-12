@@ -150,6 +150,6 @@ return [
     |
     */
 
-    'attributes' => ['selectedType'=> 'Type',],
+    'attributes' => ['selectedType'=> 'Type','subjectImage' => 'Image de Matière'],
 
 ];

@@ -17,6 +17,7 @@ class CreateClassesTable extends Migration
             $table->id();
             $table->string('name');
             $table->tinyInteger('groups')->default(2);
+            $table->enum('level',[1,2,3,4])->default(1);
             $table->enum('status', [0,1])->default(0);
             $table->timestamps();
             $table->softDeletes();
