@@ -51,6 +51,12 @@ body {
     border: 1px solid #d8d6de;
     border-radius: .357rem;
 }
+textarea.form-control{
+    padding: 0.8rem 1rem !important;
+}
+select.form-control[multiple], select.form-control[size], textarea.form-control {
+    height: auto;
+}
 
 .form-control::placeholder {
     color: #d8d6de;

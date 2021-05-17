@@ -1,7 +1,6 @@
 <template>
-    <p>hello</p>
     <div class="content-header mb-5">
-        <h2>Nouveau Matière</h2>
+        <h2>Nouveau Classe</h2>
     </div>
     <div v-if="Object.keys(errors).length" class="card card-danger p-6 mb-4 text-white">
         <ul class="list-disc">
@@ -40,8 +39,8 @@
             </div>
             <div class="form-group">
                 <Label>Nombre des Groupes</Label>
-                <input name="groups" v-model="groups" class="form-control" :class="{ 'is-invalid': veeErrors.name }" type="text" placeholder="Titre" disabled="disabled">
-                <span class="text-danger-500">{{ veeErrors.name }}</span>
+                <input name="groups" v-model="groups" class="form-control" :class="{ 'is-invalid': veeErrors.groups }" type="text" placeholder="Titre" disabled="disabled">
+                <span class="text-danger-500">{{ veeErrors.groups }}</span>
             </div>
 
             <div>
@@ -61,7 +60,7 @@ import Dropdown from 'primevue/dropdown';
 
 import { useForm, useField,Form, ErrorMessage } from 'vee-validate';
 import * as yup from "yup";
-import {computed} from "vue";
+import {watchEffect} from "vue";
 
 export default {
     components:{ Label, RadioButton, Dropdown, Form,ErrorMessage},
@@ -69,12 +68,12 @@ export default {
     layout: DashLayout,
     setup() {
         const schema = yup.object({
-            name: yup.string().required().min(3),
+            name: yup.string().required(),
             level: yup.number().required(),
             groups: yup.number().required(),
         });
         const { errors,handleSubmit,isSubmitting } = useForm({
-            validationSchema: schema, initialValues: {'groups':2}
+            validationSchema: schema, initialValues: {'groups':2,'name':''}
         });
         const veeErrors = errors;
         const onSubmit = handleSubmit(values => {
@@ -83,6 +82,15 @@ export default {
         const { value: name } = useField('name');
         const { value: level } = useField('level')
         const { value: groups } = useField('groups')
+        watchEffect(() => {
+            let lv = level.value ||'?'
+            let startStr = lv + 'AM';
+            if(!name.value.startsWith(startStr)){
+                let value = name.value.startsWith('AM',1) ? name.value.substring(3,name.value.length) : name.value;
+                name.value = startStr  + value;
+            }
+        });
+
 
         return {veeErrors, name, onSubmit,isSubmitting,level,groups};
     },
@@ -97,7 +105,8 @@ export default {
     methods: {
 
     },
-    props: {
+
+        props: {
         errors: Object,
     },
 

@@ -74,6 +74,10 @@ module.exports = {
             opacity: ['disabled'],
             backgroundColor: ['active'],
             backgroundOpacity: ['active'],
+            ringWidth: ['hover', 'active'],
+            ringColor: ['hover', 'active'],
+            ringOpacity: ['hover', 'active'],
+
         },
     },
 

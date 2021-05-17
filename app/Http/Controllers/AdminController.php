@@ -110,10 +110,46 @@ class AdminController extends Controller
             'level' => 'required|in:1,2,3,4',
         ]);
         $class= new SClass();
-        $class->name=$request->input('name');
+        $name = $request->input('name');
+        $startName = $request->input('level').'AM';
+        $class->name=strpos($name,$startName ) === 0 ?$name: $startName.$name;
         $class->level = $request->input('level');
+        $class->groups = 2;
         $class->save();
         session()->flash("toast",['type'=>'success','summary'=>'Opération réussie','detail'=>'une nouveau Class a été ajoutée.']);
         return redirect()->route('class.index');
+    }
+    public function editClass(Request $request){
+        $class = SClass::findOrFail($request->input('id'));
+        return Inertia::render('Class/Edit', ['classe'=>$class]);
+    }
+    public function patchClass(Request $request){
+        $subject = Subject::findOrFail($request->input('id'));
+        $validated = $request->validate([
+            'name' => ['required', 'max:255',
+                Rule::unique('subjects',name)->ignore($subject->id),
+            ],
+            'levels' => 'required|array|min:1',
+            'levels.*' => 'required|in:1,2,3,4',
+            'selectedType' => 'required|in:1,2',
+            'subjectImage' => 'file|image|max:2048'
+        ]);
+        $subjectImage = $request->file('subjectImage');
+        $file_name = time().'_'.$subjectImage->getClientOriginalName();
+        $file_path = $subjectImage->storeAs('subject_images', $file_name, 'public');
+
+        $subject->name=$request->input('name');
+        $subject->type = $request->input('selectedType');
+        $subject->level = implode(',',$request->input('levels'));
+        $subject->image_path = 'storage/'.$file_path;
+        $subject->save();
+        session()->flash("toast",['type'=>'success','summary'=>'Opération réussie','detail'=>'la Matière a été modifée.']);
+
+        return redirect()->route('subject.patch',['id'=>$subject->id]);
+    }
+
+    public function addStudent(){
+        $classes=SClass::all();
+        return Inertia::render('Student/Add', ["classes"=>$classes]);
     }
 }
