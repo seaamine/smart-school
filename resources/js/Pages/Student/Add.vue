@@ -27,49 +27,52 @@
                     </div>
                     <div class="form-group w-full">
                         <Label>Sexe</Label>
-                        <input name="first_name" v-model="gender" class="form-control" :class="{ 'is-invalid': veeErrors.firstName }" type="text" placeholder="Sexe">
-                        <span class="text-danger-500">{{ veeErrors.firstName }}</span>
+                        <select name="gender" v-model="gender" class="form-control" :class="{ 'is-invalid': veeErrors.gender }" type="text" placeholder="Gender">
+                            <option value="m">Male</option>
+                            <option value="f">Female</option>
+                        </select>
+                        <span class="text-danger-500">{{ veeErrors.gender }}</span>
                     </div>
                 </div>
                 <div class="flex gap-x-7 flex-col md:flex-row">
                     <div class="form-group w-full">
                         <Label>Date de naissaince</Label>
-                        <input name="last_name" v-model="lastName" class="form-control" :class="{ 'is-invalid': veeErrors.lastName }" type="text" placeholder="Last Name">
-                        <span class="text-danger-500">{{ veeErrors.lastName }}</span>
+                        <Calendar :monthNavigator="true" :yearNavigator="true" :yearRange="dobRange()" name="sdate" v-model="dob" class="w-full" :inputClass="['form-control',{ 'is-invalid': errors.dob }]" placeholder="Date de naissaince"/>
+                        <span class="text-danger-500">{{ veeErrors.dob }}</span>
                     </div>
                     <div class="form-group w-full">
                         <Label>Commune</Label>
-                        <input name="first_name" v-model="firstName" class="form-control" :class="{ 'is-invalid': veeErrors.firstName }" type="text" placeholder="First Name">
-                        <span class="text-danger-500">{{ veeErrors.firstName }}</span>
+                        <input name="commune" v-model="commune" class="form-control" :class="{ 'is-invalid': veeErrors.commune }" type="text" placeholder="Commune">
+                        <span class="text-danger-500">{{ veeErrors.commune }}</span>
                     </div>
                     <div class="form-group w-full">
                         <Label>Willaya</Label>
-                        <input name="first_name" v-model="gender" class="form-control" :class="{ 'is-invalid': veeErrors.firstName }" type="text" placeholder="Sexe">
-                        <span class="text-danger-500">{{ veeErrors.firstName }}</span>
+                        <input name="willaya" v-model="willaya" class="form-control" :class="{ 'is-invalid': veeErrors.willaya }" type="text" placeholder="Willaya">
+                        <span class="text-danger-500">{{ veeErrors.willaya }}</span>
                     </div>
                     <div class="form-group w-full">
                         <Label>Paye</Label>
-                        <input name="first_name" v-model="gender" class="form-control" :class="{ 'is-invalid': veeErrors.firstName }" type="text" placeholder="Sexe">
-                        <span class="text-danger-500">{{ veeErrors.firstName }}</span>
+                        <input name="paye" v-model="paye" class="form-control" :class="{ 'is-invalid': veeErrors.paye }" type="text" placeholder="Paye">
+                        <span class="text-danger-500">{{ veeErrors.paye }}</span>
                     </div>
                 </div>
                 <div class="flex gap-x-7 flex-col md:flex-row">
                     <div class="form-group md:w-1/3">
                         <Label>Photo</Label>
                         <input type="file" class="form-control" @change="onFileSelect" accept="image/*">
-                        <span class="text-danger-500">{{ veeErrors.subjectImage }}</span>
+                        <span class="text-danger-500">{{ veeErrors.photo }}</span>
                     </div>
                     <div class="form-group md:w-1/3">
                         <Label>Email</Label>
-                        <input name="first_name" v-model="gender" class="form-control" :class="{ 'is-invalid': veeErrors.firstName }" type="text" placeholder="Sexe">
-                        <span class="text-danger-500">{{ veeErrors.firstName }}</span>
+                        <input name="email" v-model="email" class="form-control" :class="{ 'is-invalid': veeErrors.email }" type="email" placeholder="Email">
+                        <span class="text-danger-500">{{ veeErrors.email }}</span>
                     </div>
                 </div>
                 <div class="flex gap-x-7 flex-col md:flex-row">
                     <div class="form-group md:w-1/3">
                         <Label>Note</Label>
-                        <textarea class="form-control h-auto" rows="2"></textarea>
-                        <span class="text-danger-500">{{ veeErrors.firstName }}</span>
+                        <textarea v-model="note" class="form-control h-auto" rows="2"></textarea>
+                        <span class="text-danger-500">{{ veeErrors.note }}</span>
                     </div>
                 </div>
             </div>
@@ -178,17 +181,24 @@ import DashLayout from '@/Layouts/DashLayout';
 import Label from "@/Jetstream/Label";
 import { Inertia } from '@inertiajs/inertia';
 import RadioButton from 'primevue/radiobutton';
+import Calendar from 'primevue/calendar';
 
 import { useForm, useField,Form, ErrorMessage } from 'vee-validate';
 import * as yup from "yup";
 export default {
-    components:{ Label, RadioButton, Form,ErrorMessage},
+    components:{ Label, RadioButton, Form, ErrorMessage, Calendar},
     layout: DashLayout,
     name: "Add",
     setup() {
         const schema = yup.object({
             lastName: yup.string().required(),
             firstName: yup.string().required(),
+            gender: yup.string().required().oneOf(['m', 'f']),
+            dob: yup.date().required(),
+            commune: yup.string().required(),
+            willaya: yup.string().required(),
+            paye: yup.string().required(),
+            email: yup.string().email(),
         });
         const { errors,handleSubmit,isSubmitting } = useForm({
             validationSchema: schema,
@@ -199,10 +209,19 @@ export default {
         });
         const { value: lastName } = useField('lastName');
         const { value: firstName } = useField('firstName');
+        const { value: gender } = useField('gender');
         const { value: level } = useField('level');
         const { value: group } = useField('group');
         const { value: classR } = useField('classR');
-        return {veeErrors, lastName, onSubmit,isSubmitting,firstName,level,group,classR};
+        const { value: dob } = useField('dob');
+        const { value: commune } = useField('commune');
+        const { value: willaya } = useField('willaya');
+        const { value: paye } = useField('paye');
+        const { value: email } = useField('email');
+        const { value: note } = useField('note');
+        return {veeErrors, lastName, onSubmit,isSubmitting,firstName,level,group,classR,gender,dob,commune,willaya,
+            paye,email,note
+        };
     },
     computed:{
         levelClasses: function(){
@@ -211,6 +230,16 @@ export default {
         classGroups: function(){
             return this.classR?.groups;
         },
+    },
+    methods:{
+        dobRange: function(){
+            let date = new Date();
+            let maxY = date.getFullYear();
+            let minY = maxY - 20;
+            console.log(minY + '-' + maxY);
+            return minY + ':' + maxY;
+
+        }
     },
     props: {
         errors: Object,
