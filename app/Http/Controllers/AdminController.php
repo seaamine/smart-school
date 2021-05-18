@@ -154,6 +154,26 @@ class AdminController extends Controller
     }
     public function storeStudent(Request $request){
         dd($request->all());
+        [
+  "lastName" => "laamari",
+  "firstName" => "mohamed",
+  "gender" => "m",
+  "level" => "1",
+  "group" => 1,
+  "classR" => "",
+  "dob" => "2021-05-12T23:00:00.000Z",
+  "commune" => "batna",
+  "willaya" => "batna",
+  "paye" => "Algerie",
+  "email" => "sea.amine@gmail.com",
+  "fatherFirstName" => "ahmed",
+  "fatherPhone" => "0554621378",
+  "motherName" => "habia baguigui",
+  "motherPhone" => "05621378",
+  "address" => "75",
+  "username" => "storm",
+  "password" => "123456",
+];
         return Inertia::render('Student/Add', ["classes"=>$classes]);
     }
 }

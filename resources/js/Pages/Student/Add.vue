@@ -35,7 +35,7 @@
                     </div>
                 </div>
                 <div class="flex gap-x-7 flex-col md:flex-row">
-                    <div class="form-group w-full">
+                    <div id="p12345" class="form-group w-full p12345">
                         <Label>Date de naissaince</Label>
                         <Calendar :monthNavigator="true" :yearNavigator="true" :yearRange="dobRange()" name="sdate" v-model="dob" class="w-full" :inputClass="['form-control',{ 'is-invalid': errors.dob }]" placeholder="Date de naissaince"/>
                         <span class="text-danger-500">{{ veeErrors.dob }}</span>
@@ -136,7 +136,7 @@
                     </div>
                     <div class="form-group md:w-1/4">
                         <Label>Classe</Label>
-                        <select name="classR" v-model="classR" class="form-control">
+                        <select name="classR" :disabled="level == null" v-model="classR" class="form-control">
                             <option v-for="classe in levelClasses" :value="classe" :key="classe.id">
                                 {{classe.name}}
                             </option>
@@ -144,7 +144,7 @@
                     </div>
                     <div class="form-group md:w-1/4">
                         <Label>Groupe</Label>
-                        <select name="group" v-model="group" class="form-control">
+                        <select name="group" v-model="group" :disabled="classR == null" class="form-control">
                             <option v-for="g in classGroups" :value="g" :key="'g'+g">
                                 {{'Groupe '+g}}
                             </option>
