@@ -98,7 +98,7 @@
                     </div>
                     <div class="form-group md:w-1/3">
                         <Label>No de téléphone de mère</Label>
-                        <input name="first_name" v-model="motherPhone" class="form-control" :class="{ 'is-invalid': veeErrors.motherPhone }" type="text" placeholder="No de téléphone ">
+                        <input name="first_name" v-model="motherPhone" class="form-control" :class="{ 'is-invalid': veeErrors.motherPhone }" type="text" placeholder="No de téléphone de mère">
                         <span class="text-danger-500">{{ veeErrors.motherPhone }}</span>
                     </div>
                 </div>
@@ -115,8 +115,7 @@
                 <div class="flex gap-x-7 flex-col md:flex-row">
                     <div class="form-group md:w-1/4">
                         <Label>N° d'enregistrement</Label>
-                        <input name="first_name" v-model="registrationN" class="form-control" :class="{ 'is-invalid': veeErrors.registrationN }" type="text" placeholder="N° d'enregistrement">
-                        <span class="text-danger-500">{{ veeErrors.registrationN }}</span>
+                        <input disabled="disabled" class="form-control" type="text" placeholder="N° d'enregistrement">
                     </div>
                     <div class="form-group md:w-1/4">
                         <Label>Niveau</Label>
@@ -158,12 +157,12 @@
                 <div class="flex gap-x-7 flex-col md:flex-row">
                     <div class="form-group md:w-1/2">
                         <Label>Nom d'utilisateur</Label>
-                        <input name="first_name" v-model="username" class="form-control" :class="{ 'is-invalid': veeErrors.username }" type="text" placeholder="Nom d'utilisateur">
+                        <input name="username" v-model="username" class="form-control" :class="{ 'is-invalid': veeErrors.username }" type="text" placeholder="Nom d'utilisateur">
                         <span class="text-danger-500">{{ veeErrors.username }}</span>
                     </div>
                     <div class="form-group md:w-1/2">
                         <Label>Mot de pass</Label>
-                        <input name="first_name" v-model="password" class="form-control" :class="{ 'is-invalid': veeErrors.password }" type="text" placeholder="Mot de pass">
+                        <input name="password" v-model="password" class="form-control" :class="{ 'is-invalid': veeErrors.password }" type="text" placeholder="Mot de pass">
                         <span class="text-danger-500">{{ veeErrors.password }}</span>
                     </div>
                 </div>
@@ -199,6 +198,16 @@ export default {
             willaya: yup.string().required(),
             paye: yup.string().required(),
             email: yup.string().email(),
+            fatherFirstName: yup.string().required(),
+            fatherPhone: yup.number().required().positive().integer(),
+            motherName: yup.string().required(),
+            motherPhone: yup.number().required().positive().integer(),
+            address: yup.string().required(),
+            level: yup.number().required().oneOf([1, 2, 3, 4]),
+            classR: yup.mixed().required(),
+            group: yup.number().required().positive().integer(),
+            username: yup.string().required(),
+            password: yup.string().required().min(6),
         });
         const { errors,handleSubmit,isSubmitting } = useForm({
             validationSchema: schema,
@@ -219,8 +228,15 @@ export default {
         const { value: paye } = useField('paye');
         const { value: email } = useField('email');
         const { value: note } = useField('note');
+        const { value: fatherFirstName } = useField('fatherFirstName');
+        const { value: fatherPhone } = useField('fatherPhone');
+        const { value: motherName } = useField('motherName');
+        const { value: motherPhone } = useField('motherPhone');
+        const { value: address } = useField('address');
+        const { value: username } = useField('username');
+        const { value: password } = useField('password');
         return {veeErrors, lastName, onSubmit,isSubmitting,firstName,level,group,classR,gender,dob,commune,willaya,
-            paye,email,note
+            paye,email,note,fatherFirstName,fatherPhone,motherName,motherPhone,address,username,password
         };
     },
     computed:{

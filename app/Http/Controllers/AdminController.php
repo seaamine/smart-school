@@ -152,4 +152,8 @@ class AdminController extends Controller
         $classes=SClass::all();
         return Inertia::render('Student/Add', ["classes"=>$classes]);
     }
+    public function storeStudent(Request $request){
+        dd($request->all());
+        return Inertia::render('Student/Add', ["classes"=>$classes]);
+    }
 }

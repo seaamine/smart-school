@@ -51,6 +51,7 @@ Route::get('/classes/edit',  [\App\Http\Controllers\AdminController::class,'edit
 Route::patch('/classes/edit',  [\App\Http\Controllers\AdminController::class,'patchClass'])->name('class.patch');
 
 Route::get('/students/add',  [\App\Http\Controllers\AdminController::class,'addStudent'])->name('student.add');
+Route::post('/students/add',  [\App\Http\Controllers\AdminController::class,'storeStudent'])->name('student.store');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');

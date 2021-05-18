@@ -23459,7 +23459,17 @@ __webpack_require__.r(__webpack_exports__);
       commune: yup__WEBPACK_IMPORTED_MODULE_5__.string().required(),
       willaya: yup__WEBPACK_IMPORTED_MODULE_5__.string().required(),
       paye: yup__WEBPACK_IMPORTED_MODULE_5__.string().required(),
-      email: yup__WEBPACK_IMPORTED_MODULE_5__.string().email()
+      email: yup__WEBPACK_IMPORTED_MODULE_5__.string().email(),
+      fatherFirstName: yup__WEBPACK_IMPORTED_MODULE_5__.string().required(),
+      fatherPhone: yup__WEBPACK_IMPORTED_MODULE_5__.number().required().positive().integer(),
+      motherName: yup__WEBPACK_IMPORTED_MODULE_5__.string().required(),
+      motherPhone: yup__WEBPACK_IMPORTED_MODULE_5__.number().required().positive().integer(),
+      address: yup__WEBPACK_IMPORTED_MODULE_5__.string().required(),
+      level: yup__WEBPACK_IMPORTED_MODULE_5__.number().required().oneOf([1, 2, 3, 4]),
+      classR: yup__WEBPACK_IMPORTED_MODULE_5__.mixed().required(),
+      group: yup__WEBPACK_IMPORTED_MODULE_5__.number().required().positive().integer(),
+      username: yup__WEBPACK_IMPORTED_MODULE_5__.string().required(),
+      password: yup__WEBPACK_IMPORTED_MODULE_5__.string().required().min(6)
     });
 
     var _useForm = (0,vee_validate__WEBPACK_IMPORTED_MODULE_6__.useForm)({
@@ -23510,6 +23520,27 @@ __webpack_require__.r(__webpack_exports__);
     var _useField12 = (0,vee_validate__WEBPACK_IMPORTED_MODULE_6__.useField)('note'),
         note = _useField12.value;
 
+    var _useField13 = (0,vee_validate__WEBPACK_IMPORTED_MODULE_6__.useField)('fatherFirstName'),
+        fatherFirstName = _useField13.value;
+
+    var _useField14 = (0,vee_validate__WEBPACK_IMPORTED_MODULE_6__.useField)('fatherPhone'),
+        fatherPhone = _useField14.value;
+
+    var _useField15 = (0,vee_validate__WEBPACK_IMPORTED_MODULE_6__.useField)('motherName'),
+        motherName = _useField15.value;
+
+    var _useField16 = (0,vee_validate__WEBPACK_IMPORTED_MODULE_6__.useField)('motherPhone'),
+        motherPhone = _useField16.value;
+
+    var _useField17 = (0,vee_validate__WEBPACK_IMPORTED_MODULE_6__.useField)('address'),
+        address = _useField17.value;
+
+    var _useField18 = (0,vee_validate__WEBPACK_IMPORTED_MODULE_6__.useField)('username'),
+        username = _useField18.value;
+
+    var _useField19 = (0,vee_validate__WEBPACK_IMPORTED_MODULE_6__.useField)('password'),
+        password = _useField19.value;
+
     return {
       veeErrors: veeErrors,
       lastName: lastName,
@@ -23525,7 +23556,14 @@ __webpack_require__.r(__webpack_exports__);
       willaya: willaya,
       paye: paye,
       email: email,
-      note: note
+      note: note,
+      fatherFirstName: fatherFirstName,
+      fatherPhone: fatherPhone,
+      motherName: motherName,
+      motherPhone: motherPhone,
+      address: address,
+      username: username,
+      password: password
     };
   },
   computed: {
@@ -30016,9 +30054,15 @@ var _hoisted_63 = {
 
 var _hoisted_64 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("N° d'enregistrement");
 
-var _hoisted_65 = {
-  "class": "text-danger-500"
-};
+var _hoisted_65 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
+  disabled: "disabled",
+  "class": "form-control",
+  type: "text",
+  placeholder: "N° d'enregistrement"
+}, null, -1
+/* HOISTED */
+);
+
 var _hoisted_66 = {
   "class": "form-group md:w-1/4"
 };
@@ -30092,7 +30136,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
   /* UNKEYED_FRAGMENT */
   ))])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("form", {
     "class": "divide-y",
-    onSubmit: _cache[22] || (_cache[22] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
+    onSubmit: _cache[21] || (_cache[21] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
       return $setup.onSubmit && $setup.onSubmit.apply($setup, arguments);
     }, ["prevent"]))
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [_hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Label, null, {
@@ -30312,7 +30356,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
   }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
     name: "first_name",
     "onUpdate:modelValue": _cache[11] || (_cache[11] = function ($event) {
-      return _ctx.fatherFirstName = $event;
+      return $setup.fatherFirstName = $event;
     }),
     "class": ["form-control", {
       'is-invalid': $setup.veeErrors.fatherFirstName
@@ -30321,7 +30365,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
     placeholder: "Nom du père"
   }, null, 2
   /* CLASS */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.fatherFirstName]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_46, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.veeErrors.fatherFirstName), 1
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.fatherFirstName]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_46, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.veeErrors.fatherFirstName), 1
   /* TEXT */
   )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_47, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Label, null, {
     "default": _withId(function () {
@@ -30333,7 +30377,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
   }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
     name: "first_name",
     "onUpdate:modelValue": _cache[12] || (_cache[12] = function ($event) {
-      return _ctx.fatherPhone = $event;
+      return $setup.fatherPhone = $event;
     }),
     "class": ["form-control", {
       'is-invalid': $setup.veeErrors.fatherPhone
@@ -30342,7 +30386,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
     placeholder: "No de téléphone"
   }, null, 2
   /* CLASS */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.fatherPhone]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_49, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.veeErrors.fatherPhone), 1
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.fatherPhone]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_49, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.veeErrors.fatherPhone), 1
   /* TEXT */
   )])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_50, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_51, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Label, null, {
     "default": _withId(function () {
@@ -30354,7 +30398,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
   }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
     name: "first_name",
     "onUpdate:modelValue": _cache[13] || (_cache[13] = function ($event) {
-      return _ctx.motherName = $event;
+      return $setup.motherName = $event;
     }),
     "class": ["form-control", {
       'is-invalid': $setup.veeErrors.motherName
@@ -30363,7 +30407,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
     placeholder: "Nom et Prénom de mère"
   }, null, 2
   /* CLASS */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.motherName]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_53, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.veeErrors.motherName), 1
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.motherName]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_53, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.veeErrors.motherName), 1
   /* TEXT */
   )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_54, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Label, null, {
     "default": _withId(function () {
@@ -30375,16 +30419,16 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
   }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
     name: "first_name",
     "onUpdate:modelValue": _cache[14] || (_cache[14] = function ($event) {
-      return _ctx.motherPhone = $event;
+      return $setup.motherPhone = $event;
     }),
     "class": ["form-control", {
       'is-invalid': $setup.veeErrors.motherPhone
     }],
     type: "text",
-    placeholder: "No de téléphone "
+    placeholder: "No de téléphone de mère"
   }, null, 2
   /* CLASS */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.motherPhone]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_56, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.veeErrors.motherPhone), 1
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.motherPhone]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_56, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.veeErrors.motherPhone), 1
   /* TEXT */
   )])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_57, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_58, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Label, null, {
     "default": _withId(function () {
@@ -30395,13 +30439,13 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
 
   }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("textarea", {
     "onUpdate:modelValue": _cache[15] || (_cache[15] = function ($event) {
-      return _ctx.address = $event;
+      return $setup.address = $event;
     }),
     "class": "form-control h-auto",
     rows: "2"
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.address]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_60, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.veeErrors.address), 1
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.address]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_60, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.veeErrors.address), 1
   /* TEXT */
   )])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [_hoisted_61, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_62, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_63, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Label, null, {
     "default": _withId(function () {
@@ -30410,21 +30454,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
     _: 1
     /* STABLE */
 
-  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
-    name: "first_name",
-    "onUpdate:modelValue": _cache[16] || (_cache[16] = function ($event) {
-      return _ctx.registrationN = $event;
-    }),
-    "class": ["form-control", {
-      'is-invalid': $setup.veeErrors.registrationN
-    }],
-    type: "text",
-    placeholder: "N° d'enregistrement"
-  }, null, 2
-  /* CLASS */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.registrationN]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_65, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.veeErrors.registrationN), 1
-  /* TEXT */
-  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_66, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Label, null, {
+  }), _hoisted_65]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_66, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Label, null, {
     "default": _withId(function () {
       return [_hoisted_67];
     }),
@@ -30433,7 +30463,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
 
   }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("select", {
     name: "level",
-    "onUpdate:modelValue": _cache[17] || (_cache[17] = function ($event) {
+    "onUpdate:modelValue": _cache[16] || (_cache[16] = function ($event) {
       return $setup.level = $event;
     }),
     "class": "form-control"
@@ -30448,7 +30478,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
 
   }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("select", {
     name: "classR",
-    "onUpdate:modelValue": _cache[18] || (_cache[18] = function ($event) {
+    "onUpdate:modelValue": _cache[17] || (_cache[17] = function ($event) {
       return $setup.classR = $event;
     }),
     "class": "form-control"
@@ -30472,7 +30502,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
 
   }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("select", {
     name: "group",
-    "onUpdate:modelValue": _cache[19] || (_cache[19] = function ($event) {
+    "onUpdate:modelValue": _cache[18] || (_cache[18] = function ($event) {
       return $setup.group = $event;
     }),
     "class": "form-control"
@@ -30495,9 +30525,9 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
     /* STABLE */
 
   }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
-    name: "first_name",
-    "onUpdate:modelValue": _cache[20] || (_cache[20] = function ($event) {
-      return _ctx.username = $event;
+    name: "username",
+    "onUpdate:modelValue": _cache[19] || (_cache[19] = function ($event) {
+      return $setup.username = $event;
     }),
     "class": ["form-control", {
       'is-invalid': $setup.veeErrors.username
@@ -30506,7 +30536,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
     placeholder: "Nom d'utilisateur"
   }, null, 2
   /* CLASS */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.username]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_80, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.veeErrors.username), 1
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.username]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_80, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.veeErrors.username), 1
   /* TEXT */
   )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_81, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Label, null, {
     "default": _withId(function () {
@@ -30516,9 +30546,9 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
     /* STABLE */
 
   }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
-    name: "first_name",
-    "onUpdate:modelValue": _cache[21] || (_cache[21] = function ($event) {
-      return _ctx.password = $event;
+    name: "password",
+    "onUpdate:modelValue": _cache[20] || (_cache[20] = function ($event) {
+      return $setup.password = $event;
     }),
     "class": ["form-control", {
       'is-invalid': $setup.veeErrors.password
@@ -30527,7 +30557,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
     placeholder: "Mot de pass"
   }, null, 2
   /* CLASS */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.password]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_83, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.veeErrors.password), 1
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.password]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_83, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.veeErrors.password), 1
   /* TEXT */
   )])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_84, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
     type: "submit",
@@ -31798,7 +31828,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "a.dropdown-item[data-v-62cbac59]:active{\n  background-color: #9e95f5;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "a.dropdown-item[data-v-62cbac59]:active{\n  background-color: #9e95f5;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -31822,7 +31852,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "#sidebar[data-v-6a63e488]{\n  width: 260px;\n  max-width: 260px;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "#sidebar[data-v-6a63e488]{\n  width: 260px;\n  max-width: 260px;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -31846,7 +31876,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "[data-v-2d98b894] .p-card-title{\n  height: 45px;\n  font-size: 1rem;\n  border: 1px solid rgba(34,41,47,.125);\n  border-width: 0 0 1px;\n  text-align: center;\n  display: flex;\n  align-items: center; /* Vertical center alignment */\n  justify-content: center; /* Horizontal center alignment */\n}\n[data-v-2d98b894] .p-card-footer{\n  height: 45px;\n  font-size: 1rem;\n  border: 1px solid rgba(34,41,47,.125);\n  border-width: 1px 0 0 0;\n  text-align: center;\n  display: flex;\n  align-items: center; /* Vertical center alignment */\n  justify-content: center; /* Horizontal center alignment */\n  color: #fff;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "[data-v-2d98b894] .p-card-title{\n  height: 45px;\n  font-size: 1rem;\n  border: 1px solid rgba(34,41,47,.125);\n  border-width: 0 0 1px;\n  text-align: center;\n  display: flex;\n  align-items: center; /* Vertical center alignment */\n  justify-content: center; /* Horizontal center alignment */\n}\n[data-v-2d98b894] .p-card-footer{\n  height: 45px;\n  font-size: 1rem;\n  border: 1px solid rgba(34,41,47,.125);\n  border-width: 1px 0 0 0;\n  text-align: center;\n  display: flex;\n  align-items: center; /* Vertical center alignment */\n  justify-content: center; /* Horizontal center alignment */\n  color: #fff;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -31870,7 +31900,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".bg-gray-100[data-v-317d1a6e] {\n  background-color: #f7fafc;\n  background-color: rgba(247, 250, 252, var(--tw-bg-opacity));\n}\n.border-gray-200[data-v-317d1a6e] {\n  border-color: #edf2f7;\n  border-color: rgba(237, 242, 247, var(--tw-border-opacity));\n}\n.text-gray-400[data-v-317d1a6e] {\n  color: #cbd5e0;\n  color: rgba(203, 213, 224, var(--tw-text-opacity));\n}\n.text-gray-500[data-v-317d1a6e] {\n  color: #a0aec0;\n  color: rgba(160, 174, 192, var(--tw-text-opacity));\n}\n.text-gray-600[data-v-317d1a6e] {\n  color: #718096;\n  color: rgba(113, 128, 150, var(--tw-text-opacity));\n}\n.text-gray-700[data-v-317d1a6e] {\n  color: #4a5568;\n  color: rgba(74, 85, 104, var(--tw-text-opacity));\n}\n.text-gray-900[data-v-317d1a6e] {\n  color: #1a202c;\n  color: rgba(26, 32, 44, var(--tw-text-opacity));\n}\n@media (prefers-color-scheme: dark) {\n.dark\\:bg-gray-800[data-v-317d1a6e] {\n    background-color: #2d3748;\n    background-color: rgba(45, 55, 72, var(--tw-bg-opacity));\n}\n.dark\\:bg-gray-900[data-v-317d1a6e] {\n    background-color: #1a202c;\n    background-color: rgba(26, 32, 44, var(--tw-bg-opacity));\n}\n.dark\\:border-gray-700[data-v-317d1a6e] {\n    border-color: #4a5568;\n    border-color: rgba(74, 85, 104, var(--tw-border-opacity));\n}\n.dark\\:text-white[data-v-317d1a6e] {\n    color: #fff;\n    color: rgba(255, 255, 255, var(--tw-text-opacity));\n}\n.dark\\:text-gray-400[data-v-317d1a6e] {\n    color: #cbd5e0;\n    color: rgba(203, 213, 224, var(--tw-text-opacity));\n}\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".bg-gray-100[data-v-317d1a6e] {\n  background-color: #f7fafc;\n  background-color: rgba(247, 250, 252, var(--tw-bg-opacity));\n}\n.border-gray-200[data-v-317d1a6e] {\n  border-color: #edf2f7;\n  border-color: rgba(237, 242, 247, var(--tw-border-opacity));\n}\n.text-gray-400[data-v-317d1a6e] {\n  color: #cbd5e0;\n  color: rgba(203, 213, 224, var(--tw-text-opacity));\n}\n.text-gray-500[data-v-317d1a6e] {\n  color: #a0aec0;\n  color: rgba(160, 174, 192, var(--tw-text-opacity));\n}\n.text-gray-600[data-v-317d1a6e] {\n  color: #718096;\n  color: rgba(113, 128, 150, var(--tw-text-opacity));\n}\n.text-gray-700[data-v-317d1a6e] {\n  color: #4a5568;\n  color: rgba(74, 85, 104, var(--tw-text-opacity));\n}\n.text-gray-900[data-v-317d1a6e] {\n  color: #1a202c;\n  color: rgba(26, 32, 44, var(--tw-text-opacity));\n}\n@media (prefers-color-scheme: dark) {\n.dark\\:bg-gray-800[data-v-317d1a6e] {\n    background-color: #2d3748;\n    background-color: rgba(45, 55, 72, var(--tw-bg-opacity));\n}\n.dark\\:bg-gray-900[data-v-317d1a6e] {\n    background-color: #1a202c;\n    background-color: rgba(26, 32, 44, var(--tw-bg-opacity));\n}\n.dark\\:border-gray-700[data-v-317d1a6e] {\n    border-color: #4a5568;\n    border-color: rgba(74, 85, 104, var(--tw-border-opacity));\n}\n.dark\\:text-white[data-v-317d1a6e] {\n    color: #fff;\n    color: rgba(255, 255, 255, var(--tw-text-opacity));\n}\n.dark\\:text-gray-400[data-v-317d1a6e] {\n    color: #cbd5e0;\n    color: rgba(203, 213, 224, var(--tw-text-opacity));\n}\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
