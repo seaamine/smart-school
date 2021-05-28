@@ -235,8 +235,9 @@ export default {
         const { value: address } = useField('address');
         const { value: username } = useField('username');
         const { value: password } = useField('password');
+        const { value: photo } = useField('photo');
         return {veeErrors, lastName, onSubmit,isSubmitting,firstName,level,group,classR,gender,dob,commune,willaya,
-            paye,email,note,fatherFirstName,fatherPhone,motherName,motherPhone,address,username,password
+            paye,email,note,fatherFirstName,fatherPhone,motherName,motherPhone,address,username,password,photo
         };
     },
     computed:{
@@ -252,9 +253,10 @@ export default {
             let date = new Date();
             let maxY = date.getFullYear();
             let minY = maxY - 20;
-            console.log(minY + '-' + maxY);
             return minY + ':' + maxY;
-
+        },
+        onFileSelect(event) {
+            this.photo = event.target.files[0];
         }
     },
     props: {

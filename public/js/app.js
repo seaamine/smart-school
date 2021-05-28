@@ -23541,6 +23541,9 @@ __webpack_require__.r(__webpack_exports__);
     var _useField19 = (0,vee_validate__WEBPACK_IMPORTED_MODULE_6__.useField)('password'),
         password = _useField19.value;
 
+    var _useField20 = (0,vee_validate__WEBPACK_IMPORTED_MODULE_6__.useField)('photo'),
+        photo = _useField20.value;
+
     return {
       veeErrors: veeErrors,
       lastName: lastName,
@@ -23563,7 +23566,8 @@ __webpack_require__.r(__webpack_exports__);
       motherPhone: motherPhone,
       address: address,
       username: username,
-      password: password
+      password: password,
+      photo: photo
     };
   },
   computed: {
@@ -23585,8 +23589,10 @@ __webpack_require__.r(__webpack_exports__);
       var date = new Date();
       var maxY = date.getFullYear();
       var minY = maxY - 20;
-      console.log(minY + '-' + maxY);
       return minY + ':' + maxY;
+    },
+    onFileSelect: function onFileSelect(event) {
+      this.photo = event.target.files[0];
     }
   },
   props: {
@@ -30302,7 +30308,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
     type: "file",
     "class": "form-control",
     onChange: _cache[8] || (_cache[8] = function () {
-      return _ctx.onFileSelect && _ctx.onFileSelect.apply(_ctx, arguments);
+      return $options.onFileSelect && $options.onFileSelect.apply($options, arguments);
     }),
     accept: "image/*"
   }, null, 32

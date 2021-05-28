@@ -154,26 +154,30 @@ class AdminController extends Controller
     }
     public function storeStudent(Request $request){
         dd($request->all());
-        [
-  "lastName" => "laamari",
-  "firstName" => "mohamed",
-  "gender" => "m",
-  "level" => "1",
-  "group" => 1,
-  "classR" => "",
-  "dob" => "2021-05-12T23:00:00.000Z",
-  "commune" => "batna",
-  "willaya" => "batna",
-  "paye" => "Algerie",
-  "email" => "sea.amine@gmail.com",
-  "fatherFirstName" => "ahmed",
-  "fatherPhone" => "0554621378",
-  "motherName" => "habia baguigui",
-  "motherPhone" => "05621378",
-  "address" => "75",
-  "username" => "storm",
-  "password" => "123456",
-];
+        $validated = $request->validate([
+            'name' => ['required', 'max:255',
+                Rule::unique('subjects',name)->ignore($subject->id),
+            ],
+            'lastName' => 'required|max:80',
+            'firstName' => 'required|max:80',
+            'gender' => 'required|in:m,f',
+            'level' => 'required|in:1,2,3,4',
+            'dob' => 'required|date',
+            'commune'=>'required',
+            'willaya'=>'required',
+            "paye" => "required",
+            "email" => 'email',
+            'fatherFirstName' => 'required|max:80',
+            'fatherPhone' => "required|numeric",
+            'motherName' => 'required|max:100',
+            'motherPhone' => "required|numeric",
+            'address'=> 'required',
+            'username' => 'required|max:80',
+            'password' => 'required',
+            'classR' => 'required',
+            'group' => 'required'
+        ]);
+
         return Inertia::render('Student/Add', ["classes"=>$classes]);
     }
 }
