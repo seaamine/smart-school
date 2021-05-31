@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 
+use App\Helpers\AppHelper;
 use App\Models\AcademicYear;
+use App\Models\Registration;
 use App\Models\SClass;
+use App\Models\Student;
 use App\Models\Subject;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
@@ -14,7 +18,7 @@ use Inertia\Inertia;
 class AdminController extends Controller
 {
     public function indexAcademicYear(){
-        $academicYears=AcademicYear::select('title','start_date','end_date')->get();
+        $academicYears=AcademicYear::select('title','start_date','end_date','status')->get();
         return Inertia::render('AcademicYear/Index', ['yearsData'=>$academicYears
         ]);
     }
@@ -36,7 +40,7 @@ class AdminController extends Controller
             ])
         );*/
         $aYear->save();
-        return Redirect::route('home');
+        return Redirect::route('academicYear.index');
     }
 
     public function indexSubjects(){
@@ -148,16 +152,19 @@ class AdminController extends Controller
         return redirect()->route('subject.patch',['id'=>$subject->id]);
     }
 
+    public function indexStudent(){
+        $students=Student::all();
+        return Inertia::render('Student/index', ["students"=>$students]);
+    }
+
     public function addStudent(){
         $classes=SClass::all();
         return Inertia::render('Student/Add', ["classes"=>$classes]);
     }
     public function storeStudent(Request $request){
+        sleep(20);
         dd($request->all());
         $validated = $request->validate([
-            'name' => ['required', 'max:255',
-                Rule::unique('subjects',name)->ignore($subject->id),
-            ],
             'lastName' => 'required|max:80',
             'firstName' => 'required|max:80',
             'gender' => 'required|in:m,f',
@@ -166,18 +173,86 @@ class AdminController extends Controller
             'commune'=>'required',
             'willaya'=>'required',
             "paye" => "required",
-            "email" => 'email',
+            "email" => 'email|unique:students,email|unique:users,email',
             'fatherFirstName' => 'required|max:80',
             'fatherPhone' => "required|numeric",
             'motherName' => 'required|max:100',
             'motherPhone' => "required|numeric",
-            'address'=> 'required',
+            'address'=> 'required|max:500',
             'username' => 'required|max:80',
             'password' => 'required',
             'classR' => 'required',
             'group' => 'required'
         ]);
+        $classR= $request->get("classR");
+        $sClass = SClass::where('id', $classR['id'] )->where('status', 1)->first();
+        if(!$sClass){
+            session()->flash("toast",['type'=>'error', 'summary'=>'L\'opération a échoué!','detail' => 'Mauvaise sélection de classe!']);
 
-        return Inertia::render('Student/Add', ["classes"=>$classes]);
+            return redirect()->route('student.add');
+        }
+        $academic_year = AppHelper::getAcademicYear();
+        if(!isset($academic_year)){
+            session()->flash("toast",['type'=>'error', 'summary'=>'L\'opération a échoué!','detail' => 'L\'année académique n\'est pas encore fixée! Veuillez aller dans les paramètres et le définir.']);
+            return redirect()->route('student.add');
+        }
+        $studentExist = Student::where('first_name',$request->input('firstName'))
+            ->where('last_name',$request->input('lastName'))
+            ->whereDate('dob',Date($request->input('dob')))
+            ->where('gender',$request->input('gender'))
+            ->where('father_name',$request->input('fatherFirstName'))
+            ->where('mother_full_name',$request->input('motherName'))
+            ->count();
+        if($studentExist){
+            session()->flash("toast",['type'=>'error','summary'=>'L\'opération a échoué!','detail' => 'Un étudiant inscrit avec les mêmes informations sur cette année académique!']);
+            return redirect()->route('student.add');
+        }
+        if($request->hasFile('photo')) {
+            $imgStorePath = "public/student/";
+            $storagepath = $request->file('photo')->store($imgStorePath);
+        }
+        $user = User::create([
+            'name' => "{$request->get('lastName')} {$request->get('firstName')}",
+            'username' => $request->get('username'),
+            'email' => $request->get('email'),
+            'role' => 'student',
+            'gender' => $request->input('gender'),
+            'password' => bcrypt($request->get('password')),
+            'remember_token' => null,
+        ]);
+        $student = Student::create([
+            'user_id' => $user->id,
+            'first_name' => $request->get('firstName'),
+            'last_name' => $request->get('lastName'),
+            'email' => $request->get('email'),
+            'dob' =>  $request->get('dob'),
+            'gender'=> $request->input('gender'),
+            'commune' => $request->input('commune'),
+            'willaya'=> $request->input('willaya'),
+            'paye'=> $request->input('paye'),
+            'photo'=> isset($storagepath) ? $storagepath : null,
+            'note' => $request->input('note') !== null ? $request->input('note') : null,
+            'father_name' => $request->input('fatherFirstName'),
+            'father_phone_no' => $request->input('fatherPhone'),
+            'mother_full_name' => $request->input('motherName'),
+            'mother_phone_no' => $request->input('motherPhone'),
+            'address' => $request->input('address') !== null ? $request->input('address') : null,
+            'status' => 1,
+        ]);
+        $regiNo = $academic_year->start_date->format('y') . (string)$sClass->name;
+        $totalStudent = Registration::where('academic_year_id', $academic_year->id)
+            ->where('class_id', $sClass->id)->withTrashed()->count();
+        $regiNo .= str_pad(++$totalStudent,3,'0',STR_PAD_LEFT);
+        $registration =  Registration::create([
+            'regi_no' => $regiNo,
+            'level' => $request->input('level'),
+            'student_id' => $student->id,
+            'class_id' =>$sClass->id,
+            'group' => $request->input('group'),
+            'academic_year_id' => $academic_year->id,
+        ]);
+        session()->flash("toast",['type'=>'success','summary'=>'Opération réussie','detail'=>'Nouvel étudiant inscrit avec numéro '.$regiNo]);
+
+        return redirect()->route('student.add');
     }
 }

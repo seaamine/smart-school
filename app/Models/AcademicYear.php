@@ -10,7 +10,7 @@ class AcademicYear extends Model
 {
     use HasFactory;
     use SoftDeletes;
-
+    protected $table = 'academic_years';
     protected  $dates = ['start_date', 'end_date'];
     /**
      * The attributes that are mass assignable.

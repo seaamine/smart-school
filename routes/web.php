@@ -50,6 +50,7 @@ Route::post('/classes/add',  [\App\Http\Controllers\AdminController::class,'stor
 Route::get('/classes/edit',  [\App\Http\Controllers\AdminController::class,'editClass'])->name('class.edit');
 Route::patch('/classes/edit',  [\App\Http\Controllers\AdminController::class,'patchClass'])->name('class.patch');
 
+Route::get('/students',  [\App\Http\Controllers\AdminController::class,'indexStudent'])->name('student.index');
 Route::get('/students/add',  [\App\Http\Controllers\AdminController::class,'addStudent'])->name('student.add');
 Route::post('/students/add',  [\App\Http\Controllers\AdminController::class,'storeStudent'])->name('student.store');
 

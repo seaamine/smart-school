@@ -189,3 +189,7 @@ h6 {
 .form-control:disabled, .form-control[readonly] {
     @apply bg-gray-200;
 }
+
+button:disabled{
+    @apply opacity-50 cursor-not-allowed;
+}
