@@ -21,7 +21,7 @@
                 <div class="flex justify-end">
                         <span class="p-input-icon-left ">
                             <i class="pi pi-search" />
-                            <input type="text" v-model="" class="form-control" style="padding-left: 30px;" placeholder="Keyword Search">
+                            <input type="text" v-model="search" class="form-control" style="padding-left: 30px;" placeholder="Keyword Search">
                         </span>
                 </div>
             </template>
@@ -86,6 +86,11 @@ export default {
     layout: DashLayout,
     props: {
         students: Array,
+    },
+    data() {
+      return {
+          search: null,
+      };
     },
     methods: {},
     components: {DataTable, Column},

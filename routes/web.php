@@ -57,3 +57,6 @@ Route::post('/students/add',  [\App\Http\Controllers\AdminController::class,'sto
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->name('dashboard');
+
+Route::get('/login',  [\App\Http\Controllers\AuthController::class,'login'])->name('login');
+
