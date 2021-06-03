@@ -20,4 +20,8 @@ class Registration extends Model
         'status',
         'is_promoted',
     ];
+    public function student()
+    {
+        return $this->belongsTo('App\Student', 'student_id');
+    }
 }

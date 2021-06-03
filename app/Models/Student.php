@@ -33,4 +33,9 @@ class Student extends Model
         'address',
         'status',
     ];
+
+    public function registration()
+    {
+        return $this->hasMany('App\Registration', 'student_id');
+    }
 }
