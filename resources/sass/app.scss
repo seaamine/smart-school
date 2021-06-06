@@ -176,15 +176,18 @@ h6 {
 }
 
 .badge-primary {
-    @apply bg-primary-500
+    @apply bg-primary-500;
 }
 
 .badge-success {
-    @apply bg-success-500
+    @apply bg-success-500;
 }
 
 .badge-danger {
-    @apply bg-danger-500
+    @apply bg-danger-500;
+}
+.badge-secondary{
+    @apply bg-secondary-500;
 }
 .form-control:disabled, .form-control[readonly] {
     @apply bg-gray-200;

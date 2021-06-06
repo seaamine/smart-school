@@ -1,7 +1,7 @@
 <template>
     <div class="h-screen flex-wrap  flex justify-center content-center">
         <div class="card p-6">
-            <div class="flexmb-10 flex-wrap mb-8 flex justify-center content-center">
+            <div class="mb-10 flex-wrap flex justify-center content-center">
                 <img class="mr-5" style="width: 75px; height: 75px;" width="75" height="75" :src="$page.props.appUrl+'/images/logo.png'">
                 <h2 style=" margin: auto 0px auto 0;" class="text-primary-500 align-middle font-semibold">Smart School</h2>
             </div>

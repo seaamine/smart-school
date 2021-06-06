@@ -10,26 +10,18 @@
         </ul>
     </div>
     <div class="card p-6">
-        <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 justify-items-center">
-            <Card v-for="classe in classes" class="w-60">
+        <div v-for="levelclasses in classes" class="pb-6 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 justify-items-center">
+            <Card v-for="classe in levelclasses" class="click-card w-60">
                 <template #header>
                 </template>
                 <template class="h-10" #title>
-                    <span class="pb-2">{{classe.name}}</span>
+                    {{levelName(classe.level)}}
                 </template>
                 <template #content>
+                    <span class="pb-2 text-2xl	">{{classe.name}}</span>
                 </template>
                 <template #footer>
-                    <button>Teatchers</button>
-                    <inertia-link :href="route('subject.edit')" :data="{ id: classe.id }" method="get" as="button" type="button"
-                                  class="bg-primary-500 rounded-full w-10 h-10 font-medium border border-primary-500 mr-4 focus:bg-primary-600 focus:outline-none active:bg-primary-600">
-                        edit</inertia-link>
-
-                    <button class="bg-danger-500 rounded-full w-10 h-10 font-medium p-0 inline-flex justify-center items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                        </svg>
-                    </button>
+                    <span class="badge badge-secondary">not asigned</span>
                 </template>
             </Card>
         </div>
@@ -49,11 +41,33 @@ export default {
         errors: Object,
         classes: Array,
     },
+    methods: {
+        levelName: function(level){
+            switch(level) {
+                case "1":
+                    return '1 ère année';
+                case "2":
+                    return '2 ème année';
+                case "3":
+                    return '3 ème année';
+                case "4":
+                    return '4 ème année';
+                default:
+                    return '' + level +' année'
+            }
+        }
+    }
 }
 </script>
 
 <style scoped>
->>> .p-card-title{
+    .click-card:hover{
+        cursor: pointer;
+        border: 1px solid #7367f0!important;
+        box-shadow: 0 0 10px 1px rgba(115, 103, 240, 0.7);
+
+    }
+    >>> .p-card-title{
     height: 45px;
     font-size: 1rem;
     border: 1px solid rgba(34,41,47,.125);
@@ -62,6 +76,11 @@ export default {
     display: flex;
     align-items: center; /* Vertical center alignment */
     justify-content: center; /* Horizontal center alignment */
+}
+>>> .p-card-content{
+
+    text-align: center;
+
 }
 >>> .p-card-footer{
     height: 45px;

@@ -16,8 +16,8 @@ class ClassesSeeder extends Seeder
     {
         $level = 1;
         for ($i = 1 ; $i<=4 ;$i++){
-            for($j = 1 ; $j<=4 ;$j++){
-                SClass::create(['name'=>"{$i}c{$j}",'level'=>$i,'groups'=>"2","status"=>1]);
+            for($j = 1 ; $j<=6 ;$j++){
+                SClass::create(['name'=>"{$i}AM{$j}",'level'=>$i,'groups'=>"2","status"=>1]);
             }
         }
         //

@@ -334,6 +334,6 @@ class AdminController extends Controller
 
     public function indexTeachersClasses(){
         $classes=SClass::all();
-        return Inertia::render('Teacher/TeacherClasses', ['classes'=>$classes]);
+        return Inertia::render('Teacher/TeacherClasses', ['classes'=>$classes->groupBy('level')]);
     }
 }
