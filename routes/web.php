@@ -62,7 +62,10 @@ Route::post('/teachers/add',  [\App\Http\Controllers\AdminController::class,'sto
     ->name('teacher.store')->middleware('auth');;
 
 Route::get('/teachers-classes',  [\App\Http\Controllers\AdminController::class,'indexTeachersClasses'])
-    ->name('teacher-class.index')->middleware('auth');;
+    ->name('teacher-class.index')->middleware('auth');
+Route::get('/teachers-classes/update-class-teachers',  [\App\Http\Controllers\AdminController::class,'updateTeachersClasses'])
+    ->name('teacher-class.update')->middleware('auth');
+
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->name('dashboard');

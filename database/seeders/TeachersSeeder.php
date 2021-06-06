@@ -1,7 +1,7 @@
 <?php
 
-namespace Database\Seeders;
 
+namespace Database\Seeders;
 use App\Models\Subject;
 use App\Models\Teacher;
 use App\Models\User;
@@ -18,7 +18,7 @@ class TeachersSeeder extends Seeder
     public function run()
     {
         $faker = Factory::create();
-        $subjects = Subject::where('status',1)->get();
+        $subjects = Subject::where('status','1')->get();
         foreach ($subjects as $subject){
             for($i=0;$i<4;$i++){
                 $genderArray=['male','female'];

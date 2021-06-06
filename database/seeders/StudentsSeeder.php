@@ -21,7 +21,7 @@ class StudentsSeeder extends Seeder
     public function run()
     {
         $faker = Factory::create();
-        $classes=SClass::where('status',1)->get();
+        $classes=SClass::where('status','1')->get();
         $currentAYear=AppHelper::getAcademicYear();
         foreach ($classes as $classe){
             for($i=0;$i<40;$i++){

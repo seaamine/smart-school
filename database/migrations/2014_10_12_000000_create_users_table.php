@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration
             $table->enum('status', [0,1])->default(1);
             //$table->string('phone_no',15)->nullable();
             //$table->string('nationality')->default('');
-            $table->string('gender')->default('');
+            $table->enum('gender',['m','f'])->default('m');
             //$table->string('address')->default('');
             $table->string('role',15)->default('student');
             $table->rememberToken();

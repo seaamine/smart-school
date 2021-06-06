@@ -11,7 +11,7 @@
     </div>
     <div class="card p-6">
         <div v-for="levelclasses in classes" class="pb-6 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 justify-items-center">
-            <Card v-for="classe in levelclasses" class="click-card w-60">
+            <Card v-for="classe in levelclasses" @click="updateClassTeachers(classe.id)" class="click-card w-60">
                 <template #header>
                 </template>
                 <template class="h-10" #title>
@@ -55,6 +55,29 @@ export default {
                 default:
                     return '' + level +' année'
             }
+        },
+        updateClassTeachers: function(class_id){
+            this.$inertia.visit(this.route('teacher-class.update'), {
+                method: 'get',
+                data: {
+                    'class_id': class_id,
+                },
+                replace: false,
+                preserveState: false,
+                preserveScroll: false,
+                only: [],
+                headers: {},
+                errorBag: null,
+                forceFormData: false,
+                onCancelToken: cancelToken => {},
+                onCancel: () => {},
+                onBefore: visit => {},
+                onStart: visit => {},
+                onProgress: progress => {},
+                onSuccess: page => {},
+                onError: errors => {},
+                onFinish: visit => {},
+            })
         }
     }
 }

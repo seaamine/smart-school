@@ -336,4 +336,19 @@ class AdminController extends Controller
         $classes=SClass::all();
         return Inertia::render('Teacher/TeacherClasses', ['classes'=>$classes->groupBy('level')]);
     }
+    public function updateTeachersClasses(Request $request){
+        if($request->has('class_id')){
+            $classe=SClass::where('id',$request->input('class_id'))->where('status','1')->first();
+            if(!$classe){
+                session()->flash("toast",['type'=>'danger','summary'=>'L\'opération a échoué','detail'=>'la classe n\'existe pas§']);
+                return redirect()->route('teacher-class.index');
+            }
+        }else{
+            session()->flash("toast",['type'=>'danger','summary'=>'L\'opération a échoué','detail'=>'la classe n\'existe pas§']);
+            return redirect()->route('teacher-class.index');
+        }
+        $academicYear= AppHelper::getAcademicYear();
+        $subjects=Subject::where('level','like','%'.$classe->level.'%')->where('status','1')->get();
+        return Inertia::render('Teacher/TeacherClasses2', ['classe'=>$classe,'subjects'=>$subjects,'academicYear'=>$academicYear]);
+    }
 }
