@@ -1,5 +1,5 @@
 <template>
-    <nav class="flex items-stretch justify-between h-8">
+    <nav class="flex items-stretch justify-between h-10">
         <ul>
             <li>
                 <button class="lg:hidden" @click="$emit('toggle-sidebar', 0.1)"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -9,8 +9,16 @@
         </ul>
         <div>
             <Menu>
-                <MenuButton class="relative">Mohamed Amine</MenuButton>
-                <MenuItems as="ul" class="bg-white w-52 bg-clip-padding rounded border border-gray-800 border-opacity-5 absolute top-12 left-auto right-0">
+                <MenuButton class="relative flex content-center items-center">
+                    <div class="text-right mr-3 flex flex-col">
+                        <p class="font-semibold">{{ $page.props.user.name }}</p>
+                        <span class="text-sm leading-3">{{ $page.props.user.role }}</span>
+                    </div>
+                    <span>
+                        <img style="width: 40px; height: 40px" :src="$page.props.user.gender == 'm'? $page.props.appUrl+'/images/male_avatar.png' : $page.props.appUrl+'/images/female_avatar.png'">
+                    </span>
+                </MenuButton>
+                <MenuItems as="ul" class="bg-white w-52 bg-clip-padding rounded border border-gray-800 border-opacity-5 absolute top-16 left-auto right-0 z-10">
                     <MenuItem as="li" v-slot="{ active }">
                         <a :class='{ "bg-primary-100": active }' class="w-auto flex items-center dropdown-item" href="/account-settings">
                             Profile
@@ -22,12 +30,18 @@
                         </a>
                     </MenuItem>
                     <MenuItem as="li" v-slot="{ active }">
+                        <hr>
+                    </MenuItem>
+                    <MenuItem as="li" v-slot="{ active }">
                         <a :class='{ "bg-primary-100": active }' class="w-auto flex items-center dropdown-item" href="/account-settings">
-                            Logout
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                            </svg>
+                             Logout
                         </a>
                     </MenuItem>
                     <MenuItem as="li" disabled>
-                        <span class="opacity-75">Invite a friend (coming soon!)</span>
+                        <span class="opacity-75 dropdown-item">Invite a friend (coming soon!)</span>
                     </MenuItem>
                 </MenuItems>
             </Menu>

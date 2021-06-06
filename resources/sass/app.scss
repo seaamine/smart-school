@@ -193,3 +193,14 @@ h6 {
 button:disabled{
     @apply opacity-50 cursor-not-allowed;
 }
+.dropdown-item{
+    cursor: pointer;
+    padding: .4rem 1.28rem;
+    clear: both;
+    text-align: inherit;
+    background-color: transparent;
+    border: 0;
+}
+.dropdown-item:hover {
+    @apply bg-primary-500 bg-opacity-10 text-primary-500
+}

@@ -9,6 +9,7 @@ use App\Models\Registration;
 use App\Models\SClass;
 use App\Models\Student;
 use App\Models\Subject;
+use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -162,8 +163,6 @@ class AdminController extends Controller
         return Inertia::render('Student/Add', ["classes"=>$classes]);
     }
     public function storeStudent(Request $request){
-        sleep(20);
-        dd($request->all());
         $validated = $request->validate([
             'lastName' => 'required|max:80',
             'firstName' => 'required|max:80',
@@ -179,7 +178,7 @@ class AdminController extends Controller
             'motherName' => 'required|max:100',
             'motherPhone' => "required|numeric",
             'address'=> 'required|max:500',
-            'username' => 'required|max:80',
+            'username' => 'required||unique:users,username|max:80',
             'password' => 'required',
             'classR' => 'required',
             'group' => 'required'
@@ -237,7 +236,7 @@ class AdminController extends Controller
             'mother_full_name' => $request->input('motherName'),
             'mother_phone_no' => $request->input('motherPhone'),
             'address' => $request->input('address') !== null ? $request->input('address') : null,
-            'status' => 1,
+            'status' => '1',
         ]);
         $regiNo = $academic_year->start_date->format('y') . (string)$sClass->name;
         $totalStudent = Registration::where('academic_year_id', $academic_year->id)
@@ -254,5 +253,87 @@ class AdminController extends Controller
         session()->flash("toast",['type'=>'success','summary'=>'Opération réussie','detail'=>'Nouvel étudiant inscrit avec numéro '.$regiNo]);
 
         return redirect()->route('student.add');
+    }
+
+    public function indexTeacher(){
+        $teachers = Teacher::with('subject')->get();
+        //dd($teachers);
+        return Inertia::render('Teacher/Index', ['teachers'=>$teachers]);
+    }
+    public function addTeacher(){
+        $subjects= Subject::where('status',1)->get();
+        return Inertia::render('Teacher/Add', ['subjects'=>$subjects]);
+    }
+    public function storeTeacher(Request $request){
+        $validated = $request->validate([
+            'lastName' => 'required|max:80',
+            'firstName' => 'required|max:80',
+            'gender' => 'required|in:m,f',
+            'dob' => 'required|date',
+            'join' => 'required|date',
+            'commune'=>'required',
+            'willaya'=>'required',
+            "paye" => "required",
+            "email" => 'email|unique:students,email|unique:users,email',
+            'address'=> 'required|max:500',
+            'username' => 'required|unique:users,username|max:80',
+            'password' => 'required',
+            'subject' => 'required',
+            'qualification' => 'required|in:B,L,M',
+        ]);
+        $subject = Subject::where('id', $request->input('subject') )->where('status', 1)->first();
+        if(!$subject){
+            session()->flash("toast",['type'=>'error', 'summary'=>'L\'opération a échoué!','detail' => 'Mauvaise sélection de Matière!']);
+            return redirect()->route('teacher.add');
+        }
+
+        $teacherExist = Teacher::where('first_name',$request->input('firstName'))
+            ->where('last_name',$request->input('lastName'))
+            ->whereDate('dob',Date($request->input('dob')))
+            ->where('gender',$request->input('gender'))
+            ->count();
+        if($teacherExist){
+            session()->flash("toast",['type'=>'error','summary'=>'L\'opération a échoué!','detail' => 'Un Enseignant existe avec les mêmes informations']);
+            return redirect()->route('teacher.add');
+        }
+        if($request->hasFile('photo')) {
+            $imgStorePath = "public/teacher/";
+            $storagepath = $request->file('photo')->store($imgStorePath);
+        }
+        $user = User::create([
+            'name' => "{$request->get('lastName')} {$request->get('firstName')}",
+            'username' => $request->get('username'),
+            'email' => $request->get('email'),
+            'role' => 'teacher',
+            'gender' => $request->input('gender'),
+            'password' => bcrypt($request->get('password')),
+            'remember_token' => null,
+        ]);
+        $teacher = Teacher::create([
+            'user_id' => $user->id,
+            'subject_id' => $subject->id,
+            'first_name' => $request->get('firstName'),
+            'last_name' => $request->get('lastName'),
+            'email' => $request->get('email'),
+            'dob' =>  $request->get('dob'),
+            'joining_date' =>  $request->get('join'),
+            'gender'=> $request->input('gender'),
+            'commune' => $request->input('commune'),
+            'willaya'=> $request->input('willaya'),
+            'paye'=> $request->input('paye'),
+            'photo'=> isset($storagepath) ? $storagepath : null,
+            'qualification' => $request->input('qualification'),
+            'address' => $request->input('address') !== null ? $request->input('address') : null,
+            'status' => '1',
+        ]);
+
+        session()->flash("toast",['type'=>'success','summary'=>'Opération réussie','detail'=>'Nouvel Enseignant ajouté avec succès']);
+
+        return redirect()->route('student.add');
+    }
+
+    public function indexTeachersClasses(){
+        $classes=SClass::all();
+        return Inertia::render('Teacher/TeacherClasses', ['classes'=>$classes]);
     }
 }

@@ -10,7 +10,7 @@ class AuthController extends Controller
 {
     //
     public function login(){
-        //dd(Auth::check());
+        //dd(bcrypt('123456'));$2y$10$VieKbG6h/zVaVuZFDHb80.YR8.jsujZbwKWJEfK2v5XbfHkXl8oyS
         return Inertia::render('Login', []);
     }
 }

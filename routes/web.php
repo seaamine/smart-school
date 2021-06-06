@@ -54,6 +54,15 @@ Route::get('/students',  [\App\Http\Controllers\AdminController::class,'indexStu
 Route::get('/students/add',  [\App\Http\Controllers\AdminController::class,'addStudent'])->name('student.add');
 Route::post('/students/add',  [\App\Http\Controllers\AdminController::class,'storeStudent'])->name('student.store');
 
+Route::get('/teachers',  [\App\Http\Controllers\AdminController::class,'indexTeacher'])
+    ->name('teacher.index')->middleware('auth');;
+Route::get('/teachers/add',  [\App\Http\Controllers\AdminController::class,'addTeacher'])
+    ->name('teacher.add')->middleware('auth');;
+Route::post('/teachers/add',  [\App\Http\Controllers\AdminController::class,'storeTeacher'])
+    ->name('teacher.store')->middleware('auth');;
+
+Route::get('/teachers-classes',  [\App\Http\Controllers\AdminController::class,'indexTeachersClasses'])
+    ->name('teacher-class.index')->middleware('auth');;
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->name('dashboard');

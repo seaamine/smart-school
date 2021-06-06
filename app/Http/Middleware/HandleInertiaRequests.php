@@ -39,8 +39,8 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
             'toast' => (object) $request->session()->get('toast',[]),
             'flash' => [
-
             ],
+            'appUrl' => url('/'),
         ]);
     }
 }

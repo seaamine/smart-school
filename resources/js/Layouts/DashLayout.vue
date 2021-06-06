@@ -1,5 +1,5 @@
 <template>
-    <div class=" containter bg-white px-6 py-4 z-20 shadow-csh2">
+    <div class=" containter bg-white px-6 py-2 z-20 shadow-csh2">
         <nav-bar @toggle-sidebar="toggleSb = !toggleSb"></nav-bar>
     </div>
     <div class="flex flex-row">
