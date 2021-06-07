@@ -348,7 +348,10 @@ class AdminController extends Controller
             return redirect()->route('teacher-class.index');
         }
         $academicYear= AppHelper::getAcademicYear();
-        $subjects=Subject::where('level','like','%'.$classe->level.'%')->where('status','1')->get();
+        $subjects=Subject::where('level','like','%'.$classe->level.'%')->where('status','1')->with(['teachers' => function ($query) {
+            $query->where('status', '1');
+        }])->get();
+
         return Inertia::render('Teacher/TeacherClasses2', ['classe'=>$classe,'subjects'=>$subjects,'academicYear'=>$academicYear]);
     }
 }

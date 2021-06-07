@@ -4,10 +4,10 @@
             <nav-bar @toggle-sidebar="toggleSb = !toggleSb"></nav-bar>
         </div>
         <div class="flex-1 flex flex-row" style="max-height: 94%;">
-            <div :class="{'hidden': !toggleSb}" class="z-20 lg:block absolute lg:relative bg-white flex-shrink-0 shadow-csh1" id="sidebar">
+            <div :class="{'hidden': !toggleSb}" class="z-20 lg:block absolute h-full lg:relative bg-white flex-shrink-0 shadow-csh1" id="sidebar">
                 <side-bar></side-bar>
             </div>
-            <div class="flex flex-col max-h-full w-full p-8 overflow-y-auto">
+            <div class="flex flex-col flex-grow max-h-full w-full p-8 overflow-y-auto">
                 <Toast />
 
                 <!-- Page Content -->

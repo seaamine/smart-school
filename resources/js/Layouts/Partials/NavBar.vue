@@ -1,23 +1,23 @@
 <template>
-    <nav class="flex items-stretch justify-between h-10">
-        <ul>
-            <li>
-                <button class="lg:hidden" @click="$emit('toggle-sidebar', 0.1)"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <nav class="flex items-center content-center items-stretch justify-between h-10">
+        <ul class="flex flex-warp content-center items-center">
+            <li class="lg:hidden mr-4">
+                <button class="" @click="$emit('toggle-sidebar', 0.1)"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg></button>
             </li>
 
-            <li>
+            <li class="hidden lg:list-item">
                 <inertia-link class="flex items-center"   :href="route('home')">
-                    <img class="mr-5" style="width: 45px; height: 45px;" width="45" height="45" :src="$page.props.appUrl+'/images/logo.png'">
-                    <span style=" margin: auto 0px auto 0;" class="text-primary-500 align-middle font-semibold text-2xl">Smart School</span>
+                    <img class="mr-2" style="width: 45px; height: 45px;" width="45" height="45" :src="$page.props.appUrl+'/images/logo.png'">
+                    <span style=" margin: auto 0px auto 0;" class="text-primary-500 align-middle font-semibold text-xl">Smart School</span>
                 </inertia-link>
 
             </li>
         </ul>
         <div>
             <Menu>
-                <MenuButton class="relative flex content-center items-center">
+                <MenuButton class="relative flex content-center">
                     <div class="text-right mr-3 flex flex-col">
                         <p class="font-semibold">{{ $page.props.user.name }}</p>
                         <span class="text-sm leading-3">{{ $page.props.user.role }}</span>

@@ -23,5 +23,8 @@ class Subject extends Model
         'image_path',
         'level'
     ];
-
+    public function teachers()
+    {
+        return $this->hasMany(Teacher::class,'subject_id');
+    }
 }

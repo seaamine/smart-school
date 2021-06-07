@@ -9,15 +9,15 @@
         </div>
     </div>
     <div class="card p-6">
-        <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 justify-items-center">
-            <Card v-for="subject in subjects" class="w-60">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4 justify-items-center">
+            <Card v-for="subject in subjects" class="w-48">
                 <template #header>
                 </template>
                 <template class="h-10" #title>
                     <span class="pb-2">{{subject.name}}</span>
                 </template>
                 <template #content>
-                    <img class="object-center w-48 h-48 mx-auto " alt="user header" :src="subject.image_path">
+                    <img class="object-center w-36 h-36 mx-auto " alt="user header" :src="subject.image_path">
                 </template>
                 <template #footer>
                     <button>Teatchers</button>

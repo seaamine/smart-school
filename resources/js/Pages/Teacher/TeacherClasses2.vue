@@ -11,19 +11,48 @@
     </div>
     <div class="card p-6">
         <p><b>Année Academeic:</b> {{academicYear.title}}</p>
-        <p v-for="subject in subjects">{{subject.name}}</p>
+        <div class="bg-white shadow-md rounded my-6">
+            <table class="w-full table-fixed">
+                <thead>
+                <tr class="bg-primary-200 text-white uppercase text-sm leading-normal">
+                    <th class="py-3 w-1/3 px-6 text-left">Matières</th>
+                    <th class="py-3 px-6 w-2/3 text-left">Enseignants</th>
+                </tr>
+                </thead>
+                <tbody class="text-gray-600 text-sm font-light">
+                    <tr v-for="subject in subjects" class="border-b border-gray-200 hover:bg-gray-100">
+                        <td class="py-3 px-6">
+                            {{subject.name}}
+                        </td>
+                        <td class="py-3 px-6">
+                            <Dropdown class="w-full" v-model="selectedTeachers[subject.id]" :options="subject.teachers" optionValue="id" optionLabel="first_name" :filter="true" :filterFields="['first_name','last_name']"  placeholder="Sélectionner un Enseignant">
+                                <template #option="slotProps">
+                                    {{slotProps.option.last_name+' '+slotProps.option.first_name}}
+                                </template>
+                            </Dropdown>
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </template>
 
 <script>
     import DashLayout from '@/Layouts/DashLayout';
     import Card from 'primevue/card';
+    import Dropdown from 'primevue/dropdown';
 
     export default {
         name: "TeacherClasses2",
         layout: DashLayout,
-        components: {Card},
-
+        components: {Card,Dropdown},
+        data: function () {
+            return {
+                selectedTeachers: new Object(),
+            }
+        },
         props: {
             errors: Object,
             classe: Object,

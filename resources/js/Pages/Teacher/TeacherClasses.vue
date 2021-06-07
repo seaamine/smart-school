@@ -10,8 +10,8 @@
         </ul>
     </div>
     <div class="card p-6">
-        <div v-for="levelclasses in classes" class="pb-6 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 justify-items-center">
-            <Card v-for="classe in levelclasses" @click="updateClassTeachers(classe.id)" class="click-card w-60">
+        <div v-for="levelclasses in classes" class="pb-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 justify-items-center">
+            <Card v-for="classe in levelclasses" @click="updateClassTeachers(classe.id)" class="click-card w-52">
                 <template #header>
                 </template>
                 <template class="h-10" #title>

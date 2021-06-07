@@ -1,5 +1,12 @@
 <template>
     <ul>
+        <li class="nav-item lg:hidden">
+            <inertia-link class="flex items-center"   :href="route('home')">
+                <img class="mr-2" style="width: 45px; height: 45px;" width="45" height="45" :src="$page.props.appUrl+'/images/logo.png'">
+                <span style=" margin: auto 0px auto 0;" class="text-primary-500 align-middle font-semibold text-xl">Smart School</span>
+            </inertia-link>
+
+        </li>
         <li class="nav-item">
             <inertia-link class="flex items-center" @click="changeActiveLink('dashboard')"  :class="{ 'active': activeLink == 'dashboard' }" :href="route('dashboard')">
 
