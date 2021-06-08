@@ -10,6 +10,7 @@ use App\Models\SClass;
 use App\Models\Student;
 use App\Models\Subject;
 use App\Models\Teacher;
+use App\Models\TeacherClass;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -344,14 +345,56 @@ class AdminController extends Controller
                 return redirect()->route('teacher-class.index');
             }
         }else{
+            session()->flash("toast",['type'=>'danger','summary'=>'L\'opération a échoué','detail'=>'la classe n\'existe pas']);
+            return redirect()->route('teacher-class.index');
+        }
+        $academicYear= AppHelper::getAcademicYear();
+        if(!isset($academicYear)){
+            session()->flash("toast",['type'=>'error', 'summary'=>'L\'opération a échoué!','detail' => 'L\'année académique n\'est pas encore fixée! Veuillez aller dans les paramètres et le définir.']);
+            return redirect()->route('student.add');
+        }
+        $subjects=Subject::where('level','like','%'.$classe->level.'%')->where('status','1')->with(['teachers' => function ($query) {
+            $query->where('status', '1');
+        }])->get();
+        $teachersClass=TeacherClass::where('class_id',$classe->id)->where('status','1')->get();
+        return Inertia::render('Teacher/TeacherClasses2', ['classe'=>$classe,'subjects'=>$subjects,'academicYear'=>$academicYear,'teachersClass'=>$teachersClass]);
+    }
+    public function storeUpdateTeachersClasses(Request $request){
+        if($request->has('class_id')){
+            $classe=SClass::where('id',$request->input('class_id'))->where('status','1')->first();
+            if(!$classe){
+                session()->flash("toast",['type'=>'danger','summary'=>'L\'opération a échoué','detail'=>'la classe n\'existe pas']);
+                return redirect()->route('teacher-class.index');
+            }
+        }else{
             session()->flash("toast",['type'=>'danger','summary'=>'L\'opération a échoué','detail'=>'la classe n\'existe pas§']);
             return redirect()->route('teacher-class.index');
         }
         $academicYear= AppHelper::getAcademicYear();
-        $subjects=Subject::where('level','like','%'.$classe->level.'%')->where('status','1')->with(['teachers' => function ($query) {
-            $query->where('status', '1');
-        }])->get();
+        if(!isset($academicYear)){
+            session()->flash("toast",['type'=>'error', 'summary'=>'L\'opération a échoué!','detail' => 'L\'année académique n\'est pas encore fixée! Veuillez aller dans les paramètres et le définir.']);
+            return redirect()->route('student.add');
+        }
+        //$subjectsCount=Subject::where('level','like','%'.$classe->level.'%')->where('status','1')->count();
+        $validated = $request->validate([
+            //'selectedTeachers' => 'required|array|size:'.$subjectsCount,
+            'selectedTeachers' => 'required|array',
+            'selectedTeachers.*' => 'required|exists:teachers,id',
+        ]);
+        $selectedTeachers= $request->input('selectedTeachers');
+        $teachersClass=[];
+        foreach ($selectedTeachers as $key=>$teacher){
+            $teachersClass[]=[
+                'teacher_id' => $teacher,
+                'subject_id' => $key,
+                'class_id' => $classe->id,
+                'academic_year_id' => $academicYear->id,
+                'status' => '1',
+            ];
+        }
+        TeacherClass::insert($teachersClass);
+        session()->flash("toast",['type'=>'success','summary'=>'Opération réussie','detail'=>'Les enseignants ont été affectés à la classe '.$classe->name.' avec succès']);
+        return redirect()->route('teacher-class.index');
 
-        return Inertia::render('Teacher/TeacherClasses2', ['classe'=>$classe,'subjects'=>$subjects,'academicYear'=>$academicYear]);
     }
 }
