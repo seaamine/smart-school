@@ -28,14 +28,14 @@
                         </td>
                         <td class="py-3 px-6">
                             <Dropdown class="w-full form-control" :class="{ 'is-invalid': validationErrors[subject.id]  }" v-model="selectedTeachers[subject.id]" optionValue="id" :options="subject.teachers" optionLabel="first_name" :filter="true" :filterFields="['first_name','last_name']"  placeholder="Sélectionner un Enseignant">
-                                <!--<template #value="slotProps">
+                                <template #value="slotProps">
                                     <div v-if="slotProps.value">
-                                        {{slotProps.value.last_name+' '+slotProps.value.first_name}}
+                                        {{teacherFullName(slotProps.value,subject.id)}}
                                     </div>
                                     <span v-else>
                                         {{slotProps.placeholder}}
                                     </span>
-                                </template>-->
+                                </template>
                                 <template #option="slotProps">
                                     {{slotProps.option.last_name+' '+slotProps.option.first_name}}
                                 </template>
@@ -67,23 +67,22 @@
     import Dropdown from 'primevue/dropdown';
     import { useForm, useField,Form, ErrorMessage } from 'vee-validate';
     import * as yup from "yup";
-
+    import { reactive } from 'vue';
     export default {
         name: "TeacherClasses2",
         layout: DashLayout,
         components: {Card,Dropdown},
         setup(props) {
-            let selectedTeachers = {};
-            props.teachersClass.forEach( t => {
-                let s = props.subjects.find(element => element.id ==t.subject_id)
-                let tttt =s.teachers.find(element => element.id ==t.teacher_id);
-                selectedTeachers[s.id] =  tttt.id;
+            const selectedTeachers = reactive({});
+            props.teachersClass.forEach( tc => {
+                let s = props.subjects.find(element => element.id ==tc.subject_id);
+                let t =s.teachers.find(element => element.id ==tc.teacher_id);
+                selectedTeachers[s.id] =  t.id;
             });
             return {selectedTeachers};
         },
         data: function () {
             return {
-
                 validationErrors: new Object(),
                 isSubmitting: false,
             }
@@ -96,6 +95,11 @@
             teachersClass: Array,
         },
         methods: {
+            teacherFullName: function (teacherId,subjectId){
+                let s = this.subjects.find(element => element.id ==subjectId);
+                let t =s.teachers.find(element => element.id == teacherId);
+                return t.last_name+' '+t.first_name;
+            },
             levelName: function(level){
                 switch(level) {
                     case "1":
@@ -118,7 +122,12 @@
                     }
                 });
                 if(Object.keys(this.validationErrors).length === 0){
-                    this.$inertia.post(this.route('teacher-class.storeUpdate',{'class_id': this.classe.id}), {'selectedTeachers': this.selectedTeachers}, {
+                    let postValues =[];
+                    for(const st in this.selectedTeachers){
+                        let c = this.teachersClass.find(element => element.subject_id == st )
+                        postValues.push({'subject_id':st,'teacher_id': this.selectedTeachers[st],'id':c?.id ?? null});
+                    }
+                    this.$inertia.post(this.route('teacher-class.storeUpdate',{'class_id': this.classe.id}), {'selectedTeachers': postValues}, {
                         onStart: (visit) => {
                             this.isSubmitting = true;
                         },

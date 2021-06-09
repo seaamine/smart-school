@@ -27,6 +27,7 @@ class CreateTeacherClassTable extends Migration
             $table->foreign('subject_id')->references('id')->on('subjects');
             $table->foreign('class_id')->references('id')->on('classes');
             $table->foreign('academic_year_id')->references('id')->on('academic_years');
+            //$table->index(['class_id', 'subject_id','academic_year_id','deleted_at']);
 
         });
     }

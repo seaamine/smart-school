@@ -379,22 +379,29 @@ class AdminController extends Controller
         $validated = $request->validate([
             //'selectedTeachers' => 'required|array|size:'.$subjectsCount,
             'selectedTeachers' => 'required|array',
-            'selectedTeachers.*' => 'required|exists:teachers,id',
+            'selectedTeachers.*.teacher_id' => 'required|exists:teachers,id',
+            'selectedTeachers.*.subject_id' => 'required|exists:subjects,id',
         ]);
         $selectedTeachers= $request->input('selectedTeachers');
         $teachersClass=[];
         foreach ($selectedTeachers as $key=>$teacher){
             $teachersClass[]=[
-                'teacher_id' => $teacher,
-                'subject_id' => $key,
+                'id' =>$teacher['id'],
+                'teacher_id' => $teacher['teacher_id'],
+                'subject_id' => $teacher['subject_id'],
                 'class_id' => $classe->id,
                 'academic_year_id' => $academicYear->id,
                 'status' => '1',
             ];
         }
-        TeacherClass::insert($teachersClass);
+        TeacherClass::upsert($teachersClass,['id'],['teacher_id']);
+        //TeacherClass::insert($teachersClass);
         session()->flash("toast",['type'=>'success','summary'=>'Opération réussie','detail'=>'Les enseignants ont été affectés à la classe '.$classe->name.' avec succès']);
         return redirect()->route('teacher-class.index');
+    }
+
+    public function indexExam(){
+        return Inertia::render('Exam/Index', []);
 
     }
 }

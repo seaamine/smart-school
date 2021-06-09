@@ -68,6 +68,9 @@ Route::get('/teachers-classes/update-class-teachers',  [\App\Http\Controllers\Ad
 Route::post('/teachers-classes/update-class-teachers',  [\App\Http\Controllers\AdminController::class,'storeUpdateTeachersClasses'])
     ->name('teacher-class.storeUpdate')->middleware('auth');
 
+Route::get('/Exams',  [\App\Http\Controllers\AdminController::class,'indexExam'])
+    ->name('exam.index')->middleware('auth');
+
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->name('dashboard');
