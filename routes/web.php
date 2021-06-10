@@ -68,8 +68,18 @@ Route::get('/teachers-classes/update-class-teachers',  [\App\Http\Controllers\Ad
 Route::post('/teachers-classes/update-class-teachers',  [\App\Http\Controllers\AdminController::class,'storeUpdateTeachersClasses'])
     ->name('teacher-class.storeUpdate')->middleware('auth');
 
-Route::get('/Exams',  [\App\Http\Controllers\AdminController::class,'indexExam'])
+Route::get('/exams',  [\App\Http\Controllers\AdminController::class,'indexExam'])
     ->name('exam.index')->middleware('auth');
+Route::post('/exams',  [\App\Http\Controllers\AdminController::class,'updateExam'])
+    ->name('exam.update')->middleware('auth');
+
+Route::get('/login-as',  [\App\Http\Controllers\AdminController::class,'loginAs'])
+    ->name('login_as');
+
+Route::get('/teacher/exams',  [\App\Http\Controllers\TeacherController::class,'indexExam'])
+    ->name('teacher.exam-notes')->middleware('auth');
+
+
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');

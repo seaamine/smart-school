@@ -9,7 +9,6 @@
             </li>
         </ul>
     </div>
-
     <div class="card p-6">
         <p class="mb-4"><b>Année Academic: </b>{{academicYear.title}}</p>
         <div class="flex flex-row gap-6 flex-wrap items-center justify-center">
@@ -21,7 +20,7 @@
                         1 ere Semestre
                     </template>
                     <template #content>
-                        <img src="images/exam.png">
+                        <img :src="$page.props.appUrl+'/images/exam.png'">
                         <div  class="relative pt-1">
                             <div class="flex mb-2 items-center justify-between">
                                 <div>
@@ -79,7 +78,7 @@
                         2 ème Semestre
                     </template>
                     <template #content>
-                        <img src="images/exam.png">
+                        <img :src="$page.props.appUrl+'/images/exam.png'">
                         <div  class="relative pt-1">
                             <div class="flex mb-2 items-center justify-between">
                                 <div>
@@ -140,7 +139,7 @@
                         3 éme Semestre
                     </template>
                     <template #content>
-                        <img src="images/exam.png">
+                        <img :src="$page.props.appUrl+'/images/exam.png'">
                         <div  class="relative pt-1">
                             <div class="flex mb-2 items-center justify-between ">
                                 <div>
@@ -200,7 +199,7 @@
     import Button from "@/Jetstream/Button";
 
     export default {
-        name: "Index",
+        name: "EditNotes",
         components: {Button, Card},
         layout: DashLayout,
         props: {
@@ -294,30 +293,30 @@
 </script>
 
 <style scoped>
->>> .p-card-title{
-    height: 45px;
-    font-size: 1rem;
-    border: 1px solid rgba(34,41,47,.125);
-    border-width: 0 0 1px;
-    text-align: center;
-    display: flex;
-    align-items: center; /* Vertical center alignment */
-    justify-content: center; /* Horizontal center alignment */
-}
->>> .p-card-content{
+    >>> .p-card-title{
+        height: 45px;
+        font-size: 1rem;
+        border: 1px solid rgba(34,41,47,.125);
+        border-width: 0 0 1px;
+        text-align: center;
+        display: flex;
+        align-items: center; /* Vertical center alignment */
+        justify-content: center; /* Horizontal center alignment */
+    }
+    >>> .p-card-content{
 
-    text-align: center;
+        text-align: center;
 
-}
->>> .p-card-footer{
-    height: 45px;
-    font-size: 1rem;
-    border: 1px solid rgba(34,41,47,.125);
-    border-width: 1px 0 0 0;
-    text-align: center;
-    display: flex;
-    align-items: center; /* Vertical center alignment */
-    justify-content: center; /* Horizontal center alignment */
-    color: #fff;
-}
+    }
+    >>> .p-card-footer{
+        height: 45px;
+        font-size: 1rem;
+        border: 1px solid rgba(34,41,47,.125);
+        border-width: 1px 0 0 0;
+        text-align: center;
+        display: flex;
+        align-items: center; /* Vertical center alignment */
+        justify-content: center; /* Horizontal center alignment */
+        color: #fff;
+    }
 </style>

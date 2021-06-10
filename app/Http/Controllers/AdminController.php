@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\AppHelper;
 use App\Models\AcademicYear;
+use App\Models\Exam;
 use App\Models\Registration;
 use App\Models\SClass;
 use App\Models\Student;
@@ -13,6 +14,7 @@ use App\Models\Teacher;
 use App\Models\TeacherClass;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
@@ -421,12 +423,67 @@ class AdminController extends Controller
 
     public function indexExam(){
         $academicYear= AppHelper::getAcademicYear();
+        $count = DB::table('classes')
+            ->join('subjects',function ($join) {
+                $join->on('subjects.level', 'like',DB::raw("CONCAT('%', classes.level, '%')"))
+                    ->where('subjects.status','=','1')
+                    ->whereNull('subjects.deleted_at');
+                })
+            ->count();
         if(!isset($academicYear)){
             session()->flash("toast",['type'=>'error', 'summary'=>'L\'opération a échoué!','detail' => 'L\'année académique n\'est pas encore fixée! Veuillez aller dans les paramètres et le définir.']);
-            return redirect()->route('student.add');
+            return redirect()->route('exam.index');
         }
-        $exams=Exams::where('academic_year_id',$academicYear->id)->get();
-        return Inertia::render('Exam/Index', ['exams'=>$exams]);
-
+        $exams=Exam::where('academic_year_id',$academicYear->id)->get();
+        return Inertia::render('Exam/Index', ['totalNotes'=>$count,'exams'=>$exams,'academicYear'=>$academicYear]);
+    }
+    public function updateExam(Request $request){
+        $academicYear= AppHelper::getAcademicYear();
+        if(!isset($academicYear)){
+            session()->flash("toast",['type'=>'error', 'summary'=>'L\'opération a échoué!','detail' => 'L\'année académique n\'est pas encore fixée! Veuillez aller dans les paramètres et le définir.']);
+            return redirect()->route('exam.index');
+        }
+        $validated = $request->validate([
+            'semester' => 'required|in:1,2,3',
+            'academicYear' => 'required|in:'.$academicYear->id,
+            'method' => 'required|in:start,stop,publish',
+        ]);
+        $method = $request->input('method');
+        if($method === 'start'){
+            $exam = Exam::updateOrCreate(
+                ['semester' => $request->input('semester'), 'academic_year_id' => $academicYear->id,'status'=>'1',],
+                ['started_at' => now(),'stopped_at'=>null]
+            );
+        }elseif ($method === 'stop'){
+            $exam = Exam::updateOrCreate(
+                ['semester' => $request->input('semester'), 'academic_year_id' => $academicYear->id,'status'=>'1',],
+                ['stopped_at'=>now()]
+            );
+        }elseif ($method === 'publish'){
+            $exam = Exam::updateOrCreate(
+                ['semester' => $request->input('semester'), 'academic_year_id' => $academicYear->id,'status'=>'1',],
+                ['published_at' => now()]
+            );
+        }else{
+            session()->flash("toast",['type'=>'error', 'summary'=>'L\'opération a échoué!','detail' => 'Error!']);
+            return redirect()->route('exam.index');
+        }
+        return response()->json([
+            'exam' => $exam,
+        ]);
+        return redirect()->route('exam.index');
+    }
+    public function loginAs(Request $request){
+        if(!$request->has('id') || !$request->has('role')){
+            session()->flash("toast",['type'=>'error', 'summary'=>'Missing information']);
+            return redirect()->back();
+        }
+        $user = User::find($request->input('id'));
+        if(!$user){
+            session()->flash("toast",['type'=>'error', 'summary'=>'User dosent exist']);
+            return redirect()->back();
+        }
+        Auth::login($user);
+        return redirect()->route('dashboard');
     }
 }

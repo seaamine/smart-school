@@ -21,7 +21,7 @@ class CreateExamsTable extends Migration
             $table->timestamp('started_at')->nullable();
             $table->timestamp('stopped_at')->nullable();
             $table->timestamp('published_at')->nullable();
-            $table->unsignedTinyInteger('numbNotes')->default(0);
+            $table->integer('num_notes')->default(0);
             $table->softDeletes();
             $table->timestamps();
             $table->foreign('academic_year_id')->references('id')->on('academic_years');
