@@ -13,6 +13,7 @@ use App\Models\Teacher;
 use App\Models\TeacherClass;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -335,7 +336,25 @@ class AdminController extends Controller
 
     public function indexTeachersClasses(){
         $classes=SClass::all();
-        return Inertia::render('Teacher/TeacherClasses', ['classes'=>$classes->groupBy('level')]);
+        $selectedTeachersCount=DB::table('classes')
+            ->leftJoin('subjects',function ($join) {
+                $join->on('subjects.level', 'like',DB::raw("CONCAT('%', classes.level, '%')"))
+                    ->where('subjects.status','=','1')
+                    ->whereNull('subjects.deleted_at');
+            })
+            ->leftJoin('teacher_class',function ($join) {
+                $join->on('teacher_class.class_id', '=', 'classes.id')
+                    ->where('teacher_class.status','=','1')
+                    ->whereNull('teacher_class.deleted_at');
+            })
+            ->where('classes.status','1')
+            ->whereNull('classes.deleted_at')
+            ->select('classes.id',DB::raw(' count(case when teacher_class.id is NULL then 1 end) as subject_count'))
+            ->groupBy('classes.id')
+            ->get();
+        ;
+      // dd($selectedTeachersCount->groupBy('id'));
+        return Inertia::render('Teacher/TeacherClasses', ['classes'=>$classes->groupBy('level'),'selectedTeachersCount'=>$selectedTeachersCount->keyBy('id')]);
     }
     public function updateTeachersClasses(Request $request){
         if($request->has('class_id')){
@@ -373,7 +392,7 @@ class AdminController extends Controller
         $academicYear= AppHelper::getAcademicYear();
         if(!isset($academicYear)){
             session()->flash("toast",['type'=>'error', 'summary'=>'L\'opération a échoué!','detail' => 'L\'année académique n\'est pas encore fixée! Veuillez aller dans les paramètres et le définir.']);
-            return redirect()->route('student.add');
+            return redirect()->route('teacher-class.index');
         }
         //$subjectsCount=Subject::where('level','like','%'.$classe->level.'%')->where('status','1')->count();
         $validated = $request->validate([
@@ -401,7 +420,13 @@ class AdminController extends Controller
     }
 
     public function indexExam(){
-        return Inertia::render('Exam/Index', []);
+        $academicYear= AppHelper::getAcademicYear();
+        if(!isset($academicYear)){
+            session()->flash("toast",['type'=>'error', 'summary'=>'L\'opération a échoué!','detail' => 'L\'année académique n\'est pas encore fixée! Veuillez aller dans les paramètres et le définir.']);
+            return redirect()->route('student.add');
+        }
+        $exams=Exams::where('academic_year_id',$academicYear->id)->get();
+        return Inertia::render('Exam/Index', ['exams'=>$exams]);
 
     }
 }

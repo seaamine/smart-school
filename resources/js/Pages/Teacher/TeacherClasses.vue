@@ -21,7 +21,7 @@
                     <span class="pb-2 text-2xl	">{{classe.name}}</span>
                 </template>
                 <template #footer>
-                    <span class="badge badge-secondary">not asigned</span>
+                    <span :class="selectedTeachersCount[classe.id]['subject_count'] > 0 ? 'badge-secondary' : 'badge-success'" class="badge">{{selectedTeachersCount[classe.id]['subject_count'] > 0 ? 'Non attribué': 'Complété'}}</span>
                 </template>
             </Card>
         </div>
@@ -38,6 +38,7 @@ export default {
     components: {Card},
 
     props: {
+        selectedTeachersCount: Object,
         errors: Object,
         classes: Array,
     },
