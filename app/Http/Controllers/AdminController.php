@@ -444,24 +444,24 @@ class AdminController extends Controller
             return redirect()->route('exam.index');
         }
         $validated = $request->validate([
-            'semester' => 'required|in:1,2,3',
+            'trimester' => 'required|in:1,2,3',
             'academicYear' => 'required|in:'.$academicYear->id,
             'method' => 'required|in:start,stop,publish',
         ]);
         $method = $request->input('method');
         if($method === 'start'){
             $exam = Exam::updateOrCreate(
-                ['semester' => $request->input('semester'), 'academic_year_id' => $academicYear->id,'status'=>'1',],
+                ['trimester' => $request->input('trimester'), 'academic_year_id' => $academicYear->id,'status'=>'1',],
                 ['started_at' => now(),'stopped_at'=>null]
             );
         }elseif ($method === 'stop'){
             $exam = Exam::updateOrCreate(
-                ['semester' => $request->input('semester'), 'academic_year_id' => $academicYear->id,'status'=>'1',],
+                ['trimester' => $request->input('trimester'), 'academic_year_id' => $academicYear->id,'status'=>'1',],
                 ['stopped_at'=>now()]
             );
         }elseif ($method === 'publish'){
             $exam = Exam::updateOrCreate(
-                ['semester' => $request->input('semester'), 'academic_year_id' => $academicYear->id,'status'=>'1',],
+                ['trimester' => $request->input('trimester'), 'academic_year_id' => $academicYear->id,'status'=>'1',],
                 ['published_at' => now()]
             );
         }else{

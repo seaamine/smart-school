@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\AppHelper;
 use App\Models\Exam;
 use App\Models\SClass;
+use App\Models\Student;
 use App\Models\Subject;
 use App\Models\Teacher;
 use App\Models\TeacherClass;
@@ -62,9 +63,26 @@ class TeacherController extends Controller
                 $levelsSubjects[4][$subject->id]=$subject;
             }
         }
-        //dd($classes,$levelsSubjects);
+        $subject=$teacher->subject;
+        $classesStudents=[];
+        foreach ($classes as $class){
+            $classesStudents[$class->id]=Student::join('registrations',function($join) use($academicYear,$class){
+                $join->on('students.id','=','registrations.student_id')
+                    ->where('registrations.academic_year_id','=',$academicYear->id)
+                    ->where('registrations.class_id','=',$class->id)
+                    ->where('registrations.status','1');})
+                ->leftJoin('exams_notes',function($join) use($academicYear,$class,$teacher,$subject){
+                    $join->on('students.id','=','exams_notes.student_id')
+                        ->where('exams_notes.academic_year_id','=',$academicYear->id)
+                        ->where('exams_notes.class_id','=',$class->id)
+                        ->where('exams_notes.subject_id','=',$subject->id)
+                        ->where('exams_notes.teacher_id',$teacher->id);})
+                ->select('students.*','exams_notes.id as note_id','exams_notes.note_eval','exams_notes.note_devoir','exams_notes.note_exam','exams_notes.remarque')
+                ->get();
+        }
+        //dd($classesStudents,$subject,$classes,$levelsSubjects,$teacher);
         return Inertia::render('Exam/EditNotes',
-            ['levelsSubjects'=>$levelsSubjects,'classes'=>$classes->groupBy('level'),'totalNotes'=>$count,'exams'=>$exams,'academicYear'=>$academicYear]);
+            ['classesStudents'=>$classesStudents,'subject'=>$subject,'classes'=>$classes->groupBy('level'),'totalNotes'=>$count,'exams'=>$exams,'academicYear'=>$academicYear]);
 
     }
 }

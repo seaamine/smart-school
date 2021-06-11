@@ -100,21 +100,21 @@ export default {
     display: flex;
     align-items: center; /* Vertical center alignment */
     justify-content: center; /* Horizontal center alignment */
-}
->>> .p-card-content{
+    }
+    >>> .p-card-content{
 
-    text-align: center;
+        text-align: center;
 
-}
->>> .p-card-footer{
-    height: 45px;
-    font-size: 1rem;
-    border: 1px solid rgba(34,41,47,.125);
-    border-width: 1px 0 0 0;
-    text-align: center;
-    display: flex;
-    align-items: center; /* Vertical center alignment */
-    justify-content: center; /* Horizontal center alignment */
-    color: #fff;
-}
+    }
+    >>> .p-card-footer{
+        height: 45px;
+        font-size: 1rem;
+        border: 1px solid rgba(34,41,47,.125);
+        border-width: 1px 0 0 0;
+        text-align: center;
+        display: flex;
+        align-items: center; /* Vertical center alignment */
+        justify-content: center; /* Horizontal center alignment */
+        color: #fff;
+    }
 </style>

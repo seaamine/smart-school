@@ -18,7 +18,7 @@
                     <template #header>
                     </template>
                     <template class="h-10" #title>
-                        1 ere Semestre
+                        1 ere Trimestre
                     </template>
                     <template #content>
                         <img src="images/exam.png">
@@ -26,34 +26,34 @@
                             <div class="flex mb-2 items-center justify-between">
                                 <div>
                               <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-white bg-primary-200">
-                                {{semStatus(semestersStatus.semester1)}}
+                                {{triStatus(trimestersStatus.trimester1)}}
                               </span>
                                 </div>
                                 <div class="text-right">
                               <span class="text-xs font-semibold inline-block text-emerald-600">
-                                {{semestersStatus.semester1.numNotes}}/{{totalNotes}}
+                                {{trimestersStatus.trimester1.numNotes}}/{{totalNotes}}
                               </span>
                                 </div>
                             </div>
-                            <div v-if="semestersStatus.semester1.started" class="overflow-hidden h-2 text-xs flex rounded bg-info-200">
-                                <div :style="{width: (semestersStatus.semester1.numNotes/totalNotes *100) +'%',}" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-info-500"></div>
+                            <div v-if="trimestersStatus.trimester1.started" class="overflow-hidden h-2 text-xs flex rounded bg-info-200">
+                                <div :style="{width: (trimestersStatus.trimester1.numNotes/totalNotes *100) +'%',}" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-info-500"></div>
                             </div>
                         </div>
                     </template>
                     <template #footer>
-                        <button :disabled="semestersStatus.semester1.started && !semestersStatus.semester1.stopped" @click="startSemester(1)" class="rounded-full text-success-500 font-medium mr-4 hover:text-primary-200  focus:text-primary-800 p-0 inline-flex justify-center items-center">
+                        <button :disabled="trimestersStatus.trimester1.started && !trimestersStatus.trimester1.stopped" @click="startTrimester(1)" class="rounded-full text-success-500 font-medium mr-4 hover:text-primary-200  focus:text-primary-800 p-0 inline-flex justify-center items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </button>
-                        <button :disabled="semestersStatus.semester1.stopped || !semestersStatus.semester1.started" @click="stopSemester(1)" class="rounded-full text-danger-500 font-medium mr-4 hover:text-danger-800  focus:text-danger-800 p-0 inline-flex justify-center items-center">
+                        <button :disabled="trimestersStatus.trimester1.stopped || !trimestersStatus.trimester1.started" @click="stopTrimester(1)" class="rounded-full text-danger-500 font-medium mr-4 hover:text-danger-800  focus:text-danger-800 p-0 inline-flex justify-center items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
                             </svg>
                         </button>
-                        <button :disabled="!semestersStatus.semester1.published" @click="publishSemester(1)" class="rounded-full text-info-500 font-medium hover:text-info-800  focus:text-info-800 p-0 inline-flex justify-center items-center">
+                        <button :disabled="!trimestersStatus.trimester1.published" @click="publishTrimester(1)" class="rounded-full text-info-500 font-medium hover:text-info-800  focus:text-info-800 p-0 inline-flex justify-center items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                             </svg>
@@ -76,7 +76,7 @@
                     <template #header>
                     </template>
                     <template class="h-10" #title>
-                        2 ème Semestre
+                        2 ème Trimestre
                     </template>
                     <template #content>
                         <img src="images/exam.png">
@@ -84,34 +84,34 @@
                             <div class="flex mb-2 items-center justify-between">
                                 <div>
                               <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-white bg-primary-200">
-                                {{semStatus(semestersStatus.semester2)}}
+                                {{triStatus(trimestersStatus.trimester2)}}
                               </span>
                                 </div>
                                 <div class="text-right">
                               <span class="text-xs font-semibold inline-block text-emerald-600">
-                                {{semestersStatus.semester2.numNotes}}/{{totalNotes}}
+                                {{trimestersStatus.trimester2.numNotes}}/{{totalNotes}}
                               </span>
                                 </div>
                             </div>
-                            <div v-if="semestersStatus.semester2.started" class="overflow-hidden h-2 text-xs flex rounded bg-info-200">
-                                <div :style="{width: (semestersStatus.semester2.semestersStatus.semester2.numNotes/totalNotes *100) +'%',}" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-info-500"></div>
+                            <div v-if="trimestersStatus.trimester2.started" class="overflow-hidden h-2 text-xs flex rounded bg-info-200">
+                                <div :style="{width: (trimestersStatus.trimester2.trimestersStatus.trimester2.numNotes/totalNotes *100) +'%',}" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-info-500"></div>
                             </div>
                         </div>
                     </template>
                     <template #footer>
-                        <button :disabled="semestersStatus.semester2.started && !semestersStatus.semester2.stopped" @click="startSemester(2)" class="rounded-full text-success-500 font-medium mr-4 hover:text-primary-200  focus:text-primary-800 p-0 inline-flex justify-center items-center">
+                        <button :disabled="trimestersStatus.trimester2.started && !trimestersStatus.trimester2.stopped" @click="startTrimester(2)" class="rounded-full text-success-500 font-medium mr-4 hover:text-primary-200  focus:text-primary-800 p-0 inline-flex justify-center items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </button>
-                        <button :disabled="semestersStatus.semester2.stopped || !semestersStatus.semester2.started" @click="stopSemester(2)" class="rounded-full text-danger-500 font-medium mr-4 hover:text-danger-800  focus:text-danger-800 p-0 inline-flex justify-center items-center">
+                        <button :disabled="trimestersStatus.trimester2.stopped || !trimestersStatus.trimester2.started" @click="stopTrimester(2)" class="rounded-full text-danger-500 font-medium mr-4 hover:text-danger-800  focus:text-danger-800 p-0 inline-flex justify-center items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
                             </svg>
                         </button>
-                        <button :disabled="!semestersStatus.semester2.published" @click="publishSemester(2)" class="rounded-full text-info-500 font-medium hover:text-info-800  focus:text-info-800 p-0 inline-flex justify-center items-center">
+                        <button :disabled="!trimestersStatus.trimester2.published" @click="publishTrimester(2)" class="rounded-full text-info-500 font-medium hover:text-info-800  focus:text-info-800 p-0 inline-flex justify-center items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                             </svg>
@@ -125,8 +125,8 @@
                         <path class="opacity-100" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
                 </div>
-                <div v-show="!semestersStatus.semester1.published" class="bg-white opacity-75 absolute top-0 left-0 w-full h-full flex items-center justify-center">
-                    <p class="p-2 text-danger-800 font-semibold">S'il vous plaît compléter et publier semeter 1</p>
+                <div v-show="!trimestersStatus.trimester1.published" class="bg-white opacity-75 absolute top-0 left-0 w-full h-full flex items-center justify-center">
+                    <p class="p-2 text-danger-800 font-semibold">S'il vous plaît compléter et publier Trimestre 1</p>
                 </div>
             </div>
             <div><p class="font-bold"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -137,7 +137,7 @@
                     <template #header>
                     </template>
                     <template class="h-10" #title>
-                        3 éme Semestre
+                        3 éme Trimestre
                     </template>
                     <template #content>
                         <img src="images/exam.png">
@@ -145,34 +145,34 @@
                             <div class="flex mb-2 items-center justify-between ">
                                 <div>
                               <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-white bg-primary-200">
-                                {{semStatus(semestersStatus.semester3)}}
+                                {{triStatus(trimestersStatus.trimester3)}}
                               </span>
                                 </div>
                                 <div class="text-right">
                               <span class="text-xs font-semibold inline-block text-emerald-600">
-                                {{semestersStatus.semester3.numNotes}}/{{totalNotes}}
+                                {{trimestersStatus.trimester3.numNotes}}/{{totalNotes}}
                               </span>
                                 </div>
                             </div>
-                            <div v-if="semestersStatus.semester3.started" class="overflow-hidden h-2 text-xs flex rounded bg-info-200">
-                                <div :style="{width: (semestersStatus.semester3.numNotes/totalNotes *100) +'%',}" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-info-500"></div>
+                            <div v-if="trimestersStatus.trimester3.started" class="overflow-hidden h-2 text-xs flex rounded bg-info-200">
+                                <div :style="{width: (trimestersStatus.trimester3.numNotes/totalNotes *100) +'%',}" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-info-500"></div>
                             </div>
                         </div>
                     </template>
                     <template #footer>
-                        <button :disabled="semestersStatus.semester3.started && !semestersStatus.semester3.stopped" @click="startSemester(3)" class="rounded-full text-success-500 font-medium mr-4 hover:text-primary-200  focus:text-primary-800 p-0 inline-flex justify-center items-center">
+                        <button :disabled="trimestersStatus.trimester3.started && !trimestersStatus.trimester3.stopped" @click="startTrimester(3)" class="rounded-full text-success-500 font-medium mr-4 hover:text-primary-200  focus:text-primary-800 p-0 inline-flex justify-center items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </button>
-                        <button :disabled="semestersStatus.semester3.stopped || !semestersStatus.semester3.started" @click="stopSemester(3)" class="rounded-full text-danger-500 font-medium mr-4 hover:text-danger-800  focus:text-danger-800 p-0 inline-flex justify-center items-center">
+                        <button :disabled="trimestersStatus.trimester3.stopped || !trimestersStatus.trimester3.started" @click="stopTrimester(3)" class="rounded-full text-danger-500 font-medium mr-4 hover:text-danger-800  focus:text-danger-800 p-0 inline-flex justify-center items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
                             </svg>
                         </button>
-                        <button :disabled="!semestersStatus.semester3.published" @click="publishSemester(3)" class="rounded-full text-info-500 font-medium hover:text-info-800  focus:text-info-800 p-0 inline-flex justify-center items-center">
+                        <button :disabled="!trimestersStatus.trimester3.published" @click="publishTrimester(3)" class="rounded-full text-info-500 font-medium hover:text-info-800  focus:text-info-800 p-0 inline-flex justify-center items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                             </svg>
@@ -186,8 +186,8 @@
                         <path class="opacity-100" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
                 </div>
-                <div v-show="!semestersStatus.semester2.published" class="bg-white opacity-75 absolute top-0 left-0 w-full h-full flex items-center justify-center">
-                    <p class="p-2 text-danger-800 font-semibold">S'il vous plaît compléter et publier semeter 2</p>
+                <div v-show="!trimestersStatus.trimester2.published" class="bg-white opacity-75 absolute top-0 left-0 w-full h-full flex items-center justify-center">
+                    <p class="p-2 text-danger-800 font-semibold">S'il vous plaît compléter et publier Trimestre 2</p>
                 </div>
             </div>
         </div>
@@ -210,23 +210,23 @@
             totalNotes: Number,
         },
         methods:{
-            initSemester: function(sem,exam){
+            initTrimester: function(tri,exam){
                 let i = this.exams.findIndex(e => e.id === exam.id);
                 this.exams[i]=exam;
-                this.semestersStatus['semester'+sem]['id']=exam.id;
-                this.semestersStatus['semester'+sem]['numNotes']=exam.num_notes ?? 0;
-                this.semestersStatus['semester'+sem]['started']=exam.started_at ? true : false;
-                this.semestersStatus['semester'+sem]['stopped']=exam.stopped_at ? true : false;
-                this.semestersStatus['semester'+sem]['published']=exam.published_at ? true : false;
+                this.trimestersStatus['trimester'+tri]['id']=exam.id;
+                this.trimestersStatus['trimester'+tri]['numNotes']=exam.num_notes ?? 0;
+                this.trimestersStatus['trimester'+tri]['started']=exam.started_at ? true : false;
+                this.trimestersStatus['trimester'+tri]['stopped']=exam.stopped_at ? true : false;
+                this.trimestersStatus['trimester'+tri]['published']=exam.published_at ? true : false;
             },
-            semStatus: function(sem){
-                if(!sem.started){
+            triStatus: function(tri){
+                if(!tri.started){
                     return "Pas commencé";
                 }
-                if(!sem.stopped){
+                if(!tri.stopped){
                     return "En cours";
                 }else{
-                    if(sem.published){
+                    if(tri.published){
                         return " Terminé et publié";
                     }else{
                         return " Terminé";
@@ -235,46 +235,46 @@
                 }
 
             },
-            startSemester: function(sem){
-                if(this.isSubmitting[sem]){
+            startTrimester: function(tri){
+                if(this.isSubmitting[tri]){
                     return;
                 }
-                this.isSubmitting[sem] = true;
-                axios.post(this.route('exam.update'),{'semester': sem,'academicYear': this.academicYear.id,'method':'start'})
+                this.isSubmitting[tri] = true;
+                axios.post(this.route('exam.update'),{'trimester': tri,'academicYear': this.academicYear.id,'method':'start'})
                     .then((response)=>{
-                        this.isSubmitting[sem] = false;
-                        this.initSemester(sem,response.data.exam)
+                        this.isSubmitting[tri] = false;
+                        this.initTrimester(tri,response.data.exam)
                     });
             },
-            stopSemester: function(sem){
-                if(this.isSubmitting[sem]){
+            stopTrimester: function(tri){
+                if(this.isSubmitting[tri]){
                     return;
                 }
-                this.isSubmitting[sem] = true;
-                axios.post(this.route('exam.update'),{'semester': sem,'academicYear': this.academicYear.id,'method':'stop'})
+                this.isSubmitting[tri] = true;
+                axios.post(this.route('exam.update'),{'trimester': tri,'academicYear': this.academicYear.id,'method':'stop'})
                     .then((response)=>{
-                        this.isSubmitting[sem] = false;
-                        this.initSemester(sem,response.data.exam)
+                        this.isSubmitting[tri] = false;
+                        this.initTrimester(tri,response.data.exam)
                     });
             },
-            publishSemester: function(sem){
-                if(this.isSubmitting[sem]){
+            publishTrimester: function(tri){
+                if(this.isSubmitting[tri]){
                     return;
                 }
-                this.isSubmitting[sem] = true;
-                axios.post(this.route('exam.update'),{'semester': sem,'academicYear': this.academicYear.id,'method':'publish'})
+                this.isSubmitting[tri] = true;
+                axios.post(this.route('exam.update'),{'trimester': tri,'academicYear': this.academicYear.id,'method':'publish'})
                     .then((response)=>{
-                        this.isSubmitting[sem] = false;
-                        this.initSemester(sem,response.data.exam)
+                        this.isSubmitting[tri] = false;
+                        this.initTrimester(tri,response.data.exam)
                     });
             }
         },
         data(){
             return{
-                semestersStatus:{
-                    'semester1':{'id':null,'started':false,'stopped':false,'published':false,'numNotes':0},
-                    'semester2':{'id':null,'started':false,'stopped':false,'published':false,'numNotes':0},
-                    'semester3':{'id':null,'started':false,'stopped':false,'published':false,'numNotes':0},
+                trimestersStatus:{
+                    'trimester1':{'id':null,'started':false,'stopped':false,'published':false,'numNotes':0},
+                    'trimester2':{'id':null,'started':false,'stopped':false,'published':false,'numNotes':0},
+                    'trimester3':{'id':null,'started':false,'stopped':false,'published':false,'numNotes':0},
                 },
                 isSubmitting: {
                     1:false,2:false,3:false
@@ -283,11 +283,11 @@
         },
         created() {
             this.exams.forEach(exam => {
-                this.semestersStatus['semester'+exam.semester]['id']=exam.id;
-                this.semestersStatus['semester'+exam.semester]['numNotes']=exam.num_notes ?? 0;
-                this.semestersStatus['semester'+exam.semester]['started']=exam.started_at ? true : false;
-                this.semestersStatus['semester'+exam.semester]['stopped']=exam.stopped_at ? true : false;
-                this.semestersStatus['semester'+exam.semester]['published']=exam.published_at ? true : false;
+                this.trimestersStatus['trimester'+exam.trimester]['id']=exam.id;
+                this.trimestersStatus['trimester'+exam.trimester]['numNotes']=exam.num_notes ?? 0;
+                this.trimestersStatus['trimester'+exam.trimester]['started']=exam.started_at ? true : false;
+                this.trimestersStatus['trimester'+exam.trimester]['stopped']=exam.stopped_at ? true : false;
+                this.trimestersStatus['trimester'+exam.trimester]['published']=exam.published_at ? true : false;
             })
         }
     }

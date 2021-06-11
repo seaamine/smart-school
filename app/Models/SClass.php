@@ -27,4 +27,5 @@ class SClass extends Model
     public function teachers(){
         return $this->hasMany(TeacherClass::class, 'class_id');
     }
+
 }

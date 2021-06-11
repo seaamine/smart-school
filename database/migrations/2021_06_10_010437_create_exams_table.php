@@ -15,7 +15,7 @@ class CreateExamsTable extends Migration
     {
         Schema::create('exams', function (Blueprint $table) {
             $table->id();
-            $table->enum('semester', [1,2,3])->default('1');
+            $table->enum('trimester', [1,2,3])->default('1');
             $table->unsignedInteger('academic_year_id')->nullable();
             $table->enum('status', [0,1])->default('1');
             $table->timestamp('started_at')->nullable();
@@ -25,7 +25,7 @@ class CreateExamsTable extends Migration
             $table->softDeletes();
             $table->timestamps();
             $table->foreign('academic_year_id')->references('id')->on('academic_years');
-            $table->unique(['semester','academic_year_id']);
+            $table->unique(['trimester','academic_year_id']);
             //$table->index(['class_id', 'subject_id','academic_year_id','deleted_at']);
 
         });

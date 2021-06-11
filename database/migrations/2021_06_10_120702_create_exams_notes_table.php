@@ -17,7 +17,7 @@ class CreateExamsNotesTable extends Migration
             $table->id();
             $table->unsignedInteger('academic_year_id')->nullable();
             $table->unsignedInteger('exam_id')->nullable();
-            $table->enum('semester', [1,2,3])->default('1');
+            $table->enum('trimester', [1,2,3])->default('1');
             $table->unsignedInteger('class_id')->nullable();
             $table->unsignedInteger('subject_id')->nullable();
             $table->unsignedInteger('student_id')->nullable();

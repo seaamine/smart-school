@@ -22947,6 +22947,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Layouts_DashLayout__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/Layouts/DashLayout */ "./resources/js/Layouts/DashLayout.vue");
 /* harmony import */ var primevue_card__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! primevue/card */ "./node_modules/primevue/card/card.esm.js");
 /* harmony import */ var _Jetstream_Button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/Jetstream/Button */ "./resources/js/Jetstream/Button.vue");
+/* harmony import */ var primevue_datatable__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! primevue/datatable */ "./node_modules/primevue/datatable/datatable.esm.js");
+/* harmony import */ var primevue_column__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! primevue/column */ "./node_modules/primevue/column/column.esm.js");
+
+
 
 
 
@@ -22954,7 +22958,9 @@ __webpack_require__.r(__webpack_exports__);
   name: "EditNotes",
   components: {
     Button: _Jetstream_Button__WEBPACK_IMPORTED_MODULE_2__.default,
-    Card: primevue_card__WEBPACK_IMPORTED_MODULE_1__.default
+    Card: primevue_card__WEBPACK_IMPORTED_MODULE_1__.default,
+    DataTable: primevue_datatable__WEBPACK_IMPORTED_MODULE_3__.default,
+    Column: primevue_column__WEBPACK_IMPORTED_MODULE_4__.default
   },
   layout: _Layouts_DashLayout__WEBPACK_IMPORTED_MODULE_0__.default,
   props: {
@@ -22963,9 +22969,21 @@ __webpack_require__.r(__webpack_exports__);
     academicYear: Object,
     totalNotes: Number,
     classes: Array,
-    levelsSubjects: Object
+    classesStudents: Object
   },
   methods: {
+    selectTrimester: function selectTrimester(tri) {
+      this.selectedTrimester = tri;
+      this.step = 'class';
+    },
+    selectClass: function selectClass(cla) {
+      console.log(cla);
+      console.log(this.selectedClass);
+      this.selectedClass = cla;
+      console.log(this.selectedClass);
+      console.log(this.classesStudents[this.selectedClass.id]);
+      this.step = 'notes';
+    },
     levelName: function levelName(level) {
       switch (level) {
         case "1":
@@ -22984,107 +23002,107 @@ __webpack_require__.r(__webpack_exports__);
           return '' + level + ' année';
       }
     },
-    initSemester: function initSemester(sem, exam) {
+    initTrimester: function initTrimester(tri, exam) {
       var _exam$num_notes;
 
       var i = this.exams.findIndex(function (e) {
         return e.id === exam.id;
       });
       this.exams[i] = exam;
-      this.semestersStatus['semester' + sem]['id'] = exam.id;
-      this.semestersStatus['semester' + sem]['numNotes'] = (_exam$num_notes = exam.num_notes) !== null && _exam$num_notes !== void 0 ? _exam$num_notes : 0;
-      this.semestersStatus['semester' + sem]['started'] = exam.started_at ? true : false;
-      this.semestersStatus['semester' + sem]['stopped'] = exam.stopped_at ? true : false;
-      this.semestersStatus['semester' + sem]['published'] = exam.published_at ? true : false;
+      this.trimestersStatus['trimester' + tri]['id'] = exam.id;
+      this.trimestersStatus['trimester' + tri]['numNotes'] = (_exam$num_notes = exam.num_notes) !== null && _exam$num_notes !== void 0 ? _exam$num_notes : 0;
+      this.trimestersStatus['trimester' + tri]['started'] = exam.started_at ? true : false;
+      this.trimestersStatus['trimester' + tri]['stopped'] = exam.stopped_at ? true : false;
+      this.trimestersStatus['trimester' + tri]['published'] = exam.published_at ? true : false;
     },
-    semStatus: function semStatus(sem) {
-      if (!sem.started) {
+    triStatus: function triStatus(tri) {
+      if (!tri.started) {
         return "Pas commencé";
       }
 
-      if (!sem.stopped) {
+      if (!tri.stopped) {
         return "En cours";
       } else {
-        if (sem.published) {
+        if (tri.published) {
           return "publié";
         } else {
           return "Arrêté";
         }
       }
     },
-    startSemester: function startSemester(sem) {
+    startTrimester: function startTrimester(tri) {
       var _this = this;
 
-      if (this.isSubmitting[sem]) {
+      if (this.isSubmitting[tri]) {
         return;
       }
 
-      this.isSubmitting[sem] = true;
+      this.isSubmitting[tri] = true;
       axios.post(this.route('exam.update'), {
-        'semester': sem,
+        'trimester': tri,
         'academicYear': this.academicYear.id,
         'method': 'start'
       }).then(function (response) {
-        _this.isSubmitting[sem] = false;
+        _this.isSubmitting[tri] = false;
 
-        _this.initSemester(sem, response.data.exam);
+        _this.initTrimester(tri, response.data.exam);
       });
     },
-    stopSemester: function stopSemester(sem) {
+    stopTrimester: function stopTrimester(tri) {
       var _this2 = this;
 
-      if (this.isSubmitting[sem]) {
+      if (this.isSubmitting[tri]) {
         return;
       }
 
-      this.isSubmitting[sem] = true;
+      this.isSubmitting[tri] = true;
       axios.post(this.route('exam.update'), {
-        'semester': sem,
+        'trimester': tri,
         'academicYear': this.academicYear.id,
         'method': 'stop'
       }).then(function (response) {
-        _this2.isSubmitting[sem] = false;
+        _this2.isSubmitting[tri] = false;
 
-        _this2.initSemester(sem, response.data.exam);
+        _this2.initTrimester(tri, response.data.exam);
       });
     },
-    publishSemester: function publishSemester(sem) {
+    publishTrimester: function publishTrimester(tri) {
       var _this3 = this;
 
-      if (this.isSubmitting[sem]) {
+      if (this.isSubmitting[tri]) {
         return;
       }
 
-      this.isSubmitting[sem] = true;
+      this.isSubmitting[tri] = true;
       axios.post(this.route('exam.update'), {
-        'semester': sem,
+        'trimester': tri,
         'academicYear': this.academicYear.id,
         'method': 'publish'
       }).then(function (response) {
-        _this3.isSubmitting[sem] = false;
+        _this3.isSubmitting[tri] = false;
 
-        _this3.initSemester(sem, response.data.exam);
+        _this3.initTrimester(tri, response.data.exam);
       });
     }
   },
   data: function data() {
     return {
-      semestersStatus: {
-        'semester1': {
+      trimestersStatus: {
+        'trimester1': {
           'id': null,
           'started': false,
           'stopped': false,
           'published': false,
           'numNotes': 0
         },
-        'semester2': {
+        'trimester2': {
           'id': null,
           'started': false,
           'stopped': false,
           'published': false,
           'numNotes': 0
         },
-        'semester3': {
+        'trimester3': {
           'id': null,
           'started': false,
           'stopped': false,
@@ -23097,7 +23115,9 @@ __webpack_require__.r(__webpack_exports__);
         2: false,
         3: false
       },
-      step: 'trimester'
+      step: 'trimester',
+      selectedTrimester: null,
+      selectedClass: null
     };
   },
   created: function created() {
@@ -23106,11 +23126,11 @@ __webpack_require__.r(__webpack_exports__);
     this.exams.forEach(function (exam) {
       var _exam$num_notes2;
 
-      _this4.semestersStatus['semester' + exam.semester]['id'] = exam.id;
-      _this4.semestersStatus['semester' + exam.semester]['numNotes'] = (_exam$num_notes2 = exam.num_notes) !== null && _exam$num_notes2 !== void 0 ? _exam$num_notes2 : 0;
-      _this4.semestersStatus['semester' + exam.semester]['started'] = exam.started_at ? true : false;
-      _this4.semestersStatus['semester' + exam.semester]['stopped'] = exam.stopped_at ? true : false;
-      _this4.semestersStatus['semester' + exam.semester]['published'] = exam.published_at ? true : false;
+      _this4.trimestersStatus['trimester' + exam.trimester]['id'] = exam.id;
+      _this4.trimestersStatus['trimester' + exam.trimester]['numNotes'] = (_exam$num_notes2 = exam.num_notes) !== null && _exam$num_notes2 !== void 0 ? _exam$num_notes2 : 0;
+      _this4.trimestersStatus['trimester' + exam.trimester]['started'] = exam.started_at ? true : false;
+      _this4.trimestersStatus['trimester' + exam.trimester]['stopped'] = exam.stopped_at ? true : false;
+      _this4.trimestersStatus['trimester' + exam.trimester]['published'] = exam.published_at ? true : false;
     });
   }
 });
@@ -23148,107 +23168,107 @@ __webpack_require__.r(__webpack_exports__);
     totalNotes: Number
   },
   methods: {
-    initSemester: function initSemester(sem, exam) {
+    initTrimester: function initTrimester(tri, exam) {
       var _exam$num_notes;
 
       var i = this.exams.findIndex(function (e) {
         return e.id === exam.id;
       });
       this.exams[i] = exam;
-      this.semestersStatus['semester' + sem]['id'] = exam.id;
-      this.semestersStatus['semester' + sem]['numNotes'] = (_exam$num_notes = exam.num_notes) !== null && _exam$num_notes !== void 0 ? _exam$num_notes : 0;
-      this.semestersStatus['semester' + sem]['started'] = exam.started_at ? true : false;
-      this.semestersStatus['semester' + sem]['stopped'] = exam.stopped_at ? true : false;
-      this.semestersStatus['semester' + sem]['published'] = exam.published_at ? true : false;
+      this.trimestersStatus['trimester' + tri]['id'] = exam.id;
+      this.trimestersStatus['trimester' + tri]['numNotes'] = (_exam$num_notes = exam.num_notes) !== null && _exam$num_notes !== void 0 ? _exam$num_notes : 0;
+      this.trimestersStatus['trimester' + tri]['started'] = exam.started_at ? true : false;
+      this.trimestersStatus['trimester' + tri]['stopped'] = exam.stopped_at ? true : false;
+      this.trimestersStatus['trimester' + tri]['published'] = exam.published_at ? true : false;
     },
-    semStatus: function semStatus(sem) {
-      if (!sem.started) {
+    triStatus: function triStatus(tri) {
+      if (!tri.started) {
         return "Pas commencé";
       }
 
-      if (!sem.stopped) {
+      if (!tri.stopped) {
         return "En cours";
       } else {
-        if (sem.published) {
+        if (tri.published) {
           return " Terminé et publié";
         } else {
           return " Terminé";
         }
       }
     },
-    startSemester: function startSemester(sem) {
+    startTrimester: function startTrimester(tri) {
       var _this = this;
 
-      if (this.isSubmitting[sem]) {
+      if (this.isSubmitting[tri]) {
         return;
       }
 
-      this.isSubmitting[sem] = true;
+      this.isSubmitting[tri] = true;
       axios.post(this.route('exam.update'), {
-        'semester': sem,
+        'trimester': tri,
         'academicYear': this.academicYear.id,
         'method': 'start'
       }).then(function (response) {
-        _this.isSubmitting[sem] = false;
+        _this.isSubmitting[tri] = false;
 
-        _this.initSemester(sem, response.data.exam);
+        _this.initTrimester(tri, response.data.exam);
       });
     },
-    stopSemester: function stopSemester(sem) {
+    stopTrimester: function stopTrimester(tri) {
       var _this2 = this;
 
-      if (this.isSubmitting[sem]) {
+      if (this.isSubmitting[tri]) {
         return;
       }
 
-      this.isSubmitting[sem] = true;
+      this.isSubmitting[tri] = true;
       axios.post(this.route('exam.update'), {
-        'semester': sem,
+        'trimester': tri,
         'academicYear': this.academicYear.id,
         'method': 'stop'
       }).then(function (response) {
-        _this2.isSubmitting[sem] = false;
+        _this2.isSubmitting[tri] = false;
 
-        _this2.initSemester(sem, response.data.exam);
+        _this2.initTrimester(tri, response.data.exam);
       });
     },
-    publishSemester: function publishSemester(sem) {
+    publishTrimester: function publishTrimester(tri) {
       var _this3 = this;
 
-      if (this.isSubmitting[sem]) {
+      if (this.isSubmitting[tri]) {
         return;
       }
 
-      this.isSubmitting[sem] = true;
+      this.isSubmitting[tri] = true;
       axios.post(this.route('exam.update'), {
-        'semester': sem,
+        'trimester': tri,
         'academicYear': this.academicYear.id,
         'method': 'publish'
       }).then(function (response) {
-        _this3.isSubmitting[sem] = false;
+        _this3.isSubmitting[tri] = false;
 
-        _this3.initSemester(sem, response.data.exam);
+        _this3.initTrimester(tri, response.data.exam);
       });
     }
   },
   data: function data() {
     return {
-      semestersStatus: {
-        'semester1': {
+      trimestersStatus: {
+        'trimester1': {
           'id': null,
           'started': false,
           'stopped': false,
           'published': false,
           'numNotes': 0
         },
-        'semester2': {
+        'trimester2': {
           'id': null,
           'started': false,
           'stopped': false,
           'published': false,
           'numNotes': 0
         },
-        'semester3': {
+        'trimester3': {
           'id': null,
           'started': false,
           'stopped': false,
@@ -23269,11 +23289,11 @@ __webpack_require__.r(__webpack_exports__);
     this.exams.forEach(function (exam) {
       var _exam$num_notes2;
 
-      _this4.semestersStatus['semester' + exam.semester]['id'] = exam.id;
-      _this4.semestersStatus['semester' + exam.semester]['numNotes'] = (_exam$num_notes2 = exam.num_notes) !== null && _exam$num_notes2 !== void 0 ? _exam$num_notes2 : 0;
-      _this4.semestersStatus['semester' + exam.semester]['started'] = exam.started_at ? true : false;
-      _this4.semestersStatus['semester' + exam.semester]['stopped'] = exam.stopped_at ? true : false;
-      _this4.semestersStatus['semester' + exam.semester]['published'] = exam.published_at ? true : false;
+      _this4.trimestersStatus['trimester' + exam.trimester]['id'] = exam.id;
+      _this4.trimestersStatus['trimester' + exam.trimester]['numNotes'] = (_exam$num_notes2 = exam.num_notes) !== null && _exam$num_notes2 !== void 0 ? _exam$num_notes2 : 0;
+      _this4.trimestersStatus['trimester' + exam.trimester]['started'] = exam.started_at ? true : false;
+      _this4.trimestersStatus['trimester' + exam.trimester]['stopped'] = exam.stopped_at ? true : false;
+      _this4.trimestersStatus['trimester' + exam.trimester]['published'] = exam.published_at ? true : false;
     });
   }
 });
@@ -30094,7 +30114,7 @@ var _hoisted_9 = {
   "class": "relative"
 };
 
-var _hoisted_10 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" 1 ere Semestre ");
+var _hoisted_10 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" 1 ere Trimestre ");
 
 var _hoisted_11 = {
   "class": "relative pt-1"
@@ -30168,7 +30188,7 @@ var _hoisted_22 = {
   "class": "relative"
 };
 
-var _hoisted_23 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" 2 ème Semestre ");
+var _hoisted_23 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" 2 ème Trimestre ");
 
 var _hoisted_24 = {
   "class": "relative pt-1"
@@ -30189,67 +30209,11 @@ var _hoisted_29 = {
   key: 0,
   "class": "overflow-hidden h-2 text-xs flex rounded bg-info-200"
 };
-
-var _hoisted_30 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("svg", {
-  xmlns: "http://www.w3.org/2000/svg",
-  "class": "h-8 w-8",
-  fill: "none",
-  viewBox: "0 0 24 24",
-  stroke: "currentColor"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("path", {
-  "stroke-linecap": "round",
-  "stroke-linejoin": "round",
-  "stroke-width": "2",
-  d: "M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-}), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("path", {
-  "stroke-linecap": "round",
-  "stroke-linejoin": "round",
-  "stroke-width": "2",
-  d: "M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-})], -1
-/* HOISTED */
-);
-
-var _hoisted_31 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("svg", {
-  xmlns: "http://www.w3.org/2000/svg",
-  "class": "h-8 w-8",
-  fill: "none",
-  viewBox: "0 0 24 24",
-  stroke: "currentColor"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("path", {
-  "stroke-linecap": "round",
-  "stroke-linejoin": "round",
-  "stroke-width": "2",
-  d: "M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-}), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("path", {
-  "stroke-linecap": "round",
-  "stroke-linejoin": "round",
-  "stroke-width": "2",
-  d: "M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"
-})], -1
-/* HOISTED */
-);
-
-var _hoisted_32 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("svg", {
-  xmlns: "http://www.w3.org/2000/svg",
-  "class": "h-8 w-8",
-  fill: "none",
-  viewBox: "0 0 24 24",
-  stroke: "currentColor"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("path", {
-  "stroke-linecap": "round",
-  "stroke-linejoin": "round",
-  "stroke-width": "2",
-  d: "M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-})], -1
-/* HOISTED */
-);
-
-var _hoisted_33 = {
+var _hoisted_30 = {
   "class": "bg-white opacity-75 absolute top-0 left-0 w-full h-full flex items-center justify-center"
 };
 
-var _hoisted_34 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("svg", {
+var _hoisted_31 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("svg", {
   "class": "animate-spin h-24 w-24 mr-3 text-warning-500",
   viewBox: "0 0 24 24"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("circle", {
@@ -30267,17 +30231,17 @@ var _hoisted_34 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(
 /* HOISTED */
 );
 
-var _hoisted_35 = {
+var _hoisted_32 = {
   "class": "bg-white opacity-75 absolute top-0 left-0 w-full h-full flex items-center justify-center"
 };
 
-var _hoisted_36 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", {
+var _hoisted_33 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", {
   "class": "p-2 text-danger-800 font-semibold text-3xl"
 }, "inactif", -1
 /* HOISTED */
 );
 
-var _hoisted_37 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", {
+var _hoisted_34 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", {
   "class": "font-bold"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("svg", {
   xmlns: "http://www.w3.org/2000/svg",
@@ -30294,92 +30258,36 @@ var _hoisted_37 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(
 /* HOISTED */
 );
 
-var _hoisted_38 = {
+var _hoisted_35 = {
   "class": "relative"
 };
 
-var _hoisted_39 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" 3 éme Semestre ");
+var _hoisted_36 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" 3 éme Trimestre ");
 
-var _hoisted_40 = {
+var _hoisted_37 = {
   "class": "relative pt-1"
 };
-var _hoisted_41 = {
+var _hoisted_38 = {
   "class": "flex mb-2 items-center justify-between "
 };
-var _hoisted_42 = {
+var _hoisted_39 = {
   "class": "text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-white bg-primary-200"
 };
-var _hoisted_43 = {
+var _hoisted_40 = {
   "class": "text-right"
 };
-var _hoisted_44 = {
+var _hoisted_41 = {
   "class": "text-xs font-semibold inline-block text-emerald-600"
 };
-var _hoisted_45 = {
+var _hoisted_42 = {
   key: 0,
   "class": "overflow-hidden h-2 text-xs flex rounded bg-info-200"
 };
-
-var _hoisted_46 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("svg", {
-  xmlns: "http://www.w3.org/2000/svg",
-  "class": "h-8 w-8",
-  fill: "none",
-  viewBox: "0 0 24 24",
-  stroke: "currentColor"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("path", {
-  "stroke-linecap": "round",
-  "stroke-linejoin": "round",
-  "stroke-width": "2",
-  d: "M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-}), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("path", {
-  "stroke-linecap": "round",
-  "stroke-linejoin": "round",
-  "stroke-width": "2",
-  d: "M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-})], -1
-/* HOISTED */
-);
-
-var _hoisted_47 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("svg", {
-  xmlns: "http://www.w3.org/2000/svg",
-  "class": "h-8 w-8",
-  fill: "none",
-  viewBox: "0 0 24 24",
-  stroke: "currentColor"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("path", {
-  "stroke-linecap": "round",
-  "stroke-linejoin": "round",
-  "stroke-width": "2",
-  d: "M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-}), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("path", {
-  "stroke-linecap": "round",
-  "stroke-linejoin": "round",
-  "stroke-width": "2",
-  d: "M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"
-})], -1
-/* HOISTED */
-);
-
-var _hoisted_48 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("svg", {
-  xmlns: "http://www.w3.org/2000/svg",
-  "class": "h-8 w-8",
-  fill: "none",
-  viewBox: "0 0 24 24",
-  stroke: "currentColor"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("path", {
-  "stroke-linecap": "round",
-  "stroke-linejoin": "round",
-  "stroke-width": "2",
-  d: "M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-})], -1
-/* HOISTED */
-);
-
-var _hoisted_49 = {
+var _hoisted_43 = {
   "class": "bg-white opacity-75 absolute top-0 left-0 w-full h-full flex items-center justify-center"
 };
 
-var _hoisted_50 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("svg", {
+var _hoisted_44 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("svg", {
   "class": "animate-spin h-24 w-24 mr-3 text-warning-500",
   viewBox: "0 0 24 24"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("circle", {
@@ -30397,31 +30305,39 @@ var _hoisted_50 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(
 /* HOISTED */
 );
 
-var _hoisted_51 = {
+var _hoisted_45 = {
   "class": "bg-white opacity-75 absolute top-0 left-0 w-full h-full flex items-center justify-center"
 };
 
-var _hoisted_52 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", {
+var _hoisted_46 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", {
   "class": "p-2 text-danger-800 font-semibold text-3xl"
 }, "Inactif", -1
 /* HOISTED */
 );
 
-var _hoisted_53 = {
+var _hoisted_47 = {
   key: 1,
   "class": ""
 };
-var _hoisted_54 = {
+var _hoisted_48 = {
   "class": "pb-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 justify-items-center"
 };
-var _hoisted_55 = {
+var _hoisted_49 = {
   "class": "pb-2 text-2xl\t"
+};
+var _hoisted_50 = {
+  key: 2,
+  "class": ""
 };
 
 (0,vue__WEBPACK_IMPORTED_MODULE_0__.popScopeId)();
 
 var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Card = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Card");
+
+  var _component_Column = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Column");
+
+  var _component_DataTable = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("DataTable");
 
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [_hoisted_1, Object.keys($props.errors).length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("ul", _hoisted_3, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.errors, function (error) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("li", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(error), 1
@@ -30450,13 +30366,13 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
             src: _ctx.$page.props.appUrl + '/images/exam.png'
           }, null, 8
           /* PROPS */
-          , ["src"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.semStatus($data.semestersStatus.semester1)), 1
+          , ["src"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.triStatus($data.trimestersStatus.trimester1)), 1
           /* TEXT */
-          )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.semestersStatus.semester1.numNotes) + "/" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalNotes), 1
+          )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.trimestersStatus.trimester1.numNotes) + "/" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalNotes), 1
           /* TEXT */
-          )])]), $data.semestersStatus.semester1.started ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
+          )])]), $data.trimestersStatus.trimester1.started ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
             style: {
-              width: $data.semestersStatus.semester1.numNotes / $props.totalNotes * 100 + '%'
+              width: $data.trimestersStatus.trimester1.numNotes / $props.totalNotes * 100 + '%'
             },
             "class": "shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-info-500"
           }, null, 4
@@ -30465,9 +30381,9 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
         }),
         footer: _withId(function () {
           return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
-            disabled: $data.semestersStatus.semester1.started && !$data.semestersStatus.semester1.stopped,
+            disabled: !$data.trimestersStatus.trimester1.started || $data.trimestersStatus.trimester1.stopped,
             onClick: _cache[1] || (_cache[1] = function ($event) {
-              return $data.step = 'class';
+              return $options.selectTrimester(1);
             }),
             "class": "text-white rounded-md font-medium bg-primary-500 py-2 px-4 hover:bg-primary-800 hover:ring hover:ring-primary-200 inline-flex justify-center items-center"
           }, " Saisir ", 8
@@ -30481,7 +30397,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
       /* NEED_PATCH */
       ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $data.isSubmitting[1]]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_19, [_hoisted_20], 512
       /* NEED_PATCH */
-      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, !$data.semestersStatus.semester1.started]])]), _hoisted_21, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Card, {
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, !$data.trimestersStatus.trimester1.started]])]), _hoisted_21, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Card, {
         "class": "w-52 relative"
       }, {
         header: _withId(function () {
@@ -30495,13 +30411,13 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
             src: _ctx.$page.props.appUrl + '/images/exam.png'
           }, null, 8
           /* PROPS */
-          , ["src"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_25, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_26, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.semStatus($data.semestersStatus.semester2)), 1
+          , ["src"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_25, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_26, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.triStatus($data.trimestersStatus.trimester2)), 1
           /* TEXT */
-          )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_27, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_28, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.semestersStatus.semester2.numNotes) + "/" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalNotes), 1
+          )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_27, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_28, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.trimestersStatus.trimester2.numNotes) + "/" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalNotes), 1
           /* TEXT */
-          )])]), $data.semestersStatus.semester2.started ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_29, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
+          )])]), $data.trimestersStatus.trimester2.started ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_29, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
             style: {
-              width: $data.semestersStatus.semester2.semestersStatus.semester2.numNotes / $props.totalNotes * 100 + '%'
+              width: $data.trimestersStatus.trimester2.trimestersStatus.trimester2.numNotes / $props.totalNotes * 100 + '%'
             },
             "class": "shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-info-500"
           }, null, 4
@@ -30510,59 +30426,43 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
         }),
         footer: _withId(function () {
           return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
-            disabled: $data.semestersStatus.semester2.started && !$data.semestersStatus.semester2.stopped,
+            disabled: !$data.trimestersStatus.trimester2.started || $data.trimestersStatus.trimester2.stopped,
             onClick: _cache[2] || (_cache[2] = function ($event) {
-              return $options.startSemester(2);
+              return $options.selectTrimester(2);
             }),
-            "class": "rounded-full text-success-500 font-medium mr-4 hover:text-primary-200  focus:text-primary-800 p-0 inline-flex justify-center items-center"
-          }, [_hoisted_30], 8
-          /* PROPS */
-          , ["disabled"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
-            disabled: $data.semestersStatus.semester2.stopped || !$data.semestersStatus.semester2.started,
-            onClick: _cache[3] || (_cache[3] = function ($event) {
-              return $options.stopSemester(2);
-            }),
-            "class": "rounded-full text-danger-500 font-medium mr-4 hover:text-danger-800  focus:text-danger-800 p-0 inline-flex justify-center items-center"
-          }, [_hoisted_31], 8
-          /* PROPS */
-          , ["disabled"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
-            disabled: !$data.semestersStatus.semester2.published,
-            onClick: _cache[4] || (_cache[4] = function ($event) {
-              return $options.publishSemester(2);
-            }),
-            "class": "rounded-full text-info-500 font-medium hover:text-info-800  focus:text-info-800 p-0 inline-flex justify-center items-center"
-          }, [_hoisted_32], 8
+            "class": "text-white rounded-md font-medium bg-primary-500 py-2 px-4 hover:bg-primary-800 hover:ring hover:ring-primary-200 inline-flex justify-center items-center"
+          }, " Saisir ", 8
           /* PROPS */
           , ["disabled"])];
         }),
         _: 1
         /* STABLE */
 
-      }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_33, [_hoisted_34], 512
+      }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_30, [_hoisted_31], 512
       /* NEED_PATCH */
-      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $data.isSubmitting[2]]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_35, [_hoisted_36], 512
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $data.isSubmitting[2]]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_32, [_hoisted_33], 512
       /* NEED_PATCH */
-      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, !$data.semestersStatus.semester2.started]])]), _hoisted_37, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_38, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Card, {
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, !$data.trimestersStatus.trimester2.started]])]), _hoisted_34, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_35, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Card, {
         "class": "w-52 relative"
       }, {
         header: _withId(function () {
           return [];
         }),
         title: _withId(function () {
-          return [_hoisted_39];
+          return [_hoisted_36];
         }),
         content: _withId(function () {
           return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("img", {
             src: _ctx.$page.props.appUrl + '/images/exam.png'
           }, null, 8
           /* PROPS */
-          , ["src"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_40, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_41, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_42, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.semStatus($data.semestersStatus.semester3)), 1
+          , ["src"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_37, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_38, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_39, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.triStatus($data.trimestersStatus.trimester3)), 1
           /* TEXT */
-          )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_43, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_44, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.semestersStatus.semester3.numNotes) + "/" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalNotes), 1
+          )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_40, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_41, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.trimestersStatus.trimester3.numNotes) + "/" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalNotes), 1
           /* TEXT */
-          )])]), $data.semestersStatus.semester3.started ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_45, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
+          )])]), $data.trimestersStatus.trimester3.started ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_42, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
             style: {
-              width: $data.semestersStatus.semester3.numNotes / $props.totalNotes * 100 + '%'
+              width: $data.trimestersStatus.trimester3.numNotes / $props.totalNotes * 100 + '%'
             },
             "class": "shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-info-500"
           }, null, 4
@@ -30571,43 +30471,29 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
         }),
         footer: _withId(function () {
           return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
-            disabled: $data.semestersStatus.semester3.started && !$data.semestersStatus.semester3.stopped,
-            onClick: _cache[5] || (_cache[5] = function ($event) {
-              return $options.startSemester(3);
+            disabled: !$data.trimestersStatus.trimester3.started || $data.trimestersStatus.trimester3.stopped,
+            onClick: _cache[3] || (_cache[3] = function ($event) {
+              return $options.selectTrimester(3);
             }),
-            "class": "rounded-full text-success-500 font-medium mr-4 hover:text-primary-200  focus:text-primary-800 p-0 inline-flex justify-center items-center"
-          }, [_hoisted_46], 8
-          /* PROPS */
-          , ["disabled"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
-            disabled: $data.semestersStatus.semester3.stopped || !$data.semestersStatus.semester3.started,
-            onClick: _cache[6] || (_cache[6] = function ($event) {
-              return $options.stopSemester(3);
-            }),
-            "class": "rounded-full text-danger-500 font-medium mr-4 hover:text-danger-800  focus:text-danger-800 p-0 inline-flex justify-center items-center"
-          }, [_hoisted_47], 8
-          /* PROPS */
-          , ["disabled"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
-            disabled: !$data.semestersStatus.semester3.published,
-            onClick: _cache[7] || (_cache[7] = function ($event) {
-              return $options.publishSemester(3);
-            }),
-            "class": "rounded-full text-info-500 font-medium hover:text-info-800  focus:text-info-800 p-0 inline-flex justify-center items-center"
-          }, [_hoisted_48], 8
+            "class": "text-white rounded-md font-medium bg-primary-500 py-2 px-4 hover:bg-primary-800 hover:ring hover:ring-primary-200 inline-flex justify-center items-center"
+          }, " Saisir ", 8
           /* PROPS */
           , ["disabled"])];
         }),
         _: 1
         /* STABLE */
 
-      }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_49, [_hoisted_50], 512
+      }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_43, [_hoisted_44], 512
       /* NEED_PATCH */
-      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $data.isSubmitting[3]]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_51, [_hoisted_52], 512
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $data.isSubmitting[3]]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_45, [_hoisted_46], 512
       /* NEED_PATCH */
-      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, !$data.semestersStatus.semester3.started]])])])) : $data.step === 'class' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_53, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.classes, function (levelclasses) {
-        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_54, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(levelclasses, function (classe) {
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, !$data.trimestersStatus.trimester3.started]])])])) : $data.step === 'class' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_47, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.classes, function (levelclasses) {
+        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_48, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(levelclasses, function (classe) {
           return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Card, {
             key: 'class-' + classe.id,
-            onClick: _cache[8] || (_cache[8] = function () {}),
+            onClick: function onClick($event) {
+              return $options.selectClass(classe);
+            },
             "class": "click-card w-52"
           }, {
             header: _withId(function () {
@@ -30619,7 +30505,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
               )];
             }),
             content: _withId(function () {
-              return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_55, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(classe.name), 1
+              return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_49, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(classe.name), 1
               /* TEXT */
               )];
             }),
@@ -30631,26 +30517,120 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
             _: 2
             /* DYNAMIC */
 
-          }, 1024
-          /* DYNAMIC_SLOTS */
-          );
+          }, 1032
+          /* PROPS, DYNAMIC_SLOTS */
+          , ["onClick"]);
         }), 128
         /* KEYED_FRAGMENT */
         ))]);
       }), 256
       /* UNKEYED_FRAGMENT */
-      ))])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)];
+      ))])) : $data.step === 'notes' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_50, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_DataTable, {
+        value: $props.classesStudents[$data.selectedClass.id],
+        editMode: "cell"
+      }, {
+        "default": _withId(function () {
+          return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Column, {
+            field: "last_name",
+            header: "Nom"
+          }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Column, {
+            field: "first_name",
+            header: "Prenom"
+          }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Column, {
+            field: "note_eval",
+            header: "Evaluation",
+            exportable: false
+          }, {
+            editor: _withId(function (slotProps) {
+              return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
+                type: "text",
+                "class": "input-group",
+                "onUpdate:modelValue": function onUpdateModelValue($event) {
+                  return slotProps.data[slotProps.column.props.field] = $event;
+                }
+              }, null, 8
+              /* PROPS */
+              , ["onUpdate:modelValue"]), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, slotProps.data[slotProps.column.props.field]]])];
+            }),
+            _: 1
+            /* STABLE */
+
+          }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Column, {
+            field: "note_devoir",
+            header: "Devoir",
+            exportable: false
+          }, {
+            editor: _withId(function (slotProps) {
+              return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
+                type: "text",
+                "class": "input-group",
+                "onUpdate:modelValue": function onUpdateModelValue($event) {
+                  return slotProps.data[slotProps.column.props.field] = $event;
+                }
+              }, null, 8
+              /* PROPS */
+              , ["onUpdate:modelValue"]), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, slotProps.data[slotProps.column.props.field]]])];
+            }),
+            _: 1
+            /* STABLE */
+
+          }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Column, {
+            field: "note_exam",
+            header: "Exam",
+            exportable: false
+          }, {
+            editor: _withId(function (slotProps) {
+              return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
+                type: "text",
+                "class": "input-group",
+                "onUpdate:modelValue": function onUpdateModelValue($event) {
+                  return slotProps.data[slotProps.column.props.field] = $event;
+                }
+              }, null, 8
+              /* PROPS */
+              , ["onUpdate:modelValue"]), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, slotProps.data[slotProps.column.props.field]]])];
+            }),
+            _: 1
+            /* STABLE */
+
+          }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Column, {
+            field: "remarque",
+            header: "Remarque",
+            exportable: false
+          }, {
+            editor: _withId(function (slotProps) {
+              return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
+                type: "text",
+                "class": "input-group",
+                "onUpdate:modelValue": function onUpdateModelValue($event) {
+                  return slotProps.data[slotProps.column.props.field] = $event;
+                }
+              }, null, 8
+              /* PROPS */
+              , ["onUpdate:modelValue"]), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, slotProps.data[slotProps.column.props.field]]])];
+            }),
+            _: 1
+            /* STABLE */
+
+          })];
+        }),
+        _: 1
+        /* STABLE */
+
+      }, 8
+      /* PROPS */
+      , ["value"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)];
     }),
     _: 1
     /* STABLE */
 
   })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
-    onClick: _cache[9] || (_cache[9] = function ($event) {
+    onClick: _cache[4] || (_cache[4] = function ($event) {
       return $data.step = 'class';
     }),
     "class": "rounded-full text-info-500 font-medium hover:text-info-800  focus:text-info-800 p-0 inline-flex justify-center items-center"
   }, " step2 "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
-    onClick: _cache[10] || (_cache[10] = function ($event) {
+    onClick: _cache[5] || (_cache[5] = function ($event) {
       return $data.step = 'trimester';
     }),
     "class": "rounded-full text-info-500 font-medium hover:text-info-800  focus:text-info-800 p-0 inline-flex justify-center items-center"
@@ -30710,7 +30690,7 @@ var _hoisted_8 = {
   "class": "relative"
 };
 
-var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" 1 ere Semestre ");
+var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" 1 ere Trimestre ");
 
 var _hoisted_10 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("img", {
   src: "images/exam.png"
@@ -30836,7 +30816,7 @@ var _hoisted_23 = {
   "class": "relative"
 };
 
-var _hoisted_24 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" 2 ème Semestre ");
+var _hoisted_24 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" 2 ème Trimestre ");
 
 var _hoisted_25 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("img", {
   src: "images/exam.png"
@@ -30947,7 +30927,7 @@ var _hoisted_37 = {
 
 var _hoisted_38 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", {
   "class": "p-2 text-danger-800 font-semibold"
-}, "S'il vous plaît compléter et publier semeter 1", -1
+}, "S'il vous plaît compléter et publier Trimestre 1", -1
 /* HOISTED */
 );
 
@@ -30972,7 +30952,7 @@ var _hoisted_40 = {
   "class": "relative"
 };
 
-var _hoisted_41 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" 3 éme Semestre ");
+var _hoisted_41 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" 3 éme Trimestre ");
 
 var _hoisted_42 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("img", {
   src: "images/exam.png"
@@ -31083,7 +31063,7 @@ var _hoisted_54 = {
 
 var _hoisted_55 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", {
   "class": "p-2 text-danger-800 font-semibold"
-}, "S'il vous plaît compléter et publier semeter 2", -1
+}, "S'il vous plaît compléter et publier Trimestre 2", -1
 /* HOISTED */
 );
 
@@ -31110,13 +31090,13 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
       return [_hoisted_9];
     }),
     content: _withId(function () {
-      return [_hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.semStatus($data.semestersStatus.semester1)), 1
+      return [_hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.triStatus($data.trimestersStatus.trimester1)), 1
       /* TEXT */
-      )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.semestersStatus.semester1.numNotes) + "/" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalNotes), 1
+      )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.trimestersStatus.trimester1.numNotes) + "/" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalNotes), 1
       /* TEXT */
-      )])]), $data.semestersStatus.semester1.started ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
+      )])]), $data.trimestersStatus.trimester1.started ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
         style: {
-          width: $data.semestersStatus.semester1.numNotes / $props.totalNotes * 100 + '%'
+          width: $data.trimestersStatus.trimester1.numNotes / $props.totalNotes * 100 + '%'
         },
         "class": "shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-info-500"
       }, null, 4
@@ -31125,25 +31105,25 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
     }),
     footer: _withId(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
-        disabled: $data.semestersStatus.semester1.started && !$data.semestersStatus.semester1.stopped,
+        disabled: $data.trimestersStatus.trimester1.started && !$data.trimestersStatus.trimester1.stopped,
         onClick: _cache[1] || (_cache[1] = function ($event) {
-          return $options.startSemester(1);
+          return $options.startTrimester(1);
         }),
         "class": "rounded-full text-success-500 font-medium mr-4 hover:text-primary-200  focus:text-primary-800 p-0 inline-flex justify-center items-center"
       }, [_hoisted_17], 8
       /* PROPS */
       , ["disabled"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
-        disabled: $data.semestersStatus.semester1.stopped || !$data.semestersStatus.semester1.started,
+        disabled: $data.trimestersStatus.trimester1.stopped || !$data.trimestersStatus.trimester1.started,
         onClick: _cache[2] || (_cache[2] = function ($event) {
-          return $options.stopSemester(1);
+          return $options.stopTrimester(1);
         }),
         "class": "rounded-full text-danger-500 font-medium mr-4 hover:text-danger-800  focus:text-danger-800 p-0 inline-flex justify-center items-center"
       }, [_hoisted_18], 8
       /* PROPS */
       , ["disabled"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
-        disabled: !$data.semestersStatus.semester1.published,
+        disabled: !$data.trimestersStatus.trimester1.published,
         onClick: _cache[3] || (_cache[3] = function ($event) {
-          return $options.publishSemester(1);
+          return $options.publishTrimester(1);
         }),
         "class": "rounded-full text-info-500 font-medium hover:text-info-800  focus:text-info-800 p-0 inline-flex justify-center items-center"
       }, [_hoisted_19], 8
@@ -31165,13 +31145,13 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
       return [_hoisted_24];
     }),
     content: _withId(function () {
-      return [_hoisted_25, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_26, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_27, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_28, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.semStatus($data.semestersStatus.semester2)), 1
+      return [_hoisted_25, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_26, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_27, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_28, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.triStatus($data.trimestersStatus.trimester2)), 1
       /* TEXT */
-      )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_29, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_30, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.semestersStatus.semester2.numNotes) + "/" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalNotes), 1
+      )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_29, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_30, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.trimestersStatus.trimester2.numNotes) + "/" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalNotes), 1
       /* TEXT */
-      )])]), $data.semestersStatus.semester2.started ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_31, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
+      )])]), $data.trimestersStatus.trimester2.started ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_31, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
         style: {
-          width: $data.semestersStatus.semester2.semestersStatus.semester2.numNotes / $props.totalNotes * 100 + '%'
+          width: $data.trimestersStatus.trimester2.trimestersStatus.trimester2.numNotes / $props.totalNotes * 100 + '%'
         },
         "class": "shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-info-500"
       }, null, 4
@@ -31180,25 +31160,25 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
     }),
     footer: _withId(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
-        disabled: $data.semestersStatus.semester2.started && !$data.semestersStatus.semester2.stopped,
+        disabled: $data.trimestersStatus.trimester2.started && !$data.trimestersStatus.trimester2.stopped,
         onClick: _cache[4] || (_cache[4] = function ($event) {
-          return $options.startSemester(2);
+          return $options.startTrimester(2);
         }),
         "class": "rounded-full text-success-500 font-medium mr-4 hover:text-primary-200  focus:text-primary-800 p-0 inline-flex justify-center items-center"
       }, [_hoisted_32], 8
       /* PROPS */
       , ["disabled"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
-        disabled: $data.semestersStatus.semester2.stopped || !$data.semestersStatus.semester2.started,
+        disabled: $data.trimestersStatus.trimester2.stopped || !$data.trimestersStatus.trimester2.started,
         onClick: _cache[5] || (_cache[5] = function ($event) {
-          return $options.stopSemester(2);
+          return $options.stopTrimester(2);
         }),
         "class": "rounded-full text-danger-500 font-medium mr-4 hover:text-danger-800  focus:text-danger-800 p-0 inline-flex justify-center items-center"
       }, [_hoisted_33], 8
       /* PROPS */
       , ["disabled"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
-        disabled: !$data.semestersStatus.semester2.published,
+        disabled: !$data.trimestersStatus.trimester2.published,
         onClick: _cache[6] || (_cache[6] = function ($event) {
-          return $options.publishSemester(2);
+          return $options.publishTrimester(2);
         }),
         "class": "rounded-full text-info-500 font-medium hover:text-info-800  focus:text-info-800 p-0 inline-flex justify-center items-center"
       }, [_hoisted_34], 8
@@ -31212,7 +31192,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
   /* NEED_PATCH */
   ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $data.isSubmitting[2]]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_37, [_hoisted_38], 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, !$data.semestersStatus.semester1.published]])]), _hoisted_39, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_40, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Card, {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, !$data.trimestersStatus.trimester1.published]])]), _hoisted_39, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_40, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Card, {
     "class": "w-52 relative"
   }, {
     header: _withId(function () {
@@ -31222,13 +31202,13 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
       return [_hoisted_41];
     }),
     content: _withId(function () {
-      return [_hoisted_42, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_43, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_44, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_45, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.semStatus($data.semestersStatus.semester3)), 1
+      return [_hoisted_42, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_43, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_44, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_45, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.triStatus($data.trimestersStatus.trimester3)), 1
       /* TEXT */
-      )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_46, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_47, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.semestersStatus.semester3.numNotes) + "/" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalNotes), 1
+      )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_46, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_47, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.trimestersStatus.trimester3.numNotes) + "/" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalNotes), 1
       /* TEXT */
-      )])]), $data.semestersStatus.semester3.started ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_48, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
+      )])]), $data.trimestersStatus.trimester3.started ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_48, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
         style: {
-          width: $data.semestersStatus.semester3.numNotes / $props.totalNotes * 100 + '%'
+          width: $data.trimestersStatus.trimester3.numNotes / $props.totalNotes * 100 + '%'
         },
         "class": "shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-info-500"
       }, null, 4
@@ -31237,25 +31217,25 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
     }),
     footer: _withId(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
-        disabled: $data.semestersStatus.semester3.started && !$data.semestersStatus.semester3.stopped,
+        disabled: $data.trimestersStatus.trimester3.started && !$data.trimestersStatus.trimester3.stopped,
         onClick: _cache[7] || (_cache[7] = function ($event) {
-          return $options.startSemester(3);
+          return $options.startTrimester(3);
         }),
         "class": "rounded-full text-success-500 font-medium mr-4 hover:text-primary-200  focus:text-primary-800 p-0 inline-flex justify-center items-center"
       }, [_hoisted_49], 8
       /* PROPS */
       , ["disabled"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
-        disabled: $data.semestersStatus.semester3.stopped || !$data.semestersStatus.semester3.started,
+        disabled: $data.trimestersStatus.trimester3.stopped || !$data.trimestersStatus.trimester3.started,
         onClick: _cache[8] || (_cache[8] = function ($event) {
-          return $options.stopSemester(3);
+          return $options.stopTrimester(3);
         }),
         "class": "rounded-full text-danger-500 font-medium mr-4 hover:text-danger-800  focus:text-danger-800 p-0 inline-flex justify-center items-center"
       }, [_hoisted_50], 8
       /* PROPS */
       , ["disabled"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
-        disabled: !$data.semestersStatus.semester3.published,
+        disabled: !$data.trimestersStatus.trimester3.published,
         onClick: _cache[9] || (_cache[9] = function ($event) {
-          return $options.publishSemester(3);
+          return $options.publishTrimester(3);
         }),
         "class": "rounded-full text-info-500 font-medium hover:text-info-800  focus:text-info-800 p-0 inline-flex justify-center items-center"
       }, [_hoisted_51], 8
@@ -31269,7 +31249,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
   /* NEED_PATCH */
   ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $data.isSubmitting[3]]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_54, [_hoisted_55], 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, !$data.semestersStatus.semester2.published]])])])])], 64
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, !$data.trimestersStatus.trimester2.published]])])])])], 64
   /* STABLE_FRAGMENT */
   );
 });
@@ -36114,7 +36094,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "a.dropdown-item[data-v-62cbac59]:active{\n  background-color: #9e95f5;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "a.dropdown-item[data-v-62cbac59]:active{\n  background-color: #9e95f5;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -36138,7 +36118,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "[data-v-37096330] .p-card-title{\n  height: 45px;\n  font-size: 1rem;\n  border: 1px solid rgba(34,41,47,.125);\n  border-width: 0 0 1px;\n  text-align: center;\n  display: flex;\n  align-items: center; /* Vertical center alignment */\n  justify-content: center; /* Horizontal center alignment */\n}\n[data-v-37096330] .p-card-content{\n  text-align: center;\n}\n[data-v-37096330] .p-card-footer{\n  height: 45px;\n  font-size: 1rem;\n  border: 1px solid rgba(34,41,47,.125);\n  border-width: 1px 0 0 0;\n  text-align: center;\n  display: flex;\n  align-items: center; /* Vertical center alignment */\n  justify-content: center; /* Horizontal center alignment */\n  color: #fff;\n}\n.mode-fade-enter-active[data-v-37096330], .mode-fade-leave-active[data-v-37096330] {\n  transition: opacity .5s ease\n}\n.mode-fade-enter-from[data-v-37096330], .mode-fade-leave-to[data-v-37096330] {\n  opacity: 0\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".click-card[data-v-37096330]:hover{\n  cursor: pointer;\n  border: 1px solid #7367f0!important;\n  box-shadow: 0 0 10px 1px rgba(115, 103, 240, 0.7);\n}\n[data-v-37096330] .p-card-title{\n  height: 45px;\n  font-size: 1rem;\n  border: 1px solid rgba(34,41,47,.125);\n  border-width: 0 0 1px;\n  text-align: center;\n  display: flex;\n  align-items: center; /* Vertical center alignment */\n  justify-content: center; /* Horizontal center alignment */\n}\n[data-v-37096330] .p-card-content{\n  text-align: center;\n}\n[data-v-37096330] .p-card-footer{\n  height: 45px;\n  font-size: 1rem;\n  border: 1px solid rgba(34,41,47,.125);\n  border-width: 1px 0 0 0;\n  text-align: center;\n  display: flex;\n  align-items: center; /* Vertical center alignment */\n  justify-content: center; /* Horizontal center alignment */\n  color: #fff;\n}\n.mode-fade-enter-active[data-v-37096330], .mode-fade-leave-active[data-v-37096330] {\n  transition: opacity .5s ease\n}\n.mode-fade-enter-from[data-v-37096330], .mode-fade-leave-to[data-v-37096330] {\n  opacity: 0\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -36186,7 +36166,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "#sidebar[data-v-6a63e488]{\n  width: 260px;\n  max-width: 260px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "#sidebar[data-v-6a63e488]{\n  width: 260px;\n  max-width: 260px;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -36210,7 +36190,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "[data-v-2d98b894] .p-card-title{\n  height: 45px;\n  font-size: 1rem;\n  border: 1px solid rgba(34,41,47,.125);\n  border-width: 0 0 1px;\n  text-align: center;\n  display: flex;\n  align-items: center; /* Vertical center alignment */\n  justify-content: center; /* Horizontal center alignment */\n}\n[data-v-2d98b894] .p-card-footer{\n  height: 45px;\n  font-size: 1rem;\n  border: 1px solid rgba(34,41,47,.125);\n  border-width: 1px 0 0 0;\n  text-align: center;\n  display: flex;\n  align-items: center; /* Vertical center alignment */\n  justify-content: center; /* Horizontal center alignment */\n  color: #fff;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "[data-v-2d98b894] .p-card-title{\n  height: 45px;\n  font-size: 1rem;\n  border: 1px solid rgba(34,41,47,.125);\n  border-width: 0 0 1px;\n  text-align: center;\n  display: flex;\n  align-items: center; /* Vertical center alignment */\n  justify-content: center; /* Horizontal center alignment */\n}\n[data-v-2d98b894] .p-card-footer{\n  height: 45px;\n  font-size: 1rem;\n  border: 1px solid rgba(34,41,47,.125);\n  border-width: 1px 0 0 0;\n  text-align: center;\n  display: flex;\n  align-items: center; /* Vertical center alignment */\n  justify-content: center; /* Horizontal center alignment */\n  color: #fff;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -36234,7 +36214,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".click-card[data-v-153c6f8c]:hover{\n  cursor: pointer;\n  border: 1px solid #7367f0!important;\n  box-shadow: 0 0 10px 1px rgba(115, 103, 240, 0.7);\n}\n[data-v-153c6f8c] .p-card-title{\n  height: 45px;\n  font-size: 1rem;\n  border: 1px solid rgba(34,41,47,.125);\n  border-width: 0 0 1px;\n  text-align: center;\n  display: flex;\n  align-items: center; /* Vertical center alignment */\n  justify-content: center; /* Horizontal center alignment */\n}\n[data-v-153c6f8c] .p-card-content{\n  text-align: center;\n}\n[data-v-153c6f8c] .p-card-footer{\n  height: 45px;\n  font-size: 1rem;\n  border: 1px solid rgba(34,41,47,.125);\n  border-width: 1px 0 0 0;\n  text-align: center;\n  display: flex;\n  align-items: center; /* Vertical center alignment */\n  justify-content: center; /* Horizontal center alignment */\n  color: #fff;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".click-card[data-v-153c6f8c]:hover{\n  cursor: pointer;\n  border: 1px solid #7367f0!important;\n  box-shadow: 0 0 10px 1px rgba(115, 103, 240, 0.7);\n}\n[data-v-153c6f8c] .p-card-title{\n  height: 45px;\n  font-size: 1rem;\n  border: 1px solid rgba(34,41,47,.125);\n  border-width: 0 0 1px;\n  text-align: center;\n  display: flex;\n  align-items: center; /* Vertical center alignment */\n  justify-content: center; /* Horizontal center alignment */\n}\n[data-v-153c6f8c] .p-card-content{\n  text-align: center;\n}\n[data-v-153c6f8c] .p-card-footer{\n  height: 45px;\n  font-size: 1rem;\n  border: 1px solid rgba(34,41,47,.125);\n  border-width: 1px 0 0 0;\n  text-align: center;\n  display: flex;\n  align-items: center; /* Vertical center alignment */\n  justify-content: center; /* Horizontal center alignment */\n  color: #fff;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -36258,7 +36238,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".bg-gray-100[data-v-317d1a6e] {\n  background-color: #f7fafc;\n  background-color: rgba(247, 250, 252, var(--tw-bg-opacity));\n}\n.border-gray-200[data-v-317d1a6e] {\n  border-color: #edf2f7;\n  border-color: rgba(237, 242, 247, var(--tw-border-opacity));\n}\n.text-gray-400[data-v-317d1a6e] {\n  color: #cbd5e0;\n  color: rgba(203, 213, 224, var(--tw-text-opacity));\n}\n.text-gray-500[data-v-317d1a6e] {\n  color: #a0aec0;\n  color: rgba(160, 174, 192, var(--tw-text-opacity));\n}\n.text-gray-600[data-v-317d1a6e] {\n  color: #718096;\n  color: rgba(113, 128, 150, var(--tw-text-opacity));\n}\n.text-gray-700[data-v-317d1a6e] {\n  color: #4a5568;\n  color: rgba(74, 85, 104, var(--tw-text-opacity));\n}\n.text-gray-900[data-v-317d1a6e] {\n  color: #1a202c;\n  color: rgba(26, 32, 44, var(--tw-text-opacity));\n}\n@media (prefers-color-scheme: dark) {\n.dark\\:bg-gray-800[data-v-317d1a6e] {\n    background-color: #2d3748;\n    background-color: rgba(45, 55, 72, var(--tw-bg-opacity));\n}\n.dark\\:bg-gray-900[data-v-317d1a6e] {\n    background-color: #1a202c;\n    background-color: rgba(26, 32, 44, var(--tw-bg-opacity));\n}\n.dark\\:border-gray-700[data-v-317d1a6e] {\n    border-color: #4a5568;\n    border-color: rgba(74, 85, 104, var(--tw-border-opacity));\n}\n.dark\\:text-white[data-v-317d1a6e] {\n    color: #fff;\n    color: rgba(255, 255, 255, var(--tw-text-opacity));\n}\n.dark\\:text-gray-400[data-v-317d1a6e] {\n    color: #cbd5e0;\n    color: rgba(203, 213, 224, var(--tw-text-opacity));\n}\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".bg-gray-100[data-v-317d1a6e] {\n  background-color: #f7fafc;\n  background-color: rgba(247, 250, 252, var(--tw-bg-opacity));\n}\n.border-gray-200[data-v-317d1a6e] {\n  border-color: #edf2f7;\n  border-color: rgba(237, 242, 247, var(--tw-border-opacity));\n}\n.text-gray-400[data-v-317d1a6e] {\n  color: #cbd5e0;\n  color: rgba(203, 213, 224, var(--tw-text-opacity));\n}\n.text-gray-500[data-v-317d1a6e] {\n  color: #a0aec0;\n  color: rgba(160, 174, 192, var(--tw-text-opacity));\n}\n.text-gray-600[data-v-317d1a6e] {\n  color: #718096;\n  color: rgba(113, 128, 150, var(--tw-text-opacity));\n}\n.text-gray-700[data-v-317d1a6e] {\n  color: #4a5568;\n  color: rgba(74, 85, 104, var(--tw-text-opacity));\n}\n.text-gray-900[data-v-317d1a6e] {\n  color: #1a202c;\n  color: rgba(26, 32, 44, var(--tw-text-opacity));\n}\n@media (prefers-color-scheme: dark) {\n.dark\\:bg-gray-800[data-v-317d1a6e] {\n    background-color: #2d3748;\n    background-color: rgba(45, 55, 72, var(--tw-bg-opacity));\n}\n.dark\\:bg-gray-900[data-v-317d1a6e] {\n    background-color: #1a202c;\n    background-color: rgba(26, 32, 44, var(--tw-bg-opacity));\n}\n.dark\\:border-gray-700[data-v-317d1a6e] {\n    border-color: #4a5568;\n    border-color: rgba(74, 85, 104, var(--tw-border-opacity));\n}\n.dark\\:text-white[data-v-317d1a6e] {\n    color: #fff;\n    color: rgba(255, 255, 255, var(--tw-text-opacity));\n}\n.dark\\:text-gray-400[data-v-317d1a6e] {\n    color: #cbd5e0;\n    color: rgba(203, 213, 224, var(--tw-text-opacity));\n}\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
