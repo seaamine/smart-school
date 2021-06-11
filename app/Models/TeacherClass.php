@@ -18,5 +18,7 @@ class TeacherClass extends Model
         'academic_year_id',
         'status'
     ];
-
+    public function classe(){
+        return $this->belongsTo(SClass::class,'class_id');
+    }
 }

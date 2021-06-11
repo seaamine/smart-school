@@ -23,4 +23,8 @@ class SClass extends Model
         'level',
         'status',
     ];
+
+    public function teachers(){
+        return $this->hasMany(TeacherClass::class, 'class_id');
+    }
 }

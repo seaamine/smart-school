@@ -10,6 +10,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Teacher;
 use App\Models\User;
 use Faker\Factory;
+use Illuminate\Support\Str;
 
 class StudentsSeeder extends Seeder
 {
@@ -31,7 +32,7 @@ class StudentsSeeder extends Seeder
                 $first_name=$faker->firstName($gender);
                 $last_name=$faker->lastName($gender);
                 $email=$faker->unique()->email;
-                $user=User::create(['email'=>$email,'name'=>"$last_name $first_name",'status'=>'1','username'=>$faker->unique()->userName,'password'=>bcrypt('123456'),'gender'=>$genderTog[$gender],'role'=>'student']);
+                $user=User::create(['email'=>$email,'name'=>"$last_name $first_name",'status'=>'1','username'=>$faker->unique()->userName.'_'.Str::random(3),'password'=>bcrypt('123456'),'gender'=>$genderTog[$gender],'role'=>'student']);
                 $student=Student::create(['user_id'=>$user->id,'status'=>'1','first_name'=>$first_name, 'last_name'=>$last_name,
                     'commune'=>'alger','willaya'=>'Alger','paye'=>'Algeria',
                     'dob'=>$faker->date($format = 'Y-m-d', $max = 'now'),'gender'=>$genderTog[$gender],

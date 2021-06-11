@@ -11,185 +11,203 @@
     </div>
     <div class="card p-6">
         <p class="mb-4"><b>Année Academic: </b>{{academicYear.title}}</p>
-        <div class="flex flex-row gap-6 flex-wrap items-center justify-center">
-            <div class="relative">
-                <Card class="w-52 relative">
-                    <template #header>
-                    </template>
-                    <template class="h-10" #title>
-                        1 ere Semestre
-                    </template>
-                    <template #content>
-                        <img :src="$page.props.appUrl+'/images/exam.png'">
-                        <div  class="relative pt-1">
-                            <div class="flex mb-2 items-center justify-between">
-                                <div>
+        <div class="flex flex-row gap-6">
+            <transition name="mode-fade" mode="out-in">
+                <div v-if="step === 'trimester'" class=" flex flex-grow flex-row gap-6 flex-wrap items-center justify-center">
+                    <div class="relative">
+                        <Card class="w-52 relative">
+                            <template #header>
+                            </template>
+                            <template class="h-10" #title>
+                                1 ere Semestre
+                            </template>
+                            <template #content>
+                                <img :src="$page.props.appUrl+'/images/exam.png'">
+                                <div  class="relative pt-1">
+                                    <div class="flex mb-2 items-center justify-between">
+                                        <div>
                               <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-white bg-primary-200">
                                 {{semStatus(semestersStatus.semester1)}}
                               </span>
-                                </div>
-                                <div class="text-right">
+                                        </div>
+                                        <div class="text-right">
                               <span class="text-xs font-semibold inline-block text-emerald-600">
                                 {{semestersStatus.semester1.numNotes}}/{{totalNotes}}
                               </span>
+                                        </div>
+                                    </div>
+                                    <div v-if="semestersStatus.semester1.started" class="overflow-hidden h-2 text-xs flex rounded bg-info-200">
+                                        <div :style="{width: (semestersStatus.semester1.numNotes/totalNotes *100) +'%',}" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-info-500"></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div v-if="semestersStatus.semester1.started" class="overflow-hidden h-2 text-xs flex rounded bg-info-200">
-                                <div :style="{width: (semestersStatus.semester1.numNotes/totalNotes *100) +'%',}" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-info-500"></div>
-                            </div>
-                        </div>
-                    </template>
-                    <template #footer>
-                        <button :disabled="semestersStatus.semester1.started && !semestersStatus.semester1.stopped" @click="startSemester(1)" class="rounded-full text-success-500 font-medium mr-4 hover:text-primary-200  focus:text-primary-800 p-0 inline-flex justify-center items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </button>
-                        <button :disabled="semestersStatus.semester1.stopped || !semestersStatus.semester1.started" @click="stopSemester(1)" class="rounded-full text-danger-500 font-medium mr-4 hover:text-danger-800  focus:text-danger-800 p-0 inline-flex justify-center items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
-                            </svg>
-                        </button>
-                        <button :disabled="!semestersStatus.semester1.published" @click="publishSemester(1)" class="rounded-full text-info-500 font-medium hover:text-info-800  focus:text-info-800 p-0 inline-flex justify-center items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                            </svg>
-                        </button>
-                    </template>
-                </Card>
+                            </template>
+                            <template #footer>
+                                <button :disabled="semestersStatus.semester1.started && !semestersStatus.semester1.stopped" @click="step='class'" class="text-white rounded-md font-medium bg-primary-500 py-2 px-4 hover:bg-primary-800 hover:ring hover:ring-primary-200 inline-flex justify-center items-center">
+                                    Saisir
+                                </button>
+                            </template>
+                        </Card>
 
-                <div v-show="isSubmitting[1]" class="bg-white opacity-75 absolute top-0 left-0 w-full h-full flex items-center justify-center">
-                    <svg class="animate-spin h-24 w-24 mr-3 text-warning-500" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-100" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                </div>
-            </div>
-            <div><p class="font-bold"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-            </svg></p></div>
-            <div class="relative">
-                <Card class="w-52 relative">
-                    <template #header>
-                    </template>
-                    <template class="h-10" #title>
-                        2 ème Semestre
-                    </template>
-                    <template #content>
-                        <img :src="$page.props.appUrl+'/images/exam.png'">
-                        <div  class="relative pt-1">
-                            <div class="flex mb-2 items-center justify-between">
-                                <div>
+                        <div v-show="isSubmitting[1]" class="bg-white opacity-75 absolute top-0 left-0 w-full h-full flex items-center justify-center">
+                            <svg class="animate-spin h-24 w-24 mr-3 text-warning-500" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-100" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        </div>
+                        <div v-show="!semestersStatus.semester1.started" class="bg-white opacity-75 absolute top-0 left-0 w-full h-full flex items-center justify-center">
+                            <p class="p-2 text-danger-800 font-semibold text-3xl">inactif</p>
+                        </div>
+
+                    </div>
+                    <div><p class="font-bold"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                    </svg></p></div>
+                    <div class="relative">
+                        <Card class="w-52 relative">
+                            <template #header>
+                            </template>
+                            <template class="h-10" #title>
+                                2 ème Semestre
+                            </template>
+                            <template #content>
+                                <img :src="$page.props.appUrl+'/images/exam.png'">
+                                <div  class="relative pt-1">
+                                    <div class="flex mb-2 items-center justify-between">
+                                        <div>
                               <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-white bg-primary-200">
                                 {{semStatus(semestersStatus.semester2)}}
                               </span>
-                                </div>
-                                <div class="text-right">
+                                        </div>
+                                        <div class="text-right">
                               <span class="text-xs font-semibold inline-block text-emerald-600">
                                 {{semestersStatus.semester2.numNotes}}/{{totalNotes}}
                               </span>
+                                        </div>
+                                    </div>
+                                    <div v-if="semestersStatus.semester2.started" class="overflow-hidden h-2 text-xs flex rounded bg-info-200">
+                                        <div :style="{width: (semestersStatus.semester2.semestersStatus.semester2.numNotes/totalNotes *100) +'%',}" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-info-500"></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div v-if="semestersStatus.semester2.started" class="overflow-hidden h-2 text-xs flex rounded bg-info-200">
-                                <div :style="{width: (semestersStatus.semester2.semestersStatus.semester2.numNotes/totalNotes *100) +'%',}" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-info-500"></div>
-                            </div>
-                        </div>
-                    </template>
-                    <template #footer>
-                        <button :disabled="semestersStatus.semester2.started && !semestersStatus.semester2.stopped" @click="startSemester(2)" class="rounded-full text-success-500 font-medium mr-4 hover:text-primary-200  focus:text-primary-800 p-0 inline-flex justify-center items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </button>
-                        <button :disabled="semestersStatus.semester2.stopped || !semestersStatus.semester2.started" @click="stopSemester(2)" class="rounded-full text-danger-500 font-medium mr-4 hover:text-danger-800  focus:text-danger-800 p-0 inline-flex justify-center items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
-                            </svg>
-                        </button>
-                        <button :disabled="!semestersStatus.semester2.published" @click="publishSemester(2)" class="rounded-full text-info-500 font-medium hover:text-info-800  focus:text-info-800 p-0 inline-flex justify-center items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                            </svg>
-                        </button>
-                    </template>
-                </Card>
+                            </template>
+                            <template #footer>
+                                <button :disabled="semestersStatus.semester2.started && !semestersStatus.semester2.stopped" @click="startSemester(2)" class="rounded-full text-success-500 font-medium mr-4 hover:text-primary-200  focus:text-primary-800 p-0 inline-flex justify-center items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </button>
+                                <button :disabled="semestersStatus.semester2.stopped || !semestersStatus.semester2.started" @click="stopSemester(2)" class="rounded-full text-danger-500 font-medium mr-4 hover:text-danger-800  focus:text-danger-800 p-0 inline-flex justify-center items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
+                                    </svg>
+                                </button>
+                                <button :disabled="!semestersStatus.semester2.published" @click="publishSemester(2)" class="rounded-full text-info-500 font-medium hover:text-info-800  focus:text-info-800 p-0 inline-flex justify-center items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                    </svg>
+                                </button>
+                            </template>
+                        </Card>
 
-                <div v-show="isSubmitting[2]" class="bg-white opacity-75 absolute top-0 left-0 w-full h-full flex items-center justify-center">
-                    <svg class="animate-spin h-24 w-24 mr-3 text-warning-500" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-100" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                </div>
-                <div v-show="!semestersStatus.semester1.published" class="bg-white opacity-75 absolute top-0 left-0 w-full h-full flex items-center justify-center">
-                    <p class="p-2 text-danger-800 font-semibold">S'il vous plaît compléter et publier semeter 1</p>
-                </div>
-            </div>
-            <div><p class="font-bold"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-            </svg></p></div>
-            <div class="relative">
-                <Card class="w-52 relative">
-                    <template #header>
-                    </template>
-                    <template class="h-10" #title>
-                        3 éme Semestre
-                    </template>
-                    <template #content>
-                        <img :src="$page.props.appUrl+'/images/exam.png'">
-                        <div  class="relative pt-1">
-                            <div class="flex mb-2 items-center justify-between ">
-                                <div>
+                        <div v-show="isSubmitting[2]" class="bg-white opacity-75 absolute top-0 left-0 w-full h-full flex items-center justify-center">
+                            <svg class="animate-spin h-24 w-24 mr-3 text-warning-500" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-100" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        </div>
+                        <div v-show="!semestersStatus.semester2.started" class="bg-white opacity-75 absolute top-0 left-0 w-full h-full flex items-center justify-center">
+                            <p class="p-2 text-danger-800 font-semibold text-3xl">inactif</p>
+                        </div>
+                    </div>
+                    <div><p class="font-bold"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                    </svg></p></div>
+                    <div class="relative">
+                        <Card class="w-52 relative">
+                            <template #header>
+                            </template>
+                            <template class="h-10" #title>
+                                3 éme Semestre
+                            </template>
+                            <template #content>
+                                <img :src="$page.props.appUrl+'/images/exam.png'">
+                                <div  class="relative pt-1">
+                                    <div class="flex mb-2 items-center justify-between ">
+                                        <div>
                               <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-white bg-primary-200">
                                 {{semStatus(semestersStatus.semester3)}}
                               </span>
-                                </div>
-                                <div class="text-right">
+                                        </div>
+                                        <div class="text-right">
                               <span class="text-xs font-semibold inline-block text-emerald-600">
                                 {{semestersStatus.semester3.numNotes}}/{{totalNotes}}
                               </span>
+                                        </div>
+                                    </div>
+                                    <div v-if="semestersStatus.semester3.started" class="overflow-hidden h-2 text-xs flex rounded bg-info-200">
+                                        <div :style="{width: (semestersStatus.semester3.numNotes/totalNotes *100) +'%',}" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-info-500"></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div v-if="semestersStatus.semester3.started" class="overflow-hidden h-2 text-xs flex rounded bg-info-200">
-                                <div :style="{width: (semestersStatus.semester3.numNotes/totalNotes *100) +'%',}" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-info-500"></div>
-                            </div>
-                        </div>
-                    </template>
-                    <template #footer>
-                        <button :disabled="semestersStatus.semester3.started && !semestersStatus.semester3.stopped" @click="startSemester(3)" class="rounded-full text-success-500 font-medium mr-4 hover:text-primary-200  focus:text-primary-800 p-0 inline-flex justify-center items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </button>
-                        <button :disabled="semestersStatus.semester3.stopped || !semestersStatus.semester3.started" @click="stopSemester(3)" class="rounded-full text-danger-500 font-medium mr-4 hover:text-danger-800  focus:text-danger-800 p-0 inline-flex justify-center items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
-                            </svg>
-                        </button>
-                        <button :disabled="!semestersStatus.semester3.published" @click="publishSemester(3)" class="rounded-full text-info-500 font-medium hover:text-info-800  focus:text-info-800 p-0 inline-flex justify-center items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                            </svg>
-                        </button>
-                    </template>
-                </Card>
+                            </template>
+                            <template #footer>
+                                <button :disabled="semestersStatus.semester3.started && !semestersStatus.semester3.stopped" @click="startSemester(3)" class="rounded-full text-success-500 font-medium mr-4 hover:text-primary-200  focus:text-primary-800 p-0 inline-flex justify-center items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </button>
+                                <button :disabled="semestersStatus.semester3.stopped || !semestersStatus.semester3.started" @click="stopSemester(3)" class="rounded-full text-danger-500 font-medium mr-4 hover:text-danger-800  focus:text-danger-800 p-0 inline-flex justify-center items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
+                                    </svg>
+                                </button>
+                                <button :disabled="!semestersStatus.semester3.published" @click="publishSemester(3)" class="rounded-full text-info-500 font-medium hover:text-info-800  focus:text-info-800 p-0 inline-flex justify-center items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                    </svg>
+                                </button>
+                            </template>
+                        </Card>
 
-                <div v-show="isSubmitting[3]" class="bg-white opacity-75 absolute top-0 left-0 w-full h-full flex items-center justify-center">
-                    <svg class="animate-spin h-24 w-24 mr-3 text-warning-500" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-100" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
+                        <div v-show="isSubmitting[3]" class="bg-white opacity-75 absolute top-0 left-0 w-full h-full flex items-center justify-center">
+                            <svg class="animate-spin h-24 w-24 mr-3 text-warning-500" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-100" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        </div>
+                        <div v-show="!semestersStatus.semester3.started" class="bg-white opacity-75 absolute top-0 left-0 w-full h-full flex items-center justify-center">
+                            <p class="p-2 text-danger-800 font-semibold text-3xl">Inactif</p>
+                        </div>
+                    </div>
                 </div>
-                <div v-show="!semestersStatus.semester2.published" class="bg-white opacity-75 absolute top-0 left-0 w-full h-full flex items-center justify-center">
-                    <p class="p-2 text-danger-800 font-semibold">S'il vous plaît compléter et publier semeter 2</p>
+                <div class="" v-else-if="step === 'class'">
+                    <div v-for="levelclasses in classes" class="pb-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 justify-items-center">
+                        <Card v-for="classe in levelclasses" :key="'class-'+classe.id" @click="" class="click-card w-52">
+                            <template #header>
+                            </template>
+                            <template class="h-10" #title>
+                                {{levelName(classe.level)}}
+                            </template>
+                            <template #content>
+                                <span class="pb-2 text-2xl	">{{classe.name}}</span>
+                            </template>
+                            <template #footer>
+                                <span :class=" 1> 0 ? 'badge-secondary' : 'badge-success'" class="badge">{{1> 0 ? 'Non attribué': 'Complété'}}</span>
+                            </template>
+                        </Card>
+                    </div>
                 </div>
-            </div>
+            </transition>
+
         </div>
+        <button @click="step = 'class'" class="rounded-full text-info-500 font-medium hover:text-info-800  focus:text-info-800 p-0 inline-flex justify-center items-center">
+            step2
+        </button>
+        <button @click="step = 'trimester'" class="rounded-full text-info-500 font-medium hover:text-info-800  focus:text-info-800 p-0 inline-flex justify-center items-center">
+            step1
+        </button>
     </div>
 </template>
 
@@ -207,8 +225,24 @@
             exams: Array,
             academicYear: Object,
             totalNotes: Number,
+            classes: Array,
+            levelsSubjects: Object,
         },
         methods:{
+            levelName: function(level){
+                switch(level) {
+                    case "1":
+                        return '1 ère année';
+                    case "2":
+                        return '2 ème année';
+                    case "3":
+                        return '3 ème année';
+                    case "4":
+                        return '4 ème année';
+                    default:
+                        return '' + level +' année'
+                }
+            },
             initSemester: function(sem,exam){
                 let i = this.exams.findIndex(e => e.id === exam.id);
                 this.exams[i]=exam;
@@ -226,9 +260,9 @@
                     return "En cours";
                 }else{
                     if(sem.published){
-                        return " Terminé et publié";
+                        return "publié";
                     }else{
-                        return " Terminé";
+                        return "Arrêté";
 
                     }
                 }
@@ -278,6 +312,7 @@
                 isSubmitting: {
                     1:false,2:false,3:false
                 },
+                step: 'trimester',
             };
         },
         created() {
@@ -318,5 +353,12 @@
         align-items: center; /* Vertical center alignment */
         justify-content: center; /* Horizontal center alignment */
         color: #fff;
+    }
+    .mode-fade-enter-active, .mode-fade-leave-active {
+        transition: opacity .5s ease
+    }
+
+    .mode-fade-enter-from, .mode-fade-leave-to {
+        opacity: 0
     }
 </style>
