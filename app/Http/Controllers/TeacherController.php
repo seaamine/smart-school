@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\AppHelper;
 use App\Models\Exam;
+use App\Models\ExamNote;
 use App\Models\SClass;
 use App\Models\Student;
 use App\Models\Subject;
@@ -77,12 +78,50 @@ class TeacherController extends Controller
                         ->where('exams_notes.class_id','=',$class->id)
                         ->where('exams_notes.subject_id','=',$subject->id)
                         ->where('exams_notes.teacher_id',$teacher->id);})
-                ->select('students.*','exams_notes.id as note_id','exams_notes.note_eval','exams_notes.note_devoir','exams_notes.note_exam','exams_notes.remarque')
+                ->select('students.*','registrations.regi_no','exams_notes.id as note_id','exams_notes.note_eval','exams_notes.note_devoir','exams_notes.note_exam','exams_notes.remarque')
                 ->get();
         }
         //dd($classesStudents,$subject,$classes,$levelsSubjects,$teacher);
         return Inertia::render('Exam/EditNotes',
             ['classesStudents'=>$classesStudents,'subject'=>$subject,'classes'=>$classes->groupBy('level'),'totalNotes'=>$count,'exams'=>$exams,'academicYear'=>$academicYear]);
+
+    }
+    public function updateExamNotes(Request $request){
+        $academicYear= AppHelper::getAcademicYear();
+        if(!isset($academicYear)){
+            session()->flash("toast",['type'=>'error', 'summary'=>'L\'opération a échoué!','detail' => 'L\'année académique n\'est pas encore fixée! Veuillez aller dans les paramètres et le définir.']);
+            return redirect()->route('exam.index');
+        }
+        $validated = $request->validate([
+            'trimester' => 'required|in:1,2,3',
+            'academicYear' => 'required|in:'.$academicYear->id,
+            'class' => 'required',
+            'exam' => 'required',
+            'examNotes' => 'required',
+            'examNotes.*.note_eval' => 'required|numeric|min:0|max:20',
+            'examNotes.*.note_devoir' => 'required|numeric|min:0|max:20',
+            'examNotes.*.note_exam' => 'required|numeric|min:0|max:20',
+            'examNotes.*.note' => 'required'
+        ]);
+        $user = Auth::user();
+        $teacher =  Teacher::where('status','1')->where('user_id',$user->id)->first();
+        $exam =Exam::where('status','1')->where('trimester',$request->input('trimester'))->where('id',$request->input('id'))
+            ->where('academic_year_id',$academicYear->id)->first();
+        if(!isset($exam) | $exam->started_at === null | $exam->stopped_at !== null){
+
+        }
+        $table->unsignedInteger('student_id')->nullable();
+        $table->unsignedInteger('teacher_id')->nullable();
+        $table->double('note_eval');
+        $table->double('note_devoir');
+        $table->double('note_exam');
+        $table->string('remarque');
+        $examNotes=[];
+        foreach ($request->input('examNotes') as $studentNote){
+            $examNotes[]=['academic_year_id'=>$academicYear->id,'exam_id'=>$exam->id,'trimester'=>$exam->trimester,
+                'class_id'=>$request->input('class'),'subject_id'=>$request->input('class'),];
+        }
+        ExamNote::upsert();
 
     }
 }

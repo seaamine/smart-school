@@ -47,13 +47,6 @@
                                 </button>
                             </template>
                         </Card>
-
-                        <div v-show="isSubmitting[1]" class="bg-white opacity-75 absolute top-0 left-0 w-full h-full flex items-center justify-center">
-                            <svg class="animate-spin h-24 w-24 mr-3 text-warning-500" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-100" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                        </div>
                         <div v-show="!trimestersStatus.trimester1.started" class="bg-white opacity-75 absolute top-0 left-0 w-full h-full flex items-center justify-center">
                             <p class="p-2 text-danger-800 font-semibold text-3xl">inactif</p>
                         </div>
@@ -95,13 +88,6 @@
                                 </button>
                             </template>
                         </Card>
-
-                        <div v-show="isSubmitting[2]" class="bg-white opacity-75 absolute top-0 left-0 w-full h-full flex items-center justify-center">
-                            <svg class="animate-spin h-24 w-24 mr-3 text-warning-500" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-100" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                        </div>
                         <div v-show="!trimestersStatus.trimester2.started" class="bg-white opacity-75 absolute top-0 left-0 w-full h-full flex items-center justify-center">
                             <p class="p-2 text-danger-800 font-semibold text-3xl">inactif</p>
                         </div>
@@ -142,13 +128,6 @@
                                 </button>
                             </template>
                         </Card>
-
-                        <div v-show="isSubmitting[3]" class="bg-white opacity-75 absolute top-0 left-0 w-full h-full flex items-center justify-center">
-                            <svg class="animate-spin h-24 w-24 mr-3 text-warning-500" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-100" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                        </div>
                         <div v-show="!trimestersStatus.trimester3.started" class="bg-white opacity-75 absolute top-0 left-0 w-full h-full flex items-center justify-center">
                             <p class="p-2 text-danger-800 font-semibold text-3xl">Inactif</p>
                         </div>
@@ -171,31 +150,47 @@
                         </Card>
                     </div>
                 </div>
-                <div class="" v-else-if="step === 'notes'">
-                    <DataTable :value="classesStudents[selectedClass.id]" editMode="cell" >
-                        <Column field="last_name" header="Nom"></Column>
-                        <Column field="first_name" header="Prenom"></Column>
-                        <Column field="note_eval" header="Evaluation" :exportable="false">
-                            <template #editor="slotProps">
-                                <input type="text" class="input-group" v-model="slotProps.data[slotProps.column.props.field]" />
+                <div class="overflow-x-auto	" v-else-if="step === 'notes'">
+                    <p class="mb-2"><b>Class:</b> {{selectedClass?.name}}</p>
+                    <p class="mb-4"><b>Nombres des étudiants:</b> {{classesStudents[selectedClass.id].length ?? 0}}</p>
+                    <DataTable responsiveLayout="stack" breakpoint="768px" :value="classesStudents[selectedClass.id]" dataKey="id" class="p-datatable-sm">
+                        <Column :style="{width:'150px'}" field="regi_no" header="N d'enregistrement"></Column>
+                        <Column :style="{width:'200px'}" header="nom et prénom">
+                            <template #body="slotProps">
+                                {{slotProps.data.last_name}} {{slotProps.data.first_name}}
                             </template>
                         </Column>
-                        <Column field="note_devoir" header="Devoir" :exportable="false">
-                            <template #editor="slotProps">
-                                <input type="text" class="input-group" v-model="slotProps.data[slotProps.column.props.field]" />
+                        <Column :style="{width:'80px'}" field="note_eval" header="Evaluation" :exportable="false">
+                            <template #body="slotProps">
+                                <input type="text" class="form-control " v-model="slotProps.data.note_eval" />
                             </template>
                         </Column>
-                        <Column field="note_exam" header="Exam" :exportable="false">
-                            <template #editor="slotProps">
-                                <input type="text" class="input-group" v-model="slotProps.data[slotProps.column.props.field]" />
+                        <Column :style="{width:'80px'}" field="note_devoir" header="Devoir" :exportable="false">
+                            <template #body="slotProps">
+                                <input type="text" class="form-control w-4" v-model="slotProps.data.note_devoir" />
                             </template>
                         </Column>
-                        <Column field="remarque" header="Remarque" :exportable="false">
-                            <template #editor="slotProps">
-                                <input type="text" class="input-group" v-model="slotProps.data[slotProps.column.props.field]" />
+                        <Column :style="{width:'80px'}" field="note_exam" header="Exam" :exportable="false">
+                            <template #body="slotProps">
+                                <InputNumber v-model="slotProps.data.note_exam" :min="0" :max="20" :useGrouping="false" locale="ar-DZ" mode="decimal" :minFractionDigits="2" :maxFractionDigits="2" />
+
+                            </template>
+                        </Column>
+                        <Column :style="{width:'250px'}" field="note" header="Remarque" :exportable="false">
+                            <template #body="slotProps">
+                                <input type="text" class="form-control w-4" v-model="slotProps.data.note" />
                             </template>
                         </Column>
                     </DataTable>
+                    <div class="flex justify-evenly mt-4">
+                        <button @click="submitNotes()" class=" mr-4 w-1/3 py-4 text-white rounded-md font-medium bg-primary-500 py-2 px-4 hover:bg-primary-800 hover:ring hover:ring-primary-200 inline-flex justify-center items-center">
+                            Save
+                        </button>
+                        <button @click="" class="text-white py-4 w-1/3 rounded-md font-medium bg-warning-500 py-2 px-4 hover:bg-primary-800 hover:ring hover:ring-primary-200 inline-flex justify-center items-center">
+                            Cancel
+                        </button>
+                    </div>
+
                 </div>
             </transition>
 
@@ -215,9 +210,11 @@
     import Button from "@/Jetstream/Button";
     import DataTable from 'primevue/datatable';
     import Column from 'primevue/column';
+    import InputNumber from 'primevue/inputnumber';
+
     export default {
         name: "EditNotes",
-        components: {Button, Card, DataTable, Column},
+        components: {InputNumber,Button, Card, DataTable, Column},
         layout: DashLayout,
         props: {
             errors: Object,
@@ -228,16 +225,21 @@
             classesStudents: Object,
         },
         methods:{
+            submitNotes(){
+                this.isSubmitting[this.selectedClass.id] = true;
+                axios.post(this.route('teacher.update-exam-notes'),{'trimester': this.selectedTrimester,
+                    'academicYear': this.academicYear.id, 'class':this.selectedClass.id, 'exam': this.exam.id,'examNotes': this.classesStudents[this.selectedClass.id]})
+                    .then((response)=>{
+                        this.isSubmitting[this.selectedClass.id] = false;
+                        //this.initTrimester(tri,response.data.exam)
+                    });
+            },
             selectTrimester(tri){
                 this.selectedTrimester = tri;
                 this.step = 'class';
             },
             selectClass(cla){
-                console.log(cla);
-                console.log( this.selectedClass);
                 this.selectedClass = cla;
-                console.log(this.selectedClass);
-                console.log(this.classesStudents[this.selectedClass.id]);
                 this.step = 'notes';
             },
             levelName(level){
@@ -279,39 +281,6 @@
                 }
 
             },
-            startTrimester(tri){
-                if(this.isSubmitting[tri]){
-                    return;
-                }
-                this.isSubmitting[tri] = true;
-                axios.post(this.route('exam.update'),{'trimester': tri,'academicYear': this.academicYear.id,'method':'start'})
-                    .then((response)=>{
-                        this.isSubmitting[tri] = false;
-                        this.initTrimester(tri,response.data.exam)
-                    });
-            },
-            stopTrimester(tri){
-                if(this.isSubmitting[tri]){
-                    return;
-                }
-                this.isSubmitting[tri] = true;
-                axios.post(this.route('exam.update'),{'trimester': tri,'academicYear': this.academicYear.id,'method':'stop'})
-                    .then((response)=>{
-                        this.isSubmitting[tri] = false;
-                        this.initTrimester(tri,response.data.exam)
-                    });
-            },
-            publishTrimester(tri){
-                if(this.isSubmitting[tri]){
-                    return;
-                }
-                this.isSubmitting[tri] = true;
-                axios.post(this.route('exam.update'),{'trimester': tri,'academicYear': this.academicYear.id,'method':'publish'})
-                    .then((response)=>{
-                        this.isSubmitting[tri] = false;
-                        this.initTrimester(tri,response.data.exam)
-                    });
-            }
         },
         data(){
             return{
@@ -320,9 +289,7 @@
                     'trimester2':{'id':null,'started':false,'stopped':false,'published':false,'numNotes':0},
                     'trimester3':{'id':null,'started':false,'stopped':false,'published':false,'numNotes':0},
                 },
-                isSubmitting: {
-                    1:false,2:false,3:false
-                },
+                isSubmitting: {},
                 step: 'trimester',
                 selectedTrimester: null,
                 selectedClass: null,
@@ -379,5 +346,11 @@
 
     .mode-fade-enter-from, .mode-fade-leave-to {
         opacity: 0
+    }
+    .form-control{
+        @apply w-40 md:w-full;
+    }
+    >>> .p-inputnumber-input{
+        @apply w-40 md:w-full;
     }
 </style>

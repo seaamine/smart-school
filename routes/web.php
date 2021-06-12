@@ -78,7 +78,8 @@ Route::get('/login-as',  [\App\Http\Controllers\AdminController::class,'loginAs'
 
 Route::get('/teacher/exams',  [\App\Http\Controllers\TeacherController::class,'indexExam'])
     ->name('teacher.exam-notes')->middleware('auth');
-
+Route::post('/teacher/exams/update-notes',  [\App\Http\Controllers\TeacherController::class,'updateExamNotes'])
+    ->name('teacher.update-exam-notes')->middleware('auth');
 
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {

@@ -22949,6 +22949,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Jetstream_Button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/Jetstream/Button */ "./resources/js/Jetstream/Button.vue");
 /* harmony import */ var primevue_datatable__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! primevue/datatable */ "./node_modules/primevue/datatable/datatable.esm.js");
 /* harmony import */ var primevue_column__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! primevue/column */ "./node_modules/primevue/column/column.esm.js");
+/* harmony import */ var primevue_inputnumber__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! primevue/inputnumber */ "./node_modules/primevue/inputnumber/inputnumber.esm.js");
+
 
 
 
@@ -22957,6 +22959,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "EditNotes",
   components: {
+    InputNumber: primevue_inputnumber__WEBPACK_IMPORTED_MODULE_5__.default,
     Button: _Jetstream_Button__WEBPACK_IMPORTED_MODULE_2__.default,
     Card: primevue_card__WEBPACK_IMPORTED_MODULE_1__.default,
     DataTable: primevue_datatable__WEBPACK_IMPORTED_MODULE_3__.default,
@@ -22972,16 +22975,26 @@ __webpack_require__.r(__webpack_exports__);
     classesStudents: Object
   },
   methods: {
+    submitNotes: function submitNotes() {
+      var _this = this;
+
+      this.isSubmitting[this.selectedClass.id] = true;
+      axios.post(this.route('teacher.update-exam-notes'), {
+        'trimester': this.selectedTrimester,
+        'academicYear': this.academicYear.id,
+        'class': this.selectedClass.id,
+        'exam': this.exam.id,
+        'examNotes': this.classesStudents[this.selectedClass.id]
+      }).then(function (response) {
+        _this.isSubmitting[_this.selectedClass.id] = false; //this.initTrimester(tri,response.data.exam)
+      });
+    },
     selectTrimester: function selectTrimester(tri) {
       this.selectedTrimester = tri;
       this.step = 'class';
     },
     selectClass: function selectClass(cla) {
-      console.log(cla);
-      console.log(this.selectedClass);
       this.selectedClass = cla;
-      console.log(this.selectedClass);
-      console.log(this.classesStudents[this.selectedClass.id]);
       this.step = 'notes';
     },
     levelName: function levelName(level) {
@@ -23029,60 +23042,6 @@ __webpack_require__.r(__webpack_exports__);
           return "Arrêté";
         }
       }
-    },
-    startTrimester: function startTrimester(tri) {
-      var _this = this;
-
-      if (this.isSubmitting[tri]) {
-        return;
-      }
-
-      this.isSubmitting[tri] = true;
-      axios.post(this.route('exam.update'), {
-        'trimester': tri,
-        'academicYear': this.academicYear.id,
-        'method': 'start'
-      }).then(function (response) {
-        _this.isSubmitting[tri] = false;
-
-        _this.initTrimester(tri, response.data.exam);
-      });
-    },
-    stopTrimester: function stopTrimester(tri) {
-      var _this2 = this;
-
-      if (this.isSubmitting[tri]) {
-        return;
-      }
-
-      this.isSubmitting[tri] = true;
-      axios.post(this.route('exam.update'), {
-        'trimester': tri,
-        'academicYear': this.academicYear.id,
-        'method': 'stop'
-      }).then(function (response) {
-        _this2.isSubmitting[tri] = false;
-
-        _this2.initTrimester(tri, response.data.exam);
-      });
-    },
-    publishTrimester: function publishTrimester(tri) {
-      var _this3 = this;
-
-      if (this.isSubmitting[tri]) {
-        return;
-      }
-
-      this.isSubmitting[tri] = true;
-      axios.post(this.route('exam.update'), {
-        'trimester': tri,
-        'academicYear': this.academicYear.id,
-        'method': 'publish'
-      }).then(function (response) {
-        _this3.isSubmitting[tri] = false;
-
-        _this3.initTrimester(tri, response.data.exam);
-      });
     }
   },
   data: function data() {
@@ -23110,27 +23069,23 @@ __webpack_require__.r(__webpack_exports__);
           'numNotes': 0
         }
       },
-      isSubmitting: {
-        1: false,
-        2: false,
-        3: false
-      },
+      isSubmitting: {},
       step: 'trimester',
       selectedTrimester: null,
       selectedClass: null
     };
   },
   created: function created() {
-    var _this4 = this;
+    var _this2 = this;
 
     this.exams.forEach(function (exam) {
       var _exam$num_notes2;
 
-      _this4.trimestersStatus['trimester' + exam.trimester]['id'] = exam.id;
-      _this4.trimestersStatus['trimester' + exam.trimester]['numNotes'] = (_exam$num_notes2 = exam.num_notes) !== null && _exam$num_notes2 !== void 0 ? _exam$num_notes2 : 0;
-      _this4.trimestersStatus['trimester' + exam.trimester]['started'] = exam.started_at ? true : false;
-      _this4.trimestersStatus['trimester' + exam.trimester]['stopped'] = exam.stopped_at ? true : false;
-      _this4.trimestersStatus['trimester' + exam.trimester]['published'] = exam.published_at ? true : false;
+      _this2.trimestersStatus['trimester' + exam.trimester]['id'] = exam.id;
+      _this2.trimestersStatus['trimester' + exam.trimester]['numNotes'] = (_exam$num_notes2 = exam.num_notes) !== null && _exam$num_notes2 !== void 0 ? _exam$num_notes2 : 0;
+      _this2.trimestersStatus['trimester' + exam.trimester]['started'] = exam.started_at ? true : false;
+      _this2.trimestersStatus['trimester' + exam.trimester]['stopped'] = exam.stopped_at ? true : false;
+      _this2.trimestersStatus['trimester' + exam.trimester]['published'] = exam.published_at ? true : false;
     });
   }
 });
@@ -30139,35 +30094,13 @@ var _hoisted_17 = {
   "class": "bg-white opacity-75 absolute top-0 left-0 w-full h-full flex items-center justify-center"
 };
 
-var _hoisted_18 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("svg", {
-  "class": "animate-spin h-24 w-24 mr-3 text-warning-500",
-  viewBox: "0 0 24 24"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("circle", {
-  "class": "opacity-25",
-  cx: "12",
-  cy: "12",
-  r: "10",
-  stroke: "currentColor",
-  "stroke-width": "4"
-}), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("path", {
-  "class": "opacity-100",
-  fill: "currentColor",
-  d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-})], -1
-/* HOISTED */
-);
-
-var _hoisted_19 = {
-  "class": "bg-white opacity-75 absolute top-0 left-0 w-full h-full flex items-center justify-center"
-};
-
-var _hoisted_20 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", {
+var _hoisted_18 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", {
   "class": "p-2 text-danger-800 font-semibold text-3xl"
 }, "inactif", -1
 /* HOISTED */
 );
 
-var _hoisted_21 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", {
+var _hoisted_19 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", {
   "class": "font-bold"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("svg", {
   xmlns: "http://www.w3.org/2000/svg",
@@ -30183,65 +30116,43 @@ var _hoisted_21 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(
 })])])], -1
 /* HOISTED */
 );
+
+var _hoisted_20 = {
+  "class": "relative"
+};
+
+var _hoisted_21 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" 2 ème Trimestre ");
 
 var _hoisted_22 = {
-  "class": "relative"
-};
-
-var _hoisted_23 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" 2 ème Trimestre ");
-
-var _hoisted_24 = {
   "class": "relative pt-1"
 };
-var _hoisted_25 = {
+var _hoisted_23 = {
   "class": "flex mb-2 items-center justify-between"
 };
-var _hoisted_26 = {
+var _hoisted_24 = {
   "class": "text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-white bg-primary-200"
 };
-var _hoisted_27 = {
+var _hoisted_25 = {
   "class": "text-right"
 };
-var _hoisted_28 = {
+var _hoisted_26 = {
   "class": "text-xs font-semibold inline-block text-emerald-600"
 };
-var _hoisted_29 = {
+var _hoisted_27 = {
   key: 0,
   "class": "overflow-hidden h-2 text-xs flex rounded bg-info-200"
 };
-var _hoisted_30 = {
+var _hoisted_28 = {
   "class": "bg-white opacity-75 absolute top-0 left-0 w-full h-full flex items-center justify-center"
 };
 
-var _hoisted_31 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("svg", {
-  "class": "animate-spin h-24 w-24 mr-3 text-warning-500",
-  viewBox: "0 0 24 24"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("circle", {
-  "class": "opacity-25",
-  cx: "12",
-  cy: "12",
-  r: "10",
-  stroke: "currentColor",
-  "stroke-width": "4"
-}), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("path", {
-  "class": "opacity-100",
-  fill: "currentColor",
-  d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-})], -1
-/* HOISTED */
-);
-
-var _hoisted_32 = {
-  "class": "bg-white opacity-75 absolute top-0 left-0 w-full h-full flex items-center justify-center"
-};
-
-var _hoisted_33 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", {
+var _hoisted_29 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", {
   "class": "p-2 text-danger-800 font-semibold text-3xl"
 }, "inactif", -1
 /* HOISTED */
 );
 
-var _hoisted_34 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", {
+var _hoisted_30 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", {
   "class": "font-bold"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("svg", {
   xmlns: "http://www.w3.org/2000/svg",
@@ -30258,76 +30169,73 @@ var _hoisted_34 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(
 /* HOISTED */
 );
 
-var _hoisted_35 = {
+var _hoisted_31 = {
   "class": "relative"
 };
 
-var _hoisted_36 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" 3 éme Trimestre ");
+var _hoisted_32 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" 3 éme Trimestre ");
 
-var _hoisted_37 = {
+var _hoisted_33 = {
   "class": "relative pt-1"
 };
-var _hoisted_38 = {
+var _hoisted_34 = {
   "class": "flex mb-2 items-center justify-between "
 };
-var _hoisted_39 = {
+var _hoisted_35 = {
   "class": "text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-white bg-primary-200"
 };
-var _hoisted_40 = {
+var _hoisted_36 = {
   "class": "text-right"
 };
-var _hoisted_41 = {
+var _hoisted_37 = {
   "class": "text-xs font-semibold inline-block text-emerald-600"
 };
-var _hoisted_42 = {
+var _hoisted_38 = {
   key: 0,
   "class": "overflow-hidden h-2 text-xs flex rounded bg-info-200"
 };
-var _hoisted_43 = {
+var _hoisted_39 = {
   "class": "bg-white opacity-75 absolute top-0 left-0 w-full h-full flex items-center justify-center"
 };
 
-var _hoisted_44 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("svg", {
-  "class": "animate-spin h-24 w-24 mr-3 text-warning-500",
-  viewBox: "0 0 24 24"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("circle", {
-  "class": "opacity-25",
-  cx: "12",
-  cy: "12",
-  r: "10",
-  stroke: "currentColor",
-  "stroke-width": "4"
-}), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("path", {
-  "class": "opacity-100",
-  fill: "currentColor",
-  d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-})], -1
-/* HOISTED */
-);
-
-var _hoisted_45 = {
-  "class": "bg-white opacity-75 absolute top-0 left-0 w-full h-full flex items-center justify-center"
-};
-
-var _hoisted_46 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", {
+var _hoisted_40 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", {
   "class": "p-2 text-danger-800 font-semibold text-3xl"
 }, "Inactif", -1
 /* HOISTED */
 );
 
-var _hoisted_47 = {
+var _hoisted_41 = {
   key: 1,
   "class": ""
 };
-var _hoisted_48 = {
+var _hoisted_42 = {
   "class": "pb-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 justify-items-center"
 };
-var _hoisted_49 = {
+var _hoisted_43 = {
   "class": "pb-2 text-2xl\t"
 };
-var _hoisted_50 = {
+var _hoisted_44 = {
   key: 2,
-  "class": ""
+  "class": "overflow-x-auto\t"
+};
+var _hoisted_45 = {
+  "class": "mb-2"
+};
+
+var _hoisted_46 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("b", null, "Class:", -1
+/* HOISTED */
+);
+
+var _hoisted_47 = {
+  "class": "mb-4"
+};
+
+var _hoisted_48 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("b", null, "Nombres des étudiants:", -1
+/* HOISTED */
+);
+
+var _hoisted_49 = {
+  "class": "flex justify-evenly mt-4"
 };
 
 (0,vue__WEBPACK_IMPORTED_MODULE_0__.popScopeId)();
@@ -30336,6 +30244,8 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
   var _component_Card = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Card");
 
   var _component_Column = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Column");
+
+  var _component_InputNumber = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("InputNumber");
 
   var _component_DataTable = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("DataTable");
 
@@ -30352,6 +30262,8 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
     mode: "out-in"
   }, {
     "default": _withId(function () {
+      var _$data$selectedClass, _$props$classesStuden;
+
       return [$data.step === 'trimester' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Card, {
         "class": "w-52 relative"
       }, {
@@ -30395,27 +30307,25 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
 
       }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_17, [_hoisted_18], 512
       /* NEED_PATCH */
-      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $data.isSubmitting[1]]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_19, [_hoisted_20], 512
-      /* NEED_PATCH */
-      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, !$data.trimestersStatus.trimester1.started]])]), _hoisted_21, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Card, {
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, !$data.trimestersStatus.trimester1.started]])]), _hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_20, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Card, {
         "class": "w-52 relative"
       }, {
         header: _withId(function () {
           return [];
         }),
         title: _withId(function () {
-          return [_hoisted_23];
+          return [_hoisted_21];
         }),
         content: _withId(function () {
           return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("img", {
             src: _ctx.$page.props.appUrl + '/images/exam.png'
           }, null, 8
           /* PROPS */
-          , ["src"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_25, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_26, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.triStatus($data.trimestersStatus.trimester2)), 1
+          , ["src"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_24, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.triStatus($data.trimestersStatus.trimester2)), 1
           /* TEXT */
-          )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_27, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_28, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.trimestersStatus.trimester2.numNotes) + "/" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalNotes), 1
+          )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_25, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_26, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.trimestersStatus.trimester2.numNotes) + "/" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalNotes), 1
           /* TEXT */
-          )])]), $data.trimestersStatus.trimester2.started ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_29, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
+          )])]), $data.trimestersStatus.trimester2.started ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_27, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
             style: {
               width: $data.trimestersStatus.trimester2.trimestersStatus.trimester2.numNotes / $props.totalNotes * 100 + '%'
             },
@@ -30438,29 +30348,27 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
         _: 1
         /* STABLE */
 
-      }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_30, [_hoisted_31], 512
+      }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_28, [_hoisted_29], 512
       /* NEED_PATCH */
-      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $data.isSubmitting[2]]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_32, [_hoisted_33], 512
-      /* NEED_PATCH */
-      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, !$data.trimestersStatus.trimester2.started]])]), _hoisted_34, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_35, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Card, {
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, !$data.trimestersStatus.trimester2.started]])]), _hoisted_30, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_31, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Card, {
         "class": "w-52 relative"
       }, {
         header: _withId(function () {
           return [];
         }),
         title: _withId(function () {
-          return [_hoisted_36];
+          return [_hoisted_32];
         }),
         content: _withId(function () {
           return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("img", {
             src: _ctx.$page.props.appUrl + '/images/exam.png'
           }, null, 8
           /* PROPS */
-          , ["src"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_37, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_38, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_39, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.triStatus($data.trimestersStatus.trimester3)), 1
+          , ["src"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_33, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_34, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_35, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.triStatus($data.trimestersStatus.trimester3)), 1
           /* TEXT */
-          )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_40, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_41, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.trimestersStatus.trimester3.numNotes) + "/" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalNotes), 1
+          )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_36, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_37, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.trimestersStatus.trimester3.numNotes) + "/" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.totalNotes), 1
           /* TEXT */
-          )])]), $data.trimestersStatus.trimester3.started ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_42, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
+          )])]), $data.trimestersStatus.trimester3.started ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_38, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
             style: {
               width: $data.trimestersStatus.trimester3.numNotes / $props.totalNotes * 100 + '%'
             },
@@ -30483,12 +30391,10 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
         _: 1
         /* STABLE */
 
-      }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_43, [_hoisted_44], 512
+      }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_39, [_hoisted_40], 512
       /* NEED_PATCH */
-      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $data.isSubmitting[3]]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_45, [_hoisted_46], 512
-      /* NEED_PATCH */
-      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, !$data.trimestersStatus.trimester3.started]])])])) : $data.step === 'class' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_47, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.classes, function (levelclasses) {
-        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_48, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(levelclasses, function (classe) {
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, !$data.trimestersStatus.trimester3.started]])])])) : $data.step === 'class' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_41, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.classes, function (levelclasses) {
+        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_42, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(levelclasses, function (classe) {
           return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Card, {
             key: 'class-' + classe.id,
             onClick: function onClick($event) {
@@ -30505,7 +30411,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
               )];
             }),
             content: _withId(function () {
-              return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_49, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(classe.name), 1
+              return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_43, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(classe.name), 1
               /* TEXT */
               )];
             }),
@@ -30525,89 +30431,128 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
         ))]);
       }), 256
       /* UNKEYED_FRAGMENT */
-      ))])) : $data.step === 'notes' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_50, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_DataTable, {
+      ))])) : $data.step === 'notes' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_44, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", _hoisted_45, [_hoisted_46, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)((_$data$selectedClass = $data.selectedClass) === null || _$data$selectedClass === void 0 ? void 0 : _$data$selectedClass.name), 1
+      /* TEXT */
+      )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", _hoisted_47, [_hoisted_48, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)((_$props$classesStuden = $props.classesStudents[$data.selectedClass.id].length) !== null && _$props$classesStuden !== void 0 ? _$props$classesStuden : 0), 1
+      /* TEXT */
+      )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_DataTable, {
+        responsiveLayout: "stack",
+        breakpoint: "768px",
         value: $props.classesStudents[$data.selectedClass.id],
-        editMode: "cell"
+        dataKey: "id",
+        "class": "p-datatable-sm"
       }, {
         "default": _withId(function () {
           return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Column, {
-            field: "last_name",
-            header: "Nom"
+            style: {
+              width: '150px'
+            },
+            field: "regi_no",
+            header: "N d'enregistrement"
           }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Column, {
-            field: "first_name",
-            header: "Prenom"
+            style: {
+              width: '200px'
+            },
+            header: "nom et prénom"
+          }, {
+            body: _withId(function (slotProps) {
+              return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(slotProps.data.last_name) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(slotProps.data.first_name), 1
+              /* TEXT */
+              )];
+            }),
+            _: 1
+            /* STABLE */
+
           }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Column, {
+            style: {
+              width: '80px'
+            },
             field: "note_eval",
             header: "Evaluation",
             exportable: false
           }, {
-            editor: _withId(function (slotProps) {
+            body: _withId(function (slotProps) {
               return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
                 type: "text",
-                "class": "input-group",
+                "class": "form-control ",
                 "onUpdate:modelValue": function onUpdateModelValue($event) {
-                  return slotProps.data[slotProps.column.props.field] = $event;
+                  return slotProps.data.note_eval = $event;
                 }
               }, null, 8
               /* PROPS */
-              , ["onUpdate:modelValue"]), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, slotProps.data[slotProps.column.props.field]]])];
+              , ["onUpdate:modelValue"]), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, slotProps.data.note_eval]])];
             }),
             _: 1
             /* STABLE */
 
           }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Column, {
+            style: {
+              width: '80px'
+            },
             field: "note_devoir",
             header: "Devoir",
             exportable: false
           }, {
-            editor: _withId(function (slotProps) {
+            body: _withId(function (slotProps) {
               return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
                 type: "text",
-                "class": "input-group",
+                "class": "form-control w-4",
                 "onUpdate:modelValue": function onUpdateModelValue($event) {
-                  return slotProps.data[slotProps.column.props.field] = $event;
+                  return slotProps.data.note_devoir = $event;
                 }
               }, null, 8
               /* PROPS */
-              , ["onUpdate:modelValue"]), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, slotProps.data[slotProps.column.props.field]]])];
+              , ["onUpdate:modelValue"]), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, slotProps.data.note_devoir]])];
             }),
             _: 1
             /* STABLE */
 
           }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Column, {
+            style: {
+              width: '80px'
+            },
             field: "note_exam",
             header: "Exam",
             exportable: false
           }, {
-            editor: _withId(function (slotProps) {
-              return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
-                type: "text",
-                "class": "input-group",
+            body: _withId(function (slotProps) {
+              return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_InputNumber, {
+                modelValue: slotProps.data.note_exam,
                 "onUpdate:modelValue": function onUpdateModelValue($event) {
-                  return slotProps.data[slotProps.column.props.field] = $event;
-                }
+                  return slotProps.data.note_exam = $event;
+                },
+                min: 0,
+                max: 20,
+                useGrouping: false,
+                locale: "ar-DZ",
+                mode: "decimal",
+                minFractionDigits: 2,
+                maxFractionDigits: 2
               }, null, 8
               /* PROPS */
-              , ["onUpdate:modelValue"]), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, slotProps.data[slotProps.column.props.field]]])];
+              , ["modelValue", "onUpdate:modelValue"])];
             }),
             _: 1
             /* STABLE */
 
           }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Column, {
-            field: "remarque",
+            style: {
+              width: '250px'
+            },
+            field: "note",
             header: "Remarque",
             exportable: false
           }, {
-            editor: _withId(function (slotProps) {
+            body: _withId(function (slotProps) {
               return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
                 type: "text",
-                "class": "input-group",
+                "class": "form-control w-4",
                 "onUpdate:modelValue": function onUpdateModelValue($event) {
-                  return slotProps.data[slotProps.column.props.field] = $event;
+                  return slotProps.data.note = $event;
                 }
               }, null, 8
               /* PROPS */
-              , ["onUpdate:modelValue"]), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, slotProps.data[slotProps.column.props.field]]])];
+              , ["onUpdate:modelValue"]), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, slotProps.data.note]])];
             }),
             _: 1
             /* STABLE */
@@ -30619,18 +30564,26 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
 
       }, 8
       /* PROPS */
-      , ["value"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)];
+      , ["value"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_49, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
+        onClick: _cache[4] || (_cache[4] = function ($event) {
+          return $options.submitNotes();
+        }),
+        "class": " mr-4 w-1/3 py-4 text-white rounded-md font-medium bg-primary-500 py-2 px-4 hover:bg-primary-800 hover:ring hover:ring-primary-200 inline-flex justify-center items-center"
+      }, " Save "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
+        onClick: _cache[5] || (_cache[5] = function () {}),
+        "class": "text-white py-4 w-1/3 rounded-md font-medium bg-warning-500 py-2 px-4 hover:bg-primary-800 hover:ring hover:ring-primary-200 inline-flex justify-center items-center"
+      }, " Cancel ")])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)];
     }),
     _: 1
     /* STABLE */
 
   })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
-    onClick: _cache[4] || (_cache[4] = function ($event) {
+    onClick: _cache[6] || (_cache[6] = function ($event) {
       return $data.step = 'class';
     }),
     "class": "rounded-full text-info-500 font-medium hover:text-info-800  focus:text-info-800 p-0 inline-flex justify-center items-center"
   }, " step2 "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
-    onClick: _cache[5] || (_cache[5] = function ($event) {
+    onClick: _cache[7] || (_cache[7] = function ($event) {
       return $data.step = 'trimester';
     }),
     "class": "rounded-full text-info-500 font-medium hover:text-info-800  focus:text-info-800 p-0 inline-flex justify-center items-center"
@@ -36094,7 +36047,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "a.dropdown-item[data-v-62cbac59]:active{\n  background-color: #9e95f5;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "a.dropdown-item[data-v-62cbac59]:active{\n  background-color: #9e95f5;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -36118,7 +36071,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".click-card[data-v-37096330]:hover{\n  cursor: pointer;\n  border: 1px solid #7367f0!important;\n  box-shadow: 0 0 10px 1px rgba(115, 103, 240, 0.7);\n}\n[data-v-37096330] .p-card-title{\n  height: 45px;\n  font-size: 1rem;\n  border: 1px solid rgba(34,41,47,.125);\n  border-width: 0 0 1px;\n  text-align: center;\n  display: flex;\n  align-items: center; /* Vertical center alignment */\n  justify-content: center; /* Horizontal center alignment */\n}\n[data-v-37096330] .p-card-content{\n  text-align: center;\n}\n[data-v-37096330] .p-card-footer{\n  height: 45px;\n  font-size: 1rem;\n  border: 1px solid rgba(34,41,47,.125);\n  border-width: 1px 0 0 0;\n  text-align: center;\n  display: flex;\n  align-items: center; /* Vertical center alignment */\n  justify-content: center; /* Horizontal center alignment */\n  color: #fff;\n}\n.mode-fade-enter-active[data-v-37096330], .mode-fade-leave-active[data-v-37096330] {\n  transition: opacity .5s ease\n}\n.mode-fade-enter-from[data-v-37096330], .mode-fade-leave-to[data-v-37096330] {\n  opacity: 0\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".click-card[data-v-37096330]:hover{\n  cursor: pointer;\n  border: 1px solid #7367f0!important;\n  box-shadow: 0 0 10px 1px rgba(115, 103, 240, 0.7);\n}\n[data-v-37096330] .p-card-title{\n  height: 45px;\n  font-size: 1rem;\n  border: 1px solid rgba(34,41,47,.125);\n  border-width: 0 0 1px;\n  text-align: center;\n  display: flex;\n  align-items: center; /* Vertical center alignment */\n  justify-content: center; /* Horizontal center alignment */\n}\n[data-v-37096330] .p-card-content{\n  text-align: center;\n}\n[data-v-37096330] .p-card-footer{\n  height: 45px;\n  font-size: 1rem;\n  border: 1px solid rgba(34,41,47,.125);\n  border-width: 1px 0 0 0;\n  text-align: center;\n  display: flex;\n  align-items: center; /* Vertical center alignment */\n  justify-content: center; /* Horizontal center alignment */\n  color: #fff;\n}\n.mode-fade-enter-active[data-v-37096330], .mode-fade-leave-active[data-v-37096330] {\n  transition: opacity .5s ease\n}\n.mode-fade-enter-from[data-v-37096330], .mode-fade-leave-to[data-v-37096330] {\n  opacity: 0\n}\n.form-control[data-v-37096330]{\n  width: 10rem;\n}\n@media (min-width: 768px){\n.form-control[data-v-37096330]{\n    width: 100%;\n}\n}\n[data-v-37096330] .p-inputnumber-input{\n  width: 10rem;\n}\n@media (min-width: 768px){\n[data-v-37096330] .p-inputnumber-input{\n    width: 100%;\n}\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -36166,7 +36119,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "#sidebar[data-v-6a63e488]{\n  width: 260px;\n  max-width: 260px;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "#sidebar[data-v-6a63e488]{\n  width: 260px;\n  max-width: 260px;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -36190,7 +36143,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "[data-v-2d98b894] .p-card-title{\n  height: 45px;\n  font-size: 1rem;\n  border: 1px solid rgba(34,41,47,.125);\n  border-width: 0 0 1px;\n  text-align: center;\n  display: flex;\n  align-items: center; /* Vertical center alignment */\n  justify-content: center; /* Horizontal center alignment */\n}\n[data-v-2d98b894] .p-card-footer{\n  height: 45px;\n  font-size: 1rem;\n  border: 1px solid rgba(34,41,47,.125);\n  border-width: 1px 0 0 0;\n  text-align: center;\n  display: flex;\n  align-items: center; /* Vertical center alignment */\n  justify-content: center; /* Horizontal center alignment */\n  color: #fff;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "[data-v-2d98b894] .p-card-title{\n  height: 45px;\n  font-size: 1rem;\n  border: 1px solid rgba(34,41,47,.125);\n  border-width: 0 0 1px;\n  text-align: center;\n  display: flex;\n  align-items: center; /* Vertical center alignment */\n  justify-content: center; /* Horizontal center alignment */\n}\n[data-v-2d98b894] .p-card-footer{\n  height: 45px;\n  font-size: 1rem;\n  border: 1px solid rgba(34,41,47,.125);\n  border-width: 1px 0 0 0;\n  text-align: center;\n  display: flex;\n  align-items: center; /* Vertical center alignment */\n  justify-content: center; /* Horizontal center alignment */\n  color: #fff;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -36238,7 +36191,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".bg-gray-100[data-v-317d1a6e] {\n  background-color: #f7fafc;\n  background-color: rgba(247, 250, 252, var(--tw-bg-opacity));\n}\n.border-gray-200[data-v-317d1a6e] {\n  border-color: #edf2f7;\n  border-color: rgba(237, 242, 247, var(--tw-border-opacity));\n}\n.text-gray-400[data-v-317d1a6e] {\n  color: #cbd5e0;\n  color: rgba(203, 213, 224, var(--tw-text-opacity));\n}\n.text-gray-500[data-v-317d1a6e] {\n  color: #a0aec0;\n  color: rgba(160, 174, 192, var(--tw-text-opacity));\n}\n.text-gray-600[data-v-317d1a6e] {\n  color: #718096;\n  color: rgba(113, 128, 150, var(--tw-text-opacity));\n}\n.text-gray-700[data-v-317d1a6e] {\n  color: #4a5568;\n  color: rgba(74, 85, 104, var(--tw-text-opacity));\n}\n.text-gray-900[data-v-317d1a6e] {\n  color: #1a202c;\n  color: rgba(26, 32, 44, var(--tw-text-opacity));\n}\n@media (prefers-color-scheme: dark) {\n.dark\\:bg-gray-800[data-v-317d1a6e] {\n    background-color: #2d3748;\n    background-color: rgba(45, 55, 72, var(--tw-bg-opacity));\n}\n.dark\\:bg-gray-900[data-v-317d1a6e] {\n    background-color: #1a202c;\n    background-color: rgba(26, 32, 44, var(--tw-bg-opacity));\n}\n.dark\\:border-gray-700[data-v-317d1a6e] {\n    border-color: #4a5568;\n    border-color: rgba(74, 85, 104, var(--tw-border-opacity));\n}\n.dark\\:text-white[data-v-317d1a6e] {\n    color: #fff;\n    color: rgba(255, 255, 255, var(--tw-text-opacity));\n}\n.dark\\:text-gray-400[data-v-317d1a6e] {\n    color: #cbd5e0;\n    color: rgba(203, 213, 224, var(--tw-text-opacity));\n}\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".bg-gray-100[data-v-317d1a6e] {\n  background-color: #f7fafc;\n  background-color: rgba(247, 250, 252, var(--tw-bg-opacity));\n}\n.border-gray-200[data-v-317d1a6e] {\n  border-color: #edf2f7;\n  border-color: rgba(237, 242, 247, var(--tw-border-opacity));\n}\n.text-gray-400[data-v-317d1a6e] {\n  color: #cbd5e0;\n  color: rgba(203, 213, 224, var(--tw-text-opacity));\n}\n.text-gray-500[data-v-317d1a6e] {\n  color: #a0aec0;\n  color: rgba(160, 174, 192, var(--tw-text-opacity));\n}\n.text-gray-600[data-v-317d1a6e] {\n  color: #718096;\n  color: rgba(113, 128, 150, var(--tw-text-opacity));\n}\n.text-gray-700[data-v-317d1a6e] {\n  color: #4a5568;\n  color: rgba(74, 85, 104, var(--tw-text-opacity));\n}\n.text-gray-900[data-v-317d1a6e] {\n  color: #1a202c;\n  color: rgba(26, 32, 44, var(--tw-text-opacity));\n}\n@media (prefers-color-scheme: dark) {\n.dark\\:bg-gray-800[data-v-317d1a6e] {\n    background-color: #2d3748;\n    background-color: rgba(45, 55, 72, var(--tw-bg-opacity));\n}\n.dark\\:bg-gray-900[data-v-317d1a6e] {\n    background-color: #1a202c;\n    background-color: rgba(26, 32, 44, var(--tw-bg-opacity));\n}\n.dark\\:border-gray-700[data-v-317d1a6e] {\n    border-color: #4a5568;\n    border-color: rgba(74, 85, 104, var(--tw-border-opacity));\n}\n.dark\\:text-white[data-v-317d1a6e] {\n    color: #fff;\n    color: rgba(255, 255, 255, var(--tw-text-opacity));\n}\n.dark\\:text-gray-400[data-v-317d1a6e] {\n    color: #cbd5e0;\n    color: rgba(203, 213, 224, var(--tw-text-opacity));\n}\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -71890,6 +71843,976 @@ function styleInject(css, ref) {
 }
 
 var css_248z = "\n.p-fileupload-content {\n    position: relative;\n}\n.p-fileupload-row {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n.p-fileupload-row > div {\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 auto;\n            flex: 1 1 auto;\n    width: 25%;\n}\n.p-fileupload-row > div:last-child {\n    text-align: right;\n}\n.p-fileupload-content .p-progressbar {\n    width: 100%;\n    position: absolute;\n    top: 0;\n    left: 0;\n}\n.p-button.p-fileupload-choose {\n    position: relative;\n    overflow: hidden;\n}\n.p-button.p-fileupload-choose input[type=file] {\n    display: none;\n}\n.p-fileupload-choose.p-fileupload-choose-selected input[type=file] {\n    display: none;\n}\n.p-fluid .p-fileupload .p-button {\n    width: auto;\n}\n";
+styleInject(css_248z);
+
+script.render = render;
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (script);
+
+
+/***/ }),
+
+/***/ "./node_modules/primevue/inputnumber/inputnumber.esm.js":
+/*!**************************************************************!*\
+  !*** ./node_modules/primevue/inputnumber/inputnumber.esm.js ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var primevue_inputtext__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! primevue/inputtext */ "./node_modules/primevue/inputtext/inputtext.esm.js");
+/* harmony import */ var primevue_button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! primevue/button */ "./node_modules/primevue/button/button.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
+
+
+
+var script = {
+    inheritAttrs: false,
+    emits: ['update:modelValue', 'input'],
+    props: {
+        modelValue: {
+            type: Number,
+            default: null
+        },
+        format: {
+            type: Boolean,
+            default: true
+        },
+        showButtons: {
+            type: Boolean,
+            default: false
+        },
+        buttonLayout: {
+            type: String,
+            default: 'stacked'
+        },
+        incrementButtonClass: {
+            type: String,
+            default: null,
+        },
+        decrementButtonClass: {
+            type: String,
+            default: null,
+        },
+        incrementButtonIcon: {
+            type: String,
+            default: 'pi pi-angle-up',
+        },
+        decrementButtonIcon: {
+            type: String,
+            default: 'pi pi-angle-down',
+        },
+        locale: {
+            type: String,
+            default: undefined
+        },
+        localeMatcher: {
+            type: String,
+            default: undefined
+        },
+        mode: {
+            type: String,
+            default: 'decimal'
+        },
+        prefix: {
+            type: String,
+            default: null
+        },
+        suffix: {
+            type: String,
+            default: null
+        },
+        currency: {
+            type: String,
+            default: undefined
+        },
+        currencyDisplay: {
+            type: String,
+            default: undefined
+        },
+        useGrouping: {
+            type: Boolean,
+            default: true
+        },
+        minFractionDigits: {
+            type: Number,
+            default: undefined
+        },
+        maxFractionDigits: {
+            type: Number,
+            default: undefined
+        },
+        min: {
+            type: Number,
+            default: null
+        },
+        max: {
+            type: Number,
+            default: null
+        },
+        step: {
+            type: Number,
+            default: 1
+        },
+        style: null,
+        class: null,
+        inputStyle: null,
+        inputClass: null
+    },
+    numberFormat: null,
+    _numeral: null,
+    _decimal: null,
+    _group: null,
+    _minusSign: null,
+    _currency: null,
+    _suffix: null,
+    _prefix: null,
+    _index: null,
+    groupChar: '',
+    isSpecialChar: null,
+    prefixChar: null,
+    suffixChar: null,
+    timer: null,
+    data() {
+        return {
+            focused: false
+        }
+    },
+    watch: {
+		locale(newValue, oldValue) {
+            this.updateConstructParser(newValue, oldValue);
+        },
+        localeMatcher(newValue, oldValue) {
+            this.updateConstructParser(newValue, oldValue);
+        },
+        mode(newValue, oldValue) {
+            this.updateConstructParser(newValue, oldValue);
+        },
+        currency(newValue, oldValue) {
+            this.updateConstructParser(newValue, oldValue);
+        },
+        currencyDisplay(newValue, oldValue) {
+            this.updateConstructParser(newValue, oldValue);
+        },
+        useGrouping(newValue, oldValue) {
+            this.updateConstructParser(newValue, oldValue);
+        },
+        minFractionDigits(newValue, oldValue) {
+            this.updateConstructParser(newValue, oldValue);
+        },
+        maxFractionDigits(newValue, oldValue) {
+            this.updateConstructParser(newValue, oldValue);
+        },
+        suffix(newValue, oldValue) {
+            this.updateConstructParser(newValue, oldValue);
+        },
+        prefix(newValue, oldValue) {
+            this.updateConstructParser(newValue, oldValue);
+        }
+    },
+    created() {
+        this.constructParser();
+    },
+    methods: {
+        getOptions() {
+            return {
+                localeMatcher: this.localeMatcher,
+                style: this.mode,
+                currency: this.currency,
+                currencyDisplay: this.currencyDisplay,
+                useGrouping: this.useGrouping,
+                minimumFractionDigits: this.minFractionDigits,
+                maximumFractionDigits: this.maxFractionDigits
+            };
+        },
+        constructParser() {
+            this.numberFormat = new Intl.NumberFormat(this.locale, this.getOptions());
+            const numerals = [...new Intl.NumberFormat(this.locale, {useGrouping: false}).format(9876543210)].reverse();
+            const index = new Map(numerals.map((d, i) => [d, i]));
+            this._numeral = new RegExp(`[${numerals.join('')}]`, 'g');
+            this._decimal = this.getDecimalExpression();
+            this._group = this.getGroupingExpression();
+            this._minusSign = this.getMinusSignExpression();
+            this._currency = this.getCurrencyExpression();
+            this._suffix = this.getSuffixExpression();
+            this._prefix = this.getPrefixExpression();
+            this._index = d => index.get(d);
+        },
+        updateConstructParser(newValue, oldValue) {
+            if (newValue !== oldValue) {
+                this.constructParser();
+            }
+        },
+        escapeRegExp(text) {
+            return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+        },
+        getDecimalExpression() {
+            const formatter = new Intl.NumberFormat(this.locale, {useGrouping: false});
+            return new RegExp(`[${formatter.format(1.1).trim().replace(this._numeral, '')}]`, 'g');
+        },
+        getGroupingExpression() {
+            const formatter = new Intl.NumberFormat(this.locale, {useGrouping: true});
+            this.groupChar = formatter.format(1000000).trim().replace(this._numeral, '').charAt(0);
+            return new RegExp(`[${this.groupChar}]`, 'g');
+        },
+        getMinusSignExpression() {
+            const formatter = new Intl.NumberFormat(this.locale, {useGrouping: false});
+            return new RegExp(`[${formatter.format(-1).trim().replace(this._numeral, '')}]`, 'g');
+        },
+        getCurrencyExpression() {
+            if (this.currency) {
+                const formatter = new Intl.NumberFormat(this.locale, {style: 'currency', currency: this.currency, currencyDisplay: this.currencyDisplay});
+                return new RegExp(`[${formatter.format(1).replace(/\s/g, '').replace(this._numeral, '').replace(this._decimal, '').replace(this._group, '')}]`, 'g');
+            }
+
+            return new RegExp(`[]`,'g');
+        },
+        getPrefixExpression() {
+            if (this.prefix) {
+                this.prefixChar = this.prefix;
+            }
+            else {
+                const formatter = new Intl.NumberFormat(this.locale, {style: this.mode, currency: this.currency, currencyDisplay: this.currencyDisplay});
+                this.prefixChar = formatter.format(1).split('1')[0];
+            }
+
+            return new RegExp(`${this.escapeRegExp(this.prefixChar||'')}`, 'g');
+        },
+        getSuffixExpression() {
+            if (this.suffix) {
+                this.suffixChar = this.suffix;
+            }
+            else {
+                const formatter = new Intl.NumberFormat(this.locale, {style: this.mode, currency: this.currency, currencyDisplay: this.currencyDisplay,
+                    minimumFractionDigits: 0, maximumFractionDigits: 0});
+                this.suffixChar = formatter.format(1).split('1')[1];
+            }
+
+            return new RegExp(`${this.escapeRegExp(this.suffixChar||'')}`, 'g');
+        },
+        formatValue(value) {
+            if (value != null) {
+                if (value === '-') { // Minus sign
+                    return value;
+                }
+
+                if (this.format) {
+                    let formatter = new Intl.NumberFormat(this.locale, this.getOptions());
+                    let formattedValue = formatter.format(value);
+                    if (this.prefix) {
+                        formattedValue = this.prefix + formattedValue;
+                    }
+
+                    if (this.suffix) {
+                        formattedValue = formattedValue + this.suffix;
+                    }
+
+                    return formattedValue;
+                }
+
+                return value.toString();
+            }
+
+            return '';
+        },
+        parseValue(text) {
+            let filteredText = text
+                                .replace(this._suffix, '')
+                                .replace(this._prefix, '')
+                                .trim()
+                                .replace(/\s/g, '')
+                                .replace(this._currency, '')
+                                .replace(this._group, '')
+                                .replace(this._minusSign, '-')
+                                .replace(this._decimal, '.')
+                                .replace(this._numeral, this._index);
+
+            if (filteredText) {
+                if (filteredText === '-') // Minus sign
+                    return filteredText;
+
+                let parsedValue = +filteredText;
+                return isNaN(parsedValue) ? null : parsedValue;
+            }
+
+            return null;
+        },
+        repeat(event, interval, dir) {
+            let i = interval || 500;
+
+            this.clearTimer();
+            this.timer = setTimeout(() => {
+                this.repeat(event, 40, dir);
+            }, i);
+
+            this.spin(event, dir);
+        },
+        spin(event, dir) {
+            if (this.$refs.input) {
+                let step = this.step * dir;
+                let currentValue = this.parseValue(this.$refs.input.$el.value) || 0;
+                let newValue = this.validateValue(currentValue + step);
+    
+                this.updateInput(newValue, null, 'spin');
+                this.updateModel(event, newValue);
+    
+                this.handleOnInput(event, currentValue, newValue);
+            }
+        },
+        onUpButtonMouseDown(event) {
+            if (!this.$attrs.disabled) {
+                this.$refs.input.$el.focus();
+                this.repeat(event, null, 1);
+                event.preventDefault();
+            }
+        },
+        onUpButtonMouseUp() {
+            if (!this.$attrs.disabled) {
+                this.clearTimer();
+            }
+        },
+        onUpButtonMouseLeave() {
+            if (!this.$attrs.disabled) {
+                this.clearTimer();
+            }
+        },
+        onUpButtonKeyUp() {
+            if (!this.$attrs.disabled) {
+                this.clearTimer();
+            }
+        },
+        onUpButtonKeyDown(event) {
+            if (event.keyCode === 32 || event.keyCode === 13) {
+                this.repeat(event, null, 1);
+            }
+        },
+        onDownButtonMouseDown(event) {
+            if (!this.$attrs.disabled) {
+                this.$refs.input.$el.focus();
+                this.repeat(event, null, -1);
+                event.preventDefault();
+            }
+        },
+        onDownButtonMouseUp() {
+            if (!this.$attrs.disabled) {
+                this.clearTimer();
+            }
+        },
+        onDownButtonMouseLeave() {
+            if (!this.$attrs.disabled) {
+                this.clearTimer();
+            }
+        },
+        onDownButtonKeyUp() {
+            if (!this.$attrs.disabled) {
+                this.clearTimer();
+            }
+        },
+        onDownButtonKeyDown(event) {
+            if (event.keyCode === 32 || event.keyCode === 13) {
+                this.repeat(event, null, -1);
+            }
+        },
+        onUserInput() {
+            if (this.isSpecialChar) {
+                this.$refs.input.$el.value = this.lastValue;
+            }
+            this.isSpecialChar = false;
+        },
+        onInputKeyDown(event) {
+            this.lastValue = event.target.value;
+            if (event.shiftKey || event.altKey) {
+                this.isSpecialChar = true;
+                return;
+            }
+
+            let selectionStart = event.target.selectionStart;
+            let selectionEnd = event.target.selectionEnd;
+            let inputValue = event.target.value;
+            let newValueStr = null;
+
+            if (event.altKey) {
+                event.preventDefault();
+            }
+
+            switch (event.which) {
+                //up
+                case 38:
+                    this.spin(event, 1);
+                    event.preventDefault();
+                break;
+
+                //down
+                case 40:
+                    this.spin(event, -1);
+                    event.preventDefault();
+                break;
+
+                //left
+                case 37:
+                    if (!this.isNumeralChar(inputValue.charAt(selectionStart - 1))) {
+                        event.preventDefault();
+                    }
+                break;
+
+                //right
+                case 39:
+                    if (!this.isNumeralChar(inputValue.charAt(selectionStart))) {
+                        event.preventDefault();
+                    }
+                break;
+
+                //enter
+                case 13:
+                    newValueStr = this.validateValue(this.parseValue(inputValue));
+                    this.$refs.input.$el.value = this.formatValue(newValueStr);
+                    this.$refs.input.$el.setAttribute('aria-valuenow', newValueStr);
+                    this.updateModel(event, newValueStr);
+                break;
+
+                //backspace
+                case 8: {
+                    event.preventDefault();
+
+                    if (selectionStart === selectionEnd) {
+                        let deleteChar = inputValue.charAt(selectionStart - 1);
+                        let decimalCharIndex = inputValue.search(this._decimal);
+                        this._decimal.lastIndex = 0;
+
+                        if (this.isNumeralChar(deleteChar)) {
+                            if (this._group.test(deleteChar)) {
+                                this._group.lastIndex = 0;
+                                newValueStr = inputValue.slice(0, selectionStart - 2) + inputValue.slice(selectionStart - 1);
+                            }
+                            else if (this._decimal.test(deleteChar)) {
+                                this._decimal.lastIndex = 0;
+                                this.$refs.input.$el.setSelectionRange(selectionStart - 1, selectionStart - 1);
+                            }
+                            else if (decimalCharIndex > 0 && selectionStart > decimalCharIndex) {
+                                newValueStr = inputValue.slice(0, selectionStart - 1) + '0' + inputValue.slice(selectionStart);
+                            }
+                            else if (decimalCharIndex > 0 && decimalCharIndex === 1) {
+                                newValueStr = inputValue.slice(0, selectionStart - 1) + '0' + inputValue.slice(selectionStart);
+                                newValueStr = this.parseValue(newValueStr) > 0 ? newValueStr : '';
+                            }
+                            else {
+                                newValueStr = inputValue.slice(0, selectionStart - 1) + inputValue.slice(selectionStart);
+                            }
+                        }
+
+                        this.updateValue(event, newValueStr, null, 'delete-single');
+                    }
+                    else {
+                        newValueStr = this.deleteRange(inputValue, selectionStart, selectionEnd);
+                        this.updateValue(event, newValueStr, null, 'delete-range');
+                    }
+
+                    break;
+                }
+
+                // del
+                case 46:
+                    event.preventDefault();
+
+                    if (selectionStart === selectionEnd) {
+                        let deleteChar = inputValue.charAt(selectionStart);
+                        let decimalCharIndex = inputValue.search(this._decimal);
+                        this._decimal.lastIndex = 0;
+
+                        if (this.isNumeralChar(deleteChar)) {
+                            if (this._group.test(deleteChar)) {
+                                this._group.lastIndex = 0;
+                                newValueStr = inputValue.slice(0, selectionStart) + inputValue.slice(selectionStart + 2);
+                            }
+                            else if (this._decimal.test(deleteChar)) {
+                                this._decimal.lastIndex = 0;
+                                this.$refs.input.$el.setSelectionRange(selectionStart + 1, selectionStart + 1);
+                            }
+                            else if (decimalCharIndex > 0 && selectionStart > decimalCharIndex) {
+                                newValueStr = inputValue.slice(0, selectionStart) + '0' + inputValue.slice(selectionStart + 1);
+                            }
+                            else if (decimalCharIndex > 0 && decimalCharIndex === 1) {
+                                newValueStr = inputValue.slice(0, selectionStart) + '0' + inputValue.slice(selectionStart + 1);
+                                newValueStr = this.parseValue(newValueStr) > 0 ? newValueStr : '';
+                            }
+                            else {
+                                newValueStr = inputValue.slice(0, selectionStart) + inputValue.slice(selectionStart + 1);
+                            }
+                        }
+
+                        this.updateValue(event, newValueStr, null, 'delete-back-single');
+                    }
+                    else {
+                        newValueStr = this.deleteRange(inputValue, selectionStart, selectionEnd);
+                        this.updateValue(event, newValueStr, null, 'delete-range');
+                    }
+                break;
+            }
+        },
+        onInputKeyPress(event) {
+            event.preventDefault();
+            let code = event.which || event.keyCode;
+            let char = String.fromCharCode(code);
+            const isDecimalSign = this.isDecimalSign(char);
+            const isMinusSign = this.isMinusSign(char);
+
+            if ((48 <= code && code <= 57) || isMinusSign || isDecimalSign) {
+                this.insert(event, char, { isDecimalSign, isMinusSign });
+            }
+        },
+        onPaste(event) {
+            event.preventDefault();
+            let data = (event.clipboardData || window['clipboardData']).getData('Text');
+            if (data) {
+                let filteredData = this.parseValue(data);
+                if (filteredData != null) {
+                    this.insert(event, filteredData.toString());
+                }
+            }
+        },
+        allowMinusSign() {
+            return this.min === null || this.min < 0;
+        },
+        isMinusSign(char) {
+            if (this._minusSign.test(char)) {
+                this._minusSign.lastIndex = 0;
+                return true;
+            }
+
+            return false;
+        },
+        isDecimalSign(char) {
+            if (this._decimal.test(char)) {
+                this._decimal.lastIndex = 0;
+                return true;
+            }
+
+            return false;
+        },
+        insert(event, text, sign = { isDecimalSign: false, isMinusSign: false }) {
+            const minusCharIndexOnText = text.search(this._minusSign);
+            this._minusSign.lastIndex = 0;
+            if (!this.allowMinusSign() && minusCharIndexOnText !== -1) {
+                return;
+            }
+
+            const selectionStart = this.$refs.input.$el.selectionStart;
+            const selectionEnd = this.$refs.input.$el.selectionEnd;
+            let inputValue = this.$refs.input.$el.value.trim();
+            const decimalCharIndex = inputValue.search(this._decimal);
+            this._decimal.lastIndex = 0;
+            const minusCharIndex = inputValue.search(this._minusSign);
+            this._minusSign.lastIndex = 0;
+            let newValueStr;
+
+            if (sign.isMinusSign) {
+                if (selectionStart === 0) {
+                    newValueStr = inputValue;
+                    if (minusCharIndex === -1 || selectionEnd !== 0) {
+                        newValueStr = this.insertText(inputValue, text, 0, selectionEnd);
+                    }
+
+                    this.updateValue(event, newValueStr, text, 'insert');
+                }
+            }
+            else if (sign.isDecimalSign) {
+                if (decimalCharIndex > 0 && selectionStart === decimalCharIndex) {
+                    this.updateValue(event, inputValue, text, 'insert');
+                }
+                else if (decimalCharIndex > selectionStart && decimalCharIndex < selectionEnd) {
+                    newValueStr = this.insertText(inputValue, text, selectionStart, selectionEnd);
+                    this.updateValue(event, newValueStr, text, 'insert');
+                }
+            }
+            else {
+                const maxFractionDigits = this.numberFormat.resolvedOptions().maximumFractionDigits;
+                const operation = selectionStart !== selectionEnd ? 'range-insert' : 'insert';
+
+                if (decimalCharIndex > 0 && selectionStart > decimalCharIndex) {
+                    if ((selectionStart + text.length - (decimalCharIndex + 1)) <= maxFractionDigits) {
+                        newValueStr = inputValue.slice(0, selectionStart) + text + inputValue.slice(selectionStart + text.length);
+                        this.updateValue(event, newValueStr, text, operation);
+                    }
+                }
+                else {
+                    newValueStr = this.insertText(inputValue, text, selectionStart, selectionEnd);
+                    this.updateValue(event, newValueStr, text, operation);
+                }
+            }
+        },
+        insertText(value, text, start, end) {
+            let textSplit = text.split('.');
+
+            if (textSplit.length === 2) {
+                const decimalCharIndex = value.slice(start, end).search(this._decimal);
+                this._decimal.lastIndex = 0;
+                return (decimalCharIndex > 0) ? value.slice(0, start) + this.formatValue(text) + value.slice(end) : (value || this.formatValue(text));
+            }
+            else if ((end - start) === value.length) {
+                return this.formatValue(text);
+            }
+            else if (start === 0) {
+                return text + value.slice(end);
+            }
+            else if (end === value.length) {
+                return value.slice(0, start) + text;
+            }
+            else {
+                return value.slice(0, start) + text + value.slice(end);
+            }
+        },
+        deleteRange(value, start, end) {
+            let newValueStr;
+
+            if ((end - start) === value.length)
+                newValueStr = '';
+            else if (start === 0)
+                newValueStr = value.slice(end);
+            else if (end === value.length)
+                newValueStr = value.slice(0, start);
+            else
+                newValueStr = value.slice(0, start) + value.slice(end);
+
+            return newValueStr;
+        },
+        initCursor() {
+            let selectionStart = this.$refs.input.$el.selectionStart;
+            let inputValue = this.$refs.input.$el.value;
+            let valueLength = inputValue.length;
+            let index = null;
+
+            let char = inputValue.charAt(selectionStart);
+            if (this.isNumeralChar(char)) {
+                return;
+            }
+
+            //left
+            let i = selectionStart - 1;
+            while (i >= 0) {
+                char = inputValue.charAt(i);
+                if (this.isNumeralChar(char)) {
+                    index = i;
+                    break;
+                }
+                else {
+                    i--;
+                }
+            }
+
+            if (index !== null) {
+                this.$refs.input.$el.setSelectionRange(index + 1, index + 1);
+            }
+            else {
+                i = selectionStart + 1;
+                while (i < valueLength) {
+                    char = inputValue.charAt(i);
+                    if (this.isNumeralChar(char)) {
+                        index = i;
+                        break;
+                    }
+                    else {
+                        i++;
+                    }
+                }
+
+                if (index !== null) {
+                    this.$refs.input.$el.setSelectionRange(index, index);
+                }
+            }
+        },
+        onInputClick() {
+            this.initCursor();
+        },
+        isNumeralChar(char) {
+            if (char.length === 1 && (this._numeral.test(char) || this._decimal.test(char) || this._group.test(char) || this._minusSign.test(char))) {
+                this.resetRegex();
+                return true;
+            }
+
+            return false;
+        },
+        resetRegex() {
+            this._numeral.lastIndex =  0;
+            this._decimal.lastIndex =  0;
+            this._group.lastIndex =  0;
+            this._minusSign.lastIndex =  0;
+        },
+        updateValue(event, valueStr, insertedValueStr, operation) {
+            let currentValue = this.$refs.input.$el.value;
+            let newValue = null;
+
+            if (valueStr != null) {
+                newValue = this.parseValue(valueStr);
+                this.updateInput(newValue, insertedValueStr, operation);
+            }
+
+            this.handleOnInput(event, currentValue, newValue);
+        },
+        handleOnInput(event, currentValue, newValue) {
+            if (this.isValueChanged(currentValue, newValue)) {
+                this.$emit('input', { originalEvent: event, value: newValue });
+            }
+        },
+        isValueChanged(currentValue, newValue) {
+            if (newValue === null && currentValue !== null) {
+                return true;
+            }
+
+            if (newValue != null) {
+                let parsedCurrentValue = (typeof currentValue === 'string') ? this.parseValue(currentValue) : currentValue;
+                return newValue !== parsedCurrentValue;
+            }
+
+            return false;
+        },
+        validateValue(value) {
+            if (this.min != null && value < this.min) {
+                return this.min;
+            }
+
+            if (this.max != null && value > this.max) {
+                return this.max;
+            }
+
+            if (value === '-') { // Minus sign
+                return null;
+            }
+
+            return value;
+        },
+        updateInput(value, insertedValueStr, operation) {
+            insertedValueStr = insertedValueStr || '';
+
+            let inputValue = this.$refs.input.$el.value;
+            let newValue = this.formatValue(value);
+            let currentLength = inputValue.length;
+
+            if (currentLength === 0) {
+                this.$refs.input.$el.value = newValue;
+                this.$refs.input.$el.setSelectionRange(0, 0);
+                this.initCursor();
+                const prefixLength = (this.prefixChar || '').length;
+                const selectionEnd = prefixLength + insertedValueStr.length;
+                this.$refs.input.$el.setSelectionRange(selectionEnd, selectionEnd);
+            }
+            else {
+                let selectionStart = this.$refs.input.$el.selectionStart;
+                let selectionEnd = this.$refs.input.$el.selectionEnd;
+                this.$refs.input.$el.value = newValue;
+                let newLength = newValue.length;
+
+                if (operation === 'range-insert') {
+                    const startValue = this.parseValue((inputValue || '').slice(0, selectionStart));
+                    const startValueStr = startValue !== null ? startValue.toString() : '';
+                    const startExpr = startValueStr.split('').join(`(${this.groupChar})?`);
+                    const sRegex = new RegExp(startExpr, 'g');
+                    sRegex.test(newValue);
+
+                    const tExpr = insertedValueStr.split('').join(`(${this.groupChar})?`);
+                    const tRegex = new RegExp(tExpr, 'g');
+                    tRegex.test(newValue.slice(sRegex.lastIndex));
+
+                    selectionEnd = sRegex.lastIndex + tRegex.lastIndex;
+                    this.$refs.input.$el.setSelectionRange(selectionEnd, selectionEnd);
+                }
+                else if (newLength === currentLength) {
+                    if (operation === 'insert' || operation === 'delete-back-single')
+                        this.$refs.input.$el.setSelectionRange(selectionEnd + 1, selectionEnd + 1);
+                    else if (operation === 'delete-single')
+                        this.$refs.input.$el.setSelectionRange(selectionEnd - 1, selectionEnd - 1);
+                    else if (operation === 'delete-range' || operation === 'spin')
+                        this.$refs.input.$el.setSelectionRange(selectionEnd, selectionEnd);
+                }
+                else if (operation === 'delete-back-single') {
+                    let prevChar = inputValue.charAt(selectionEnd - 1);
+                    let nextChar = inputValue.charAt(selectionEnd);
+                    let diff = currentLength - newLength;
+                    let isGroupChar = this._group.test(nextChar);
+
+                    if (isGroupChar && diff === 1) {
+                        selectionEnd += 1;
+                    }
+                    else if (!isGroupChar && this.isNumeralChar(prevChar)) {
+                        selectionEnd += (-1 * diff) + 1;
+                    }
+
+                    this._group.lastIndex = 0;
+                    this.$refs.input.$el.setSelectionRange(selectionEnd, selectionEnd);
+                }
+                else {
+                    selectionEnd = selectionEnd + (newLength - currentLength);
+                    this.$refs.input.$el.setSelectionRange(selectionEnd, selectionEnd);
+                }
+            }
+
+            this.$refs.input.$el.setAttribute('aria-valuenow', value);
+        },
+        updateModel(event, value) {
+            this.$emit('update:modelValue', value);
+        },
+        onInputFocus() {
+            this.focused = true;
+        },
+        onInputBlur(event) {
+            this.focused = false;
+
+            let input = event.target;
+            let newValue = this.validateValue(this.parseValue(input.value));
+            input.value = this.formatValue(newValue);
+            input.setAttribute('aria-valuenow', newValue);
+            this.updateModel(event, newValue);
+        },
+        clearTimer() {
+            if (this.timer) {
+                clearInterval(this.timer);
+            }
+        }
+    },
+    computed: {
+        containerClass() {
+            return ['p-inputnumber p-component p-inputwrapper', this.class, {
+                'p-inputwrapper-filled': this.filled,
+                'p-inputwrapper-focus': this.focused,
+                'p-inputnumber-buttons-stacked': this.showButtons && this.buttonLayout === 'stacked',
+                'p-inputnumber-buttons-horizontal': this.showButtons && this.buttonLayout === 'horizontal',
+                'p-inputnumber-buttons-vertical': this.showButtons && this.buttonLayout === 'vertical'
+            }];
+        },
+        upButtonClass() {
+            return ['p-inputnumber-button p-inputnumber-button-up', this.incrementButtonClass];
+        },
+        downButtonClass() {
+            return ['p-inputnumber-button p-inputnumber-button-down', this.decrementButtonClass];
+        },
+        filled() {
+            return (this.modelValue != null && this.modelValue.toString().length > 0)
+        },
+        upButtonListeners() {
+            return {
+                mousedown: event => this.onUpButtonMouseDown(event),
+                mouseup: event => this.onUpButtonMouseUp(event),
+                mouseleave: event => this.onUpButtonMouseLeave(event),
+                keydown: event => this.onUpButtonKeyDown(event),
+                keyup: event => this.onUpButtonKeyUp(event)
+            }
+        },
+        downButtonListeners() {
+            return {
+                mousedown: event => this.onDownButtonMouseDown(event),
+                mouseup: event => this.onDownButtonMouseUp(event),
+                mouseleave: event => this.onDownButtonMouseLeave(event),
+                keydown: event => this.onDownButtonKeyDown(event),
+                keyup: event => this.onDownButtonKeyUp(event)
+            }
+        },
+        formattedValue() {
+            return this.formatValue(this.modelValue);
+        }
+    },
+    components: {
+        'INInputText': primevue_inputtext__WEBPACK_IMPORTED_MODULE_0__.default,
+        'INButton': primevue_button__WEBPACK_IMPORTED_MODULE_1__.default
+    }
+};
+
+const _hoisted_1 = {
+  key: 0,
+  class: "p-inputnumber-button-group"
+};
+
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_INInputText = (0,vue__WEBPACK_IMPORTED_MODULE_2__.resolveComponent)("INInputText");
+  const _component_INButton = (0,vue__WEBPACK_IMPORTED_MODULE_2__.resolveComponent)("INButton");
+
+  return ((0,vue__WEBPACK_IMPORTED_MODULE_2__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_2__.createBlock)("span", {
+    class: $options.containerClass,
+    style: $props.style
+  }, [
+    (0,vue__WEBPACK_IMPORTED_MODULE_2__.createVNode)(_component_INInputText, (0,vue__WEBPACK_IMPORTED_MODULE_2__.mergeProps)({
+      ref: "input",
+      class: ['p-inputnumber-input', $props.inputClass],
+      style: $props.inputStyle,
+      value: $options.formattedValue
+    }, _ctx.$attrs, {
+      "aria-valumin": $props.min,
+      "aria-valuemax": $props.max,
+      onInput: $options.onUserInput,
+      onKeydown: $options.onInputKeyDown,
+      onKeypress: $options.onInputKeyPress,
+      onPaste: $options.onPaste,
+      onClick: $options.onInputClick,
+      onFocus: $options.onInputFocus,
+      onBlur: $options.onInputBlur
+    }), null, 16, ["class", "style", "value", "aria-valumin", "aria-valuemax", "onInput", "onKeydown", "onKeypress", "onPaste", "onClick", "onFocus", "onBlur"]),
+    ($props.showButtons && $props.buttonLayout === 'stacked')
+      ? ((0,vue__WEBPACK_IMPORTED_MODULE_2__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_2__.createBlock)("span", _hoisted_1, [
+          (0,vue__WEBPACK_IMPORTED_MODULE_2__.createVNode)(_component_INButton, (0,vue__WEBPACK_IMPORTED_MODULE_2__.mergeProps)({
+            class: $options.upButtonClass,
+            icon: $props.incrementButtonIcon
+          }, (0,vue__WEBPACK_IMPORTED_MODULE_2__.toHandlers)($options.upButtonListeners), {
+            disabled: _ctx.$attrs.disabled
+          }), null, 16, ["class", "icon", "disabled"]),
+          (0,vue__WEBPACK_IMPORTED_MODULE_2__.createVNode)(_component_INButton, (0,vue__WEBPACK_IMPORTED_MODULE_2__.mergeProps)({
+            class: $options.downButtonClass,
+            icon: $props.decrementButtonIcon
+          }, (0,vue__WEBPACK_IMPORTED_MODULE_2__.toHandlers)($options.downButtonListeners), {
+            disabled: _ctx.$attrs.disabled
+          }), null, 16, ["class", "icon", "disabled"])
+        ]))
+      : (0,vue__WEBPACK_IMPORTED_MODULE_2__.createCommentVNode)("", true),
+    ($props.showButtons && $props.buttonLayout !== 'stacked')
+      ? ((0,vue__WEBPACK_IMPORTED_MODULE_2__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_2__.createBlock)(_component_INButton, (0,vue__WEBPACK_IMPORTED_MODULE_2__.mergeProps)({
+          key: 1,
+          class: $options.upButtonClass,
+          icon: $props.incrementButtonIcon
+        }, (0,vue__WEBPACK_IMPORTED_MODULE_2__.toHandlers)($options.upButtonListeners), {
+          disabled: _ctx.$attrs.disabled
+        }), null, 16, ["class", "icon", "disabled"]))
+      : (0,vue__WEBPACK_IMPORTED_MODULE_2__.createCommentVNode)("", true),
+    ($props.showButtons && $props.buttonLayout !== 'stacked')
+      ? ((0,vue__WEBPACK_IMPORTED_MODULE_2__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_2__.createBlock)(_component_INButton, (0,vue__WEBPACK_IMPORTED_MODULE_2__.mergeProps)({
+          key: 2,
+          class: $options.downButtonClass,
+          icon: $props.decrementButtonIcon
+        }, (0,vue__WEBPACK_IMPORTED_MODULE_2__.toHandlers)($options.downButtonListeners), {
+          disabled: _ctx.$attrs.disabled
+        }), null, 16, ["class", "icon", "disabled"]))
+      : (0,vue__WEBPACK_IMPORTED_MODULE_2__.createCommentVNode)("", true)
+  ], 6))
+}
+
+function styleInject(css, ref) {
+  if ( ref === void 0 ) ref = {};
+  var insertAt = ref.insertAt;
+
+  if (!css || typeof document === 'undefined') { return; }
+
+  var head = document.head || document.getElementsByTagName('head')[0];
+  var style = document.createElement('style');
+  style.type = 'text/css';
+
+  if (insertAt === 'top') {
+    if (head.firstChild) {
+      head.insertBefore(style, head.firstChild);
+    } else {
+      head.appendChild(style);
+    }
+  } else {
+    head.appendChild(style);
+  }
+
+  if (style.styleSheet) {
+    style.styleSheet.cssText = css;
+  } else {
+    style.appendChild(document.createTextNode(css));
+  }
+}
+
+var css_248z = "\n.p-inputnumber {\n    display: -webkit-inline-box;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n}\n.p-inputnumber-button {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    -webkit-box-flex: 0;\n        -ms-flex: 0 0 auto;\n            flex: 0 0 auto;\n}\n.p-inputnumber-buttons-stacked .p-button.p-inputnumber-button .p-button-label,\n.p-inputnumber-buttons-horizontal .p-button.p-inputnumber-button .p-button-label {\n    display: none;\n}\n.p-inputnumber-buttons-stacked .p-button.p-inputnumber-button-up {\n    border-top-left-radius: 0;\n    border-bottom-left-radius: 0;\n    border-bottom-right-radius: 0;\n    padding: 0;\n}\n.p-inputnumber-buttons-stacked .p-inputnumber-input {\n    border-top-right-radius: 0;\n    border-bottom-right-radius: 0;\n}\n.p-inputnumber-buttons-stacked .p-button.p-inputnumber-button-down {\n    border-top-left-radius: 0;\n    border-top-right-radius: 0;\n    border-bottom-left-radius: 0;\n    padding: 0;\n}\n.p-inputnumber-buttons-stacked .p-inputnumber-button-group {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column;\n}\n.p-inputnumber-buttons-stacked .p-inputnumber-button-group .p-button.p-inputnumber-button {\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 auto;\n            flex: 1 1 auto;\n}\n.p-inputnumber-buttons-horizontal .p-button.p-inputnumber-button-up {\n    -webkit-box-ordinal-group: 4;\n        -ms-flex-order: 3;\n            order: 3;\n    border-top-left-radius: 0;\n    border-bottom-left-radius: 0;\n}\n.p-inputnumber-buttons-horizontal .p-inputnumber-input {\n    -webkit-box-ordinal-group: 3;\n        -ms-flex-order: 2;\n            order: 2;\n    border-radius: 0;\n}\n.p-inputnumber-buttons-horizontal .p-button.p-inputnumber-button-down {\n    -webkit-box-ordinal-group: 2;\n        -ms-flex-order: 1;\n            order: 1;\n    border-top-right-radius: 0;\n    border-bottom-right-radius: 0;\n}\n.p-inputnumber-buttons-vertical {\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column;\n}\n.p-inputnumber-buttons-vertical .p-button.p-inputnumber-button-up {\n    -webkit-box-ordinal-group: 2;\n        -ms-flex-order: 1;\n            order: 1;\n    border-bottom-left-radius: 0;\n    border-bottom-right-radius: 0;\n    width: 100%;\n}\n.p-inputnumber-buttons-vertical .p-inputnumber-input {\n    -webkit-box-ordinal-group: 3;\n        -ms-flex-order: 2;\n            order: 2;\n    border-radius: 0;\n    text-align: center;\n}\n.p-inputnumber-buttons-vertical .p-button.p-inputnumber-button-down {\n    -webkit-box-ordinal-group: 4;\n        -ms-flex-order: 3;\n            order: 3;\n    border-top-left-radius: 0;\n    border-top-right-radius: 0;\n    width: 100%;\n}\n.p-inputnumber-input {\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 auto;\n            flex: 1 1 auto;\n}\n.p-fluid .p-inputnumber {\n    width: 100%;\n}\n.p-fluid .p-inputnumber .p-inputnumber-input {\n    width: 1%;\n}\n.p-fluid .p-inputnumber-buttons-vertical .p-inputnumber-input {\n    width: 100%;\n}\n";
 styleInject(css_248z);
 
 script.render = render;
