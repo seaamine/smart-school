@@ -17,5 +17,5 @@ class Exam extends Model
      *
      * @var array
      */
-    protected $fillable = ['trimester','started_at', 'stopped_at', 'published_at','status','numbNotes','academic_year_id'];
+    protected $fillable = ['trimester','started_at', 'stopped_at', 'published_at','status','num_notes','academic_year_id'];
 }

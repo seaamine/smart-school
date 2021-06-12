@@ -22975,18 +22975,58 @@ __webpack_require__.r(__webpack_exports__);
     classesStudents: Object
   },
   methods: {
+    processResponse: function processResponse(response) {
+      this.isSubmitting[this.selectedClass.id] = false;
+
+      if (response.data.type === 'error') {
+        this.$toast.add({
+          severity: 'error',
+          summary: response.data.toast.summary,
+          detail: response.data.toast.detail,
+          life: 5000
+        });
+      } else if (response.data.type === 'success') {
+        this.$toast.add({
+          severity: 'success',
+          summary: response.data.toast.summary,
+          detail: response.data.toast.detail,
+          life: 5000
+        });
+        this.classNotesCount[this.selectedClass.id] = this.classesStudents[this.selectedClass.id].length;
+        this.selectedClass = null;
+        this.step = "class";
+      }
+    },
+    handleError: function handleError(error) {
+      this.isSubmitting[this.selectedClass.id] = false;
+      var errorResponse = this.handleFetchError(error);
+      this.$toast.add({
+        severity: 'error',
+        summary: 'L\'opération a échoué!',
+        detail: errorResponse.message,
+        life: 5000
+      });
+    },
     submitNotes: function submitNotes() {
-      var _this = this;
+      var _this = this,
+          _exam$id;
 
       this.isSubmitting[this.selectedClass.id] = true;
+      var self = this;
+      var exam = this.exams.find(function (e) {
+        return e.trimester === _this.selectedTrimester.toString();
+      });
+      console.log(exam);
       axios.post(this.route('teacher.update-exam-notes'), {
         'trimester': this.selectedTrimester,
         'academicYear': this.academicYear.id,
         'class': this.selectedClass.id,
-        'exam': this.exam.id,
+        'exam': (_exam$id = exam.id) !== null && _exam$id !== void 0 ? _exam$id : null,
         'examNotes': this.classesStudents[this.selectedClass.id]
       }).then(function (response) {
-        _this.isSubmitting[_this.selectedClass.id] = false; //this.initTrimester(tri,response.data.exam)
+        self.processResponse(response); //this.initTrimester(tri,response.data.exam)
+      })["catch"](function (error) {
+        self.handleError(error);
       });
     },
     selectTrimester: function selectTrimester(tri) {
@@ -23072,7 +23112,8 @@ __webpack_require__.r(__webpack_exports__);
       isSubmitting: {},
       step: 'trimester',
       selectedTrimester: null,
-      selectedClass: null
+      selectedClass: null,
+      classNotesCount: {}
     };
   },
   created: function created() {
@@ -23086,6 +23127,22 @@ __webpack_require__.r(__webpack_exports__);
       _this2.trimestersStatus['trimester' + exam.trimester]['started'] = exam.started_at ? true : false;
       _this2.trimestersStatus['trimester' + exam.trimester]['stopped'] = exam.stopped_at ? true : false;
       _this2.trimestersStatus['trimester' + exam.trimester]['published'] = exam.published_at ? true : false;
+    });
+    Object.keys(this.classesStudents).forEach(function (classe) {
+      _this2.classNotesCount[classe] = 0;
+
+      _this2.classesStudents[classe].forEach(function (student) {
+        if (student.note_exam !== null) {
+          _this2.classNotesCount[classe]++;
+        }
+
+        ;
+        _this2.classNotesCount[classe.id];
+        student.note_devoir = Math.floor(Math.random() * 21);
+        student.note_eval = Math.floor(Math.random() * 21);
+        student.note_exam = Math.floor(Math.random() * 21);
+        student.remarque = 'good';
+      });
     });
   }
 });
@@ -23151,26 +23208,55 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
     },
-    startTrimester: function startTrimester(tri) {
-      var _this = this;
+    processResponse: function processResponse(response, tri) {
+      this.isSubmitting[tri] = false;
 
+      if (response.data.type === 'error') {
+        this.$toast.add({
+          severity: 'error',
+          summary: response.data.toast.summary,
+          detail: response.data.toast.detail,
+          life: 5000
+        });
+      } else if (response.data.type === 'success') {
+        this.$toast.add({
+          severity: 'success',
+          summary: response.data.toast.summary,
+          detail: response.data.toast.detail,
+          life: 5000
+        });
+        this.initTrimester(tri, response.data.exam);
+      }
+    },
+    handleError: function handleError(error, tri) {
+      this.isSubmitting[tri] = false;
+      var errorResponse = this.handleFetchError(error);
+      this.$toast.add({
+        severity: 'error',
+        summary: 'L\'opération a échoué!',
+        detail: errorResponse.message,
+        life: 5000
+      });
+    },
+    startTrimester: function startTrimester(tri) {
       if (this.isSubmitting[tri]) {
         return;
       }
 
       this.isSubmitting[tri] = true;
+      var self = this;
       axios.post(this.route('exam.update'), {
         'trimester': tri,
         'academicYear': this.academicYear.id,
         'method': 'start'
       }).then(function (response) {
-        _this.isSubmitting[tri] = false;
-
-        _this.initTrimester(tri, response.data.exam);
+        self.processResponse(response, tri);
+      })["catch"](function (error) {
+        self.handleError(error, tri);
       });
     },
     stopTrimester: function stopTrimester(tri) {
-      var _this2 = this;
+      var _this = this;
 
       if (this.isSubmitting[tri]) {
         return;
@@ -23182,13 +23268,13 @@ __webpack_require__.r(__webpack_exports__);
         'academicYear': this.academicYear.id,
         'method': 'stop'
       }).then(function (response) {
-        _this2.isSubmitting[tri] = false;
-
-        _this2.initTrimester(tri, response.data.exam);
+        _this.processResponse(response, tri);
+      })["catch"](function (err) {
+        this.handleError(err);
       });
     },
     publishTrimester: function publishTrimester(tri) {
-      var _this3 = this;
+      var _this2 = this;
 
       if (this.isSubmitting[tri]) {
         return;
@@ -23200,9 +23286,9 @@ __webpack_require__.r(__webpack_exports__);
         'academicYear': this.academicYear.id,
         'method': 'publish'
       }).then(function (response) {
-        _this3.isSubmitting[tri] = false;
-
-        _this3.initTrimester(tri, response.data.exam);
+        _this2.processResponse(response, tri);
+      })["catch"](function (err) {
+        this.handleError(err);
       });
     }
   },
@@ -23239,16 +23325,16 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   created: function created() {
-    var _this4 = this;
+    var _this3 = this;
 
     this.exams.forEach(function (exam) {
       var _exam$num_notes2;
 
-      _this4.trimestersStatus['trimester' + exam.trimester]['id'] = exam.id;
-      _this4.trimestersStatus['trimester' + exam.trimester]['numNotes'] = (_exam$num_notes2 = exam.num_notes) !== null && _exam$num_notes2 !== void 0 ? _exam$num_notes2 : 0;
-      _this4.trimestersStatus['trimester' + exam.trimester]['started'] = exam.started_at ? true : false;
-      _this4.trimestersStatus['trimester' + exam.trimester]['stopped'] = exam.stopped_at ? true : false;
-      _this4.trimestersStatus['trimester' + exam.trimester]['published'] = exam.published_at ? true : false;
+      _this3.trimestersStatus['trimester' + exam.trimester]['id'] = exam.id;
+      _this3.trimestersStatus['trimester' + exam.trimester]['numNotes'] = (_exam$num_notes2 = exam.num_notes) !== null && _exam$num_notes2 !== void 0 ? _exam$num_notes2 : 0;
+      _this3.trimestersStatus['trimester' + exam.trimester]['started'] = exam.started_at ? true : false;
+      _this3.trimestersStatus['trimester' + exam.trimester]['stopped'] = exam.stopped_at ? true : false;
+      _this3.trimestersStatus['trimester' + exam.trimester]['published'] = exam.published_at ? true : false;
     });
   }
 });
@@ -30215,28 +30301,59 @@ var _hoisted_43 = {
   "class": "pb-2 text-2xl\t"
 };
 var _hoisted_44 = {
+  "class": "flex justify-evenly mt-4"
+};
+var _hoisted_45 = {
   key: 2,
   "class": "overflow-x-auto\t"
 };
-var _hoisted_45 = {
+var _hoisted_46 = {
   "class": "mb-2"
 };
 
-var _hoisted_46 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("b", null, "Class:", -1
+var _hoisted_47 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("b", null, "Class:", -1
 /* HOISTED */
 );
 
-var _hoisted_47 = {
+var _hoisted_48 = {
   "class": "mb-4"
 };
 
-var _hoisted_48 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("b", null, "Nombres des étudiants:", -1
+var _hoisted_49 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("b", null, "Nombres des étudiants:", -1
 /* HOISTED */
 );
 
-var _hoisted_49 = {
+var _hoisted_50 = {
+  "class": "text-white text-center h-8 font-bold"
+};
+var _hoisted_51 = {
   "class": "flex justify-evenly mt-4"
 };
+var _hoisted_52 = {
+  "class": "animate-spin h-6 w-6 mr-3 text-warning-500",
+  viewBox: "0 0 24 24"
+};
+
+var _hoisted_53 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("circle", {
+  "class": "opacity-25",
+  cx: "12",
+  cy: "12",
+  r: "10",
+  stroke: "currentColor",
+  "stroke-width": "4"
+}, null, -1
+/* HOISTED */
+);
+
+var _hoisted_54 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("path", {
+  "class": "opacity-100",
+  fill: "currentColor",
+  d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+}, null, -1
+/* HOISTED */
+);
+
+var _hoisted_55 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Sauvegarder ");
 
 (0,vue__WEBPACK_IMPORTED_MODULE_0__.popScopeId)();
 
@@ -30298,8 +30415,8 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
               return $options.selectTrimester(1);
             }),
             "class": "text-white rounded-md font-medium bg-primary-500 py-2 px-4 hover:bg-primary-800 hover:ring hover:ring-primary-200 inline-flex justify-center items-center"
-          }, " Saisir ", 8
-          /* PROPS */
+          }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.trimestersStatus.trimester1.stopped ? 'Voir' : 'Saisir'), 9
+          /* TEXT, PROPS */
           , ["disabled"])];
         }),
         _: 1
@@ -30417,8 +30534,10 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
             }),
             footer: _withId(function () {
               return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", {
-                "class": [ true ? 'badge-secondary' : 0, "badge"]
-              }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)( true ? 'Non attribué' : 0))];
+                "class": [$data.classNotesCount[classe.id] < $props.classesStudents[classe.id].length ? 'badge-secondary' : 'badge-success', "badge"]
+              }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.classNotesCount[classe.id] < $props.classesStudents[classe.id].length ? 'Non attribué' : 'Complété'), 3
+              /* TEXT, CLASS */
+              )];
             }),
             _: 2
             /* DYNAMIC */
@@ -30431,11 +30550,20 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
         ))]);
       }), 256
       /* UNKEYED_FRAGMENT */
-      ))])) : $data.step === 'notes' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_44, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", _hoisted_45, [_hoisted_46, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)((_$data$selectedClass = $data.selectedClass) === null || _$data$selectedClass === void 0 ? void 0 : _$data$selectedClass.name), 1
+      )), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_44, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
+        onClick: _cache[4] || (_cache[4] = function ($event) {
+          $data.step = 'trimester';
+          $data.selectedTrimester = null;
+        }),
+        "class": "text-white py-4 w-1/3 rounded-md font-medium bg-warning-500 py-2 px-4 hover:bg-primary-800 hover:ring hover:ring-primary-200 inline-flex justify-center items-center"
+      }, " Annuler ")])])) : $data.step === 'notes' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_45, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", _hoisted_46, [_hoisted_47, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)((_$data$selectedClass = $data.selectedClass) === null || _$data$selectedClass === void 0 ? void 0 : _$data$selectedClass.name), 1
       /* TEXT */
-      )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", _hoisted_47, [_hoisted_48, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)((_$props$classesStuden = $props.classesStudents[$data.selectedClass.id].length) !== null && _$props$classesStuden !== void 0 ? _$props$classesStuden : 0), 1
+      )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", _hoisted_48, [_hoisted_49, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)((_$props$classesStuden = $props.classesStudents[$data.selectedClass.id].length) !== null && _$props$classesStuden !== void 0 ? _$props$classesStuden : 0), 1
       /* TEXT */
       )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_DataTable, {
+        rowGroupMode: "rowspan",
+        sortField: "group",
+        groupRowsBy: "group",
         responsiveLayout: "stack",
         breakpoint: "768px",
         value: $props.classesStudents[$data.selectedClass.id],
@@ -30444,6 +30572,22 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
       }, {
         "default": _withId(function () {
           return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Column, {
+            "class": "bg-gradient-to-b from-primary-500 to-success-200",
+            style: {
+              width: '60px'
+            },
+            field: "group",
+            header: "Groupe"
+          }, {
+            body: _withId(function (slotProps) {
+              return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_50, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(slotProps.data.group), 1
+              /* TEXT */
+              )];
+            }),
+            _: 1
+            /* STABLE */
+
+          }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Column, {
             style: {
               width: '150px'
             },
@@ -30472,15 +30616,23 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
             exportable: false
           }, {
             body: _withId(function (slotProps) {
-              return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
-                type: "text",
-                "class": "form-control ",
+              return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_InputNumber, {
+                inputClass: "form-control",
+                readonly: $data.trimestersStatus['trimester' + $data.selectedTrimester].stopped,
+                modelValue: slotProps.data.note_eval,
                 "onUpdate:modelValue": function onUpdateModelValue($event) {
                   return slotProps.data.note_eval = $event;
-                }
+                },
+                min: 0,
+                max: 20,
+                useGrouping: false,
+                locale: "ar-DZ",
+                mode: "decimal",
+                minFractionDigits: 2,
+                maxFractionDigits: 2
               }, null, 8
               /* PROPS */
-              , ["onUpdate:modelValue"]), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, slotProps.data.note_eval]])];
+              , ["readonly", "modelValue", "onUpdate:modelValue"])];
             }),
             _: 1
             /* STABLE */
@@ -30494,15 +30646,23 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
             exportable: false
           }, {
             body: _withId(function (slotProps) {
-              return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
-                type: "text",
-                "class": "form-control w-4",
+              return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_InputNumber, {
+                inputClass: "form-control",
+                readonly: $data.trimestersStatus['trimester' + $data.selectedTrimester].stopped,
+                modelValue: slotProps.data.note_devoir,
                 "onUpdate:modelValue": function onUpdateModelValue($event) {
                   return slotProps.data.note_devoir = $event;
-                }
+                },
+                min: 0,
+                max: 20,
+                useGrouping: false,
+                locale: "ar-DZ",
+                mode: "decimal",
+                minFractionDigits: 2,
+                maxFractionDigits: 2
               }, null, 8
               /* PROPS */
-              , ["onUpdate:modelValue"]), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, slotProps.data.note_devoir]])];
+              , ["readonly", "modelValue", "onUpdate:modelValue"])];
             }),
             _: 1
             /* STABLE */
@@ -30517,6 +30677,8 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
           }, {
             body: _withId(function (slotProps) {
               return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_InputNumber, {
+                inputClass: "form-control",
+                readonly: $data.trimestersStatus['trimester' + $data.selectedTrimester].stopped,
                 modelValue: slotProps.data.note_exam,
                 "onUpdate:modelValue": function onUpdateModelValue($event) {
                   return slotProps.data.note_exam = $event;
@@ -30530,7 +30692,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
                 maxFractionDigits: 2
               }, null, 8
               /* PROPS */
-              , ["modelValue", "onUpdate:modelValue"])];
+              , ["readonly", "modelValue", "onUpdate:modelValue"])];
             }),
             _: 1
             /* STABLE */
@@ -30539,20 +30701,21 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
             style: {
               width: '250px'
             },
-            field: "note",
+            field: "remarque",
             header: "Remarque",
             exportable: false
           }, {
             body: _withId(function (slotProps) {
               return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
                 type: "text",
+                readonly: $data.trimestersStatus['trimester' + $data.selectedTrimester].stopped,
                 "class": "form-control w-4",
                 "onUpdate:modelValue": function onUpdateModelValue($event) {
-                  return slotProps.data.note = $event;
+                  return slotProps.data.remarque = $event;
                 }
               }, null, 8
               /* PROPS */
-              , ["onUpdate:modelValue"]), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, slotProps.data.note]])];
+              , ["readonly", "onUpdate:modelValue"]), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, slotProps.data.remarque]])];
             }),
             _: 1
             /* STABLE */
@@ -30564,30 +30727,28 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
 
       }, 8
       /* PROPS */
-      , ["value"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_49, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
-        onClick: _cache[4] || (_cache[4] = function ($event) {
+      , ["value"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_51, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
+        disabled: $data.isSubmitting[$data.selectedClass.id],
+        onClick: _cache[5] || (_cache[5] = function ($event) {
           return $options.submitNotes();
         }),
         "class": " mr-4 w-1/3 py-4 text-white rounded-md font-medium bg-primary-500 py-2 px-4 hover:bg-primary-800 hover:ring hover:ring-primary-200 inline-flex justify-center items-center"
-      }, " Save "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
-        onClick: _cache[5] || (_cache[5] = function () {}),
+      }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)(((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("svg", _hoisted_52, [_hoisted_53, _hoisted_54], 512
+      /* NEED_PATCH */
+      )), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $data.isSubmitting[$data.selectedClass.id]]]), _hoisted_55], 8
+      /* PROPS */
+      , ["disabled"]), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, !$data.trimestersStatus['trimester' + $data.selectedTrimester].stopped]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
+        onClick: _cache[6] || (_cache[6] = function ($event) {
+          $data.step = 'class';
+          $data.selectedClass = null;
+        }),
         "class": "text-white py-4 w-1/3 rounded-md font-medium bg-warning-500 py-2 px-4 hover:bg-primary-800 hover:ring hover:ring-primary-200 inline-flex justify-center items-center"
-      }, " Cancel ")])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)];
+      }, " Annuler ")])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)];
     }),
     _: 1
     /* STABLE */
 
-  })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
-    onClick: _cache[6] || (_cache[6] = function ($event) {
-      return $data.step = 'class';
-    }),
-    "class": "rounded-full text-info-500 font-medium hover:text-info-800  focus:text-info-800 p-0 inline-flex justify-center items-center"
-  }, " step2 "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
-    onClick: _cache[7] || (_cache[7] = function ($event) {
-      return $data.step = 'trimester';
-    }),
-    "class": "rounded-full text-info-500 font-medium hover:text-info-800  focus:text-info-800 p-0 inline-flex justify-center items-center"
-  }, " step1 ")])], 64
+  })])])], 64
   /* STABLE_FRAGMENT */
   );
 });
@@ -31062,7 +31223,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
         onClick: _cache[1] || (_cache[1] = function ($event) {
           return $options.startTrimester(1);
         }),
-        "class": "rounded-full text-success-500 font-medium mr-4 hover:text-primary-200  focus:text-primary-800 p-0 inline-flex justify-center items-center"
+        "class": "rounded-full text-success-500 font-medium mr-4 hover:text-success-800  active:text-primary-800 p-0 inline-flex justify-center items-center"
       }, [_hoisted_17], 8
       /* PROPS */
       , ["disabled"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
@@ -31070,7 +31231,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
         onClick: _cache[2] || (_cache[2] = function ($event) {
           return $options.stopTrimester(1);
         }),
-        "class": "rounded-full text-danger-500 font-medium mr-4 hover:text-danger-800  focus:text-danger-800 p-0 inline-flex justify-center items-center"
+        "class": "rounded-full text-danger-500 font-medium mr-4 hover:text-danger-800  active:text-danger-800 p-0 inline-flex justify-center items-center"
       }, [_hoisted_18], 8
       /* PROPS */
       , ["disabled"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
@@ -31078,7 +31239,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
         onClick: _cache[3] || (_cache[3] = function ($event) {
           return $options.publishTrimester(1);
         }),
-        "class": "rounded-full text-info-500 font-medium hover:text-info-800  focus:text-info-800 p-0 inline-flex justify-center items-center"
+        "class": "rounded-full text-info-500 font-medium hover:text-info-800  active:text-info-800 p-0 inline-flex justify-center items-center"
       }, [_hoisted_19], 8
       /* PROPS */
       , ["disabled"])];
@@ -31117,7 +31278,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
         onClick: _cache[4] || (_cache[4] = function ($event) {
           return $options.startTrimester(2);
         }),
-        "class": "rounded-full text-success-500 font-medium mr-4 hover:text-primary-200  focus:text-primary-800 p-0 inline-flex justify-center items-center"
+        "class": "rounded-full text-success-500 font-medium mr-4 hover:text-success-00  active:text-success-800 p-0 inline-flex justify-center items-center"
       }, [_hoisted_32], 8
       /* PROPS */
       , ["disabled"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
@@ -31125,7 +31286,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
         onClick: _cache[5] || (_cache[5] = function ($event) {
           return $options.stopTrimester(2);
         }),
-        "class": "rounded-full text-danger-500 font-medium mr-4 hover:text-danger-800  focus:text-danger-800 p-0 inline-flex justify-center items-center"
+        "class": "rounded-full text-danger-500 font-medium mr-4 hover:text-danger-800  active:text-danger-800 p-0 inline-flex justify-center items-center"
       }, [_hoisted_33], 8
       /* PROPS */
       , ["disabled"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
@@ -31133,7 +31294,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
         onClick: _cache[6] || (_cache[6] = function ($event) {
           return $options.publishTrimester(2);
         }),
-        "class": "rounded-full text-info-500 font-medium hover:text-info-800  focus:text-info-800 p-0 inline-flex justify-center items-center"
+        "class": "rounded-full text-info-500 font-medium hover:text-info-800  active:text-info-800 p-0 inline-flex justify-center items-center"
       }, [_hoisted_34], 8
       /* PROPS */
       , ["disabled"])];
@@ -31174,7 +31335,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
         onClick: _cache[7] || (_cache[7] = function ($event) {
           return $options.startTrimester(3);
         }),
-        "class": "rounded-full text-success-500 font-medium mr-4 hover:text-primary-200  focus:text-primary-800 p-0 inline-flex justify-center items-center"
+        "class": "rounded-full text-success-500 font-medium mr-4 hover:text-success-200  active:text-success-800 p-0 inline-flex justify-center items-center"
       }, [_hoisted_49], 8
       /* PROPS */
       , ["disabled"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
@@ -31182,7 +31343,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
         onClick: _cache[8] || (_cache[8] = function ($event) {
           return $options.stopTrimester(3);
         }),
-        "class": "rounded-full text-danger-500 font-medium mr-4 hover:text-danger-800  focus:text-danger-800 p-0 inline-flex justify-center items-center"
+        "class": "rounded-full text-danger-500 font-medium mr-4 hover:text-danger-800  active:text-danger-800 p-0 inline-flex justify-center items-center"
       }, [_hoisted_50], 8
       /* PROPS */
       , ["disabled"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
@@ -31190,7 +31351,7 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
         onClick: _cache[9] || (_cache[9] = function ($event) {
           return $options.publishTrimester(3);
         }),
-        "class": "rounded-full text-info-500 font-medium hover:text-info-800  focus:text-info-800 p-0 inline-flex justify-center items-center"
+        "class": "rounded-full text-info-500 font-medium hover:text-info-800  active:text-info-800 p-0 inline-flex justify-center items-center"
       }, [_hoisted_51], 8
       /* PROPS */
       , ["disabled"])];
@@ -35858,6 +36019,97 @@ var el = document.getElementById('app');
         month: '2-digit',
         year: 'numeric'
       });
+    },
+    handleFetchError: function handleFetchError(error) {
+      var customMessages = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      var errorResponse = {
+        isValidationError: false,
+        message: 'Network Error.',
+        type: 'error',
+        errors: [],
+        timeout: 2500
+      };
+      var ErrorMessages = {
+        400: 'Il y a eu un problème lors du traitement de votre demande',
+        // not being used currently
+        401: 'Non autorisé, vous n\'êtes pas autorisé',
+        403: 'Désolé, vous n\'êtes pas autorisé pour cette action',
+        404: 'La route API est manquante ou indéfinie',
+        405: 'Méthode de routage API non autorisée',
+        500: 'Erreur de serveur, veuillez réessayer plus tard',
+        request: 'Il y a un problème avec nos serveurs, veuillez réessayer plus tard',
+        other: 'Il y a eu un problème avec votre demande, veuillez réessayer plus tard'
+      };
+
+      if (Object.prototype.hasOwnProperty.call(customMessages, '400')) {
+        ErrorMessages['400'] = customMessages['400'];
+      }
+
+      if (Object.prototype.hasOwnProperty.call(customMessages, '401')) {
+        ErrorMessages['401'] = customMessages['401'];
+      }
+
+      if (Object.prototype.hasOwnProperty.call(customMessages, '403')) {
+        ErrorMessages['403'] = customMessages['403'];
+      }
+
+      if (Object.prototype.hasOwnProperty.call(customMessages, '404')) {
+        ErrorMessages['404'] = customMessages['404'];
+      }
+
+      if (Object.prototype.hasOwnProperty.call(customMessages, '405')) {
+        ErrorMessages['405'] = customMessages['405'];
+      }
+
+      if (Object.prototype.hasOwnProperty.call(customMessages, '500')) {
+        ErrorMessages['500'] = customMessages['500'];
+      }
+
+      if (Object.prototype.hasOwnProperty.call(customMessages, 'request')) {
+        ErrorMessages.request = customMessages.request;
+      }
+
+      if (Object.prototype.hasOwnProperty.call(customMessages, 'other')) {
+        ErrorMessages.other = customMessages.other;
+      }
+
+      if (error && error.response) {
+        // client received an error response (5xx, 4xx)
+        if (error.response.status === 400) {
+          // console.log('unauthorized, logging out ...');
+          errorResponse.message = error.response.data.message;
+        } else if (error.response.status === 401) {
+          // console.log('unauthorized, logging out ...');
+          errorResponse.message = ErrorMessages['401'];
+        } else if (error.response.status === 403) {
+          errorResponse.message = ErrorMessages['403'];
+        } else if (error.response.status === 404) {
+          errorResponse.message = ErrorMessages['404'];
+        } else if (error.response.status === 422) {
+          errorResponse.isValidationError = true;
+          errorResponse.errors = error.response.data.errors;
+          errorResponse.message = error.response.data.message;
+        } else if (error.response.status === 405) {
+          errorResponse.message = ErrorMessages['405'];
+        } else if (error.response.status >= 500) {
+          errorResponse.message = ErrorMessages['500'];
+        } else if (error.response.status === 429) {}
+      } else if (error && error.request) {
+        errorResponse.message = ErrorMessages.request; // client never received a response, or request never left
+      } else if (error instanceof Error) {
+        errorResponse.message = error.message;
+      } else if (typeof error === 'string') {
+        errorResponse.message = error;
+      } else {
+        //this.$buefy.toast.open({
+        //  message: 'Going Too Fast hun?, Please Slow Down',
+        // type: 'is-danger',
+        // })
+        // anything else
+        errorResponse.message = ErrorMessages.other;
+      }
+
+      return errorResponse;
     }
   }
 }).use(_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.plugin).use(primevue_config__WEBPACK_IMPORTED_MODULE_3__.default).use(primevue_toastservice__WEBPACK_IMPORTED_MODULE_4__.default).mount(el);
@@ -36047,7 +36299,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "a.dropdown-item[data-v-62cbac59]:active{\n  background-color: #9e95f5;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "a.dropdown-item[data-v-62cbac59]:active{\n  background-color: #9e95f5;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -36071,7 +36323,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".click-card[data-v-37096330]:hover{\n  cursor: pointer;\n  border: 1px solid #7367f0!important;\n  box-shadow: 0 0 10px 1px rgba(115, 103, 240, 0.7);\n}\n[data-v-37096330] .p-card-title{\n  height: 45px;\n  font-size: 1rem;\n  border: 1px solid rgba(34,41,47,.125);\n  border-width: 0 0 1px;\n  text-align: center;\n  display: flex;\n  align-items: center; /* Vertical center alignment */\n  justify-content: center; /* Horizontal center alignment */\n}\n[data-v-37096330] .p-card-content{\n  text-align: center;\n}\n[data-v-37096330] .p-card-footer{\n  height: 45px;\n  font-size: 1rem;\n  border: 1px solid rgba(34,41,47,.125);\n  border-width: 1px 0 0 0;\n  text-align: center;\n  display: flex;\n  align-items: center; /* Vertical center alignment */\n  justify-content: center; /* Horizontal center alignment */\n  color: #fff;\n}\n.mode-fade-enter-active[data-v-37096330], .mode-fade-leave-active[data-v-37096330] {\n  transition: opacity .5s ease\n}\n.mode-fade-enter-from[data-v-37096330], .mode-fade-leave-to[data-v-37096330] {\n  opacity: 0\n}\n.form-control[data-v-37096330]{\n  width: 10rem;\n}\n@media (min-width: 768px){\n.form-control[data-v-37096330]{\n    width: 100%;\n}\n}\n[data-v-37096330] .p-inputnumber-input{\n  width: 10rem;\n}\n@media (min-width: 768px){\n[data-v-37096330] .p-inputnumber-input{\n    width: 100%;\n}\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".click-card[data-v-37096330]:hover{\n  cursor: pointer;\n  border: 1px solid #7367f0!important;\n  box-shadow: 0 0 10px 1px rgba(115, 103, 240, 0.7);\n}\n[data-v-37096330] .p-card-title{\n  height: 45px;\n  font-size: 1rem;\n  border: 1px solid rgba(34,41,47,.125);\n  border-width: 0 0 1px;\n  text-align: center;\n  display: flex;\n  align-items: center; /* Vertical center alignment */\n  justify-content: center; /* Horizontal center alignment */\n}\n[data-v-37096330] .p-card-content{\n  text-align: center;\n}\n[data-v-37096330] .p-card-footer{\n  height: 45px;\n  font-size: 1rem;\n  border: 1px solid rgba(34,41,47,.125);\n  border-width: 1px 0 0 0;\n  text-align: center;\n  display: flex;\n  align-items: center; /* Vertical center alignment */\n  justify-content: center; /* Horizontal center alignment */\n  color: #fff;\n}\n.mode-fade-enter-active[data-v-37096330], .mode-fade-leave-active[data-v-37096330] {\n  transition: opacity .5s ease\n}\n.mode-fade-enter-from[data-v-37096330], .mode-fade-leave-to[data-v-37096330] {\n  opacity: 0\n}\n.form-control[data-v-37096330]{\n  width: 10rem;\n}\n@media (min-width: 768px){\n.form-control[data-v-37096330]{\n    width: 100%;\n}\n}\n[data-v-37096330] .p-inputnumber-input{\n  width: 10rem;\n}\n@media (min-width: 768px){\n[data-v-37096330] .p-inputnumber-input{\n    width: 100%;\n}\n}\r\n\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -36119,7 +36371,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "#sidebar[data-v-6a63e488]{\n  width: 260px;\n  max-width: 260px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "#sidebar[data-v-6a63e488]{\n  width: 260px;\n  max-width: 260px;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -36143,7 +36395,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "[data-v-2d98b894] .p-card-title{\n  height: 45px;\n  font-size: 1rem;\n  border: 1px solid rgba(34,41,47,.125);\n  border-width: 0 0 1px;\n  text-align: center;\n  display: flex;\n  align-items: center; /* Vertical center alignment */\n  justify-content: center; /* Horizontal center alignment */\n}\n[data-v-2d98b894] .p-card-footer{\n  height: 45px;\n  font-size: 1rem;\n  border: 1px solid rgba(34,41,47,.125);\n  border-width: 1px 0 0 0;\n  text-align: center;\n  display: flex;\n  align-items: center; /* Vertical center alignment */\n  justify-content: center; /* Horizontal center alignment */\n  color: #fff;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "[data-v-2d98b894] .p-card-title{\n  height: 45px;\n  font-size: 1rem;\n  border: 1px solid rgba(34,41,47,.125);\n  border-width: 0 0 1px;\n  text-align: center;\n  display: flex;\n  align-items: center; /* Vertical center alignment */\n  justify-content: center; /* Horizontal center alignment */\n}\n[data-v-2d98b894] .p-card-footer{\n  height: 45px;\n  font-size: 1rem;\n  border: 1px solid rgba(34,41,47,.125);\n  border-width: 1px 0 0 0;\n  text-align: center;\n  display: flex;\n  align-items: center; /* Vertical center alignment */\n  justify-content: center; /* Horizontal center alignment */\n  color: #fff;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -36191,7 +36443,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".bg-gray-100[data-v-317d1a6e] {\n  background-color: #f7fafc;\n  background-color: rgba(247, 250, 252, var(--tw-bg-opacity));\n}\n.border-gray-200[data-v-317d1a6e] {\n  border-color: #edf2f7;\n  border-color: rgba(237, 242, 247, var(--tw-border-opacity));\n}\n.text-gray-400[data-v-317d1a6e] {\n  color: #cbd5e0;\n  color: rgba(203, 213, 224, var(--tw-text-opacity));\n}\n.text-gray-500[data-v-317d1a6e] {\n  color: #a0aec0;\n  color: rgba(160, 174, 192, var(--tw-text-opacity));\n}\n.text-gray-600[data-v-317d1a6e] {\n  color: #718096;\n  color: rgba(113, 128, 150, var(--tw-text-opacity));\n}\n.text-gray-700[data-v-317d1a6e] {\n  color: #4a5568;\n  color: rgba(74, 85, 104, var(--tw-text-opacity));\n}\n.text-gray-900[data-v-317d1a6e] {\n  color: #1a202c;\n  color: rgba(26, 32, 44, var(--tw-text-opacity));\n}\n@media (prefers-color-scheme: dark) {\n.dark\\:bg-gray-800[data-v-317d1a6e] {\n    background-color: #2d3748;\n    background-color: rgba(45, 55, 72, var(--tw-bg-opacity));\n}\n.dark\\:bg-gray-900[data-v-317d1a6e] {\n    background-color: #1a202c;\n    background-color: rgba(26, 32, 44, var(--tw-bg-opacity));\n}\n.dark\\:border-gray-700[data-v-317d1a6e] {\n    border-color: #4a5568;\n    border-color: rgba(74, 85, 104, var(--tw-border-opacity));\n}\n.dark\\:text-white[data-v-317d1a6e] {\n    color: #fff;\n    color: rgba(255, 255, 255, var(--tw-text-opacity));\n}\n.dark\\:text-gray-400[data-v-317d1a6e] {\n    color: #cbd5e0;\n    color: rgba(203, 213, 224, var(--tw-text-opacity));\n}\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".bg-gray-100[data-v-317d1a6e] {\n  background-color: #f7fafc;\n  background-color: rgba(247, 250, 252, var(--tw-bg-opacity));\n}\n.border-gray-200[data-v-317d1a6e] {\n  border-color: #edf2f7;\n  border-color: rgba(237, 242, 247, var(--tw-border-opacity));\n}\n.text-gray-400[data-v-317d1a6e] {\n  color: #cbd5e0;\n  color: rgba(203, 213, 224, var(--tw-text-opacity));\n}\n.text-gray-500[data-v-317d1a6e] {\n  color: #a0aec0;\n  color: rgba(160, 174, 192, var(--tw-text-opacity));\n}\n.text-gray-600[data-v-317d1a6e] {\n  color: #718096;\n  color: rgba(113, 128, 150, var(--tw-text-opacity));\n}\n.text-gray-700[data-v-317d1a6e] {\n  color: #4a5568;\n  color: rgba(74, 85, 104, var(--tw-text-opacity));\n}\n.text-gray-900[data-v-317d1a6e] {\n  color: #1a202c;\n  color: rgba(26, 32, 44, var(--tw-text-opacity));\n}\n@media (prefers-color-scheme: dark) {\n.dark\\:bg-gray-800[data-v-317d1a6e] {\n    background-color: #2d3748;\n    background-color: rgba(45, 55, 72, var(--tw-bg-opacity));\n}\n.dark\\:bg-gray-900[data-v-317d1a6e] {\n    background-color: #1a202c;\n    background-color: rgba(26, 32, 44, var(--tw-bg-opacity));\n}\n.dark\\:border-gray-700[data-v-317d1a6e] {\n    border-color: #4a5568;\n    border-color: rgba(74, 85, 104, var(--tw-border-opacity));\n}\n.dark\\:text-white[data-v-317d1a6e] {\n    color: #fff;\n    color: rgba(255, 255, 255, var(--tw-text-opacity));\n}\n.dark\\:text-gray-400[data-v-317d1a6e] {\n    color: #cbd5e0;\n    color: rgba(203, 213, 224, var(--tw-text-opacity));\n}\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

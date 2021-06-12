@@ -20,13 +20,6 @@ class TeacherController extends Controller
     //
     public function indexExam(){
         $academicYear= AppHelper::getAcademicYear();
-        $count = DB::table('classes')
-            ->join('subjects',function ($join) {
-                $join->on('subjects.level', 'like',DB::raw("CONCAT('%', classes.level, '%')"))
-                    ->where('subjects.status','=','1')
-                    ->whereNull('subjects.deleted_at');
-            })
-            ->count();
         if(!isset($academicYear)){
             session()->flash("toast",['type'=>'error', 'summary'=>'L\'opération a échoué!','detail' => 'L\'année académique n\'est pas encore fixée! Veuillez aller dans les paramètres et le définir.']);
             return redirect()->route('teacher.exam-notes');
@@ -48,6 +41,7 @@ class TeacherController extends Controller
             ->whereNull('classes.deleted_at')
             ->select('classes.*')
             ->get();
+        $count = $classes->count();
         $subjects=Subject::where('status','=','1')->get();
         $levelsSubjects=[];
         foreach ($subjects as $subject) {
@@ -78,7 +72,7 @@ class TeacherController extends Controller
                         ->where('exams_notes.class_id','=',$class->id)
                         ->where('exams_notes.subject_id','=',$subject->id)
                         ->where('exams_notes.teacher_id',$teacher->id);})
-                ->select('students.*','registrations.regi_no','exams_notes.id as note_id','exams_notes.note_eval','exams_notes.note_devoir','exams_notes.note_exam','exams_notes.remarque')
+                ->select('students.*','registrations.group','registrations.regi_no','exams_notes.id as note_id','exams_notes.note_eval','exams_notes.note_devoir','exams_notes.note_exam','exams_notes.remarque')
                 ->get();
         }
         //dd($classesStudents,$subject,$classes,$levelsSubjects,$teacher);
@@ -89,8 +83,11 @@ class TeacherController extends Controller
     public function updateExamNotes(Request $request){
         $academicYear= AppHelper::getAcademicYear();
         if(!isset($academicYear)){
-            session()->flash("toast",['type'=>'error', 'summary'=>'L\'opération a échoué!','detail' => 'L\'année académique n\'est pas encore fixée! Veuillez aller dans les paramètres et le définir.']);
-            return redirect()->route('exam.index');
+
+            return response()->json([
+                'toast' => ['type'=>'error', 'summary'=>'L\'opération a échoué!','detail' => 'L\'année académique n\'est pas encore fixée! Veuillez aller dans les paramètres et le définir.'],
+                'type' => 'error',
+            ]);
         }
         $validated = $request->validate([
             'trimester' => 'required|in:1,2,3',
@@ -101,27 +98,74 @@ class TeacherController extends Controller
             'examNotes.*.note_eval' => 'required|numeric|min:0|max:20',
             'examNotes.*.note_devoir' => 'required|numeric|min:0|max:20',
             'examNotes.*.note_exam' => 'required|numeric|min:0|max:20',
-            'examNotes.*.note' => 'required'
+            'examNotes.*.remarque' => 'required'
         ]);
         $user = Auth::user();
         $teacher =  Teacher::where('status','1')->where('user_id',$user->id)->first();
-        $exam =Exam::where('status','1')->where('trimester',$request->input('trimester'))->where('id',$request->input('id'))
+        $exam =Exam::where('status','1')->where('trimester',$request->input('trimester'))->where('id',$request->input('exam'))
             ->where('academic_year_id',$academicYear->id)->first();
-        if(!isset($exam) | $exam->started_at === null | $exam->stopped_at !== null){
-
+        if(!isset($exam) || $exam->started_at === null || $exam->stopped_at !== null){
+            return response()->json([
+                'toast' => ['type'=>'error', 'summary'=>'L\'opération a échoué!','detail' => "notes soumettre à l'examen du trimestre $exam->trimester n'est pas autorisé, s'il vous plaît vérifier avec l'administration."],
+                'type' => 'error',
+            ]);
         }
-        $table->unsignedInteger('student_id')->nullable();
-        $table->unsignedInteger('teacher_id')->nullable();
-        $table->double('note_eval');
-        $table->double('note_devoir');
-        $table->double('note_exam');
-        $table->string('remarque');
+        $class = SClass::where('status','1')->where('id',$request->input('class'))->first();
+        if(!$class){
+            return response()->json([
+                'toast' => ['type'=>'error', 'summary'=>'L\'opération a échoué!','detail' => "Nous n'avons pas pu trouver cette classe."],
+                'type' => 'error',
+            ]);
+        }
         $examNotes=[];
+        $countExisting=0;
+        $countd=0;
         foreach ($request->input('examNotes') as $studentNote){
-            $examNotes[]=['academic_year_id'=>$academicYear->id,'exam_id'=>$exam->id,'trimester'=>$exam->trimester,
-                'class_id'=>$request->input('class'),'subject_id'=>$request->input('class'),];
-        }
-        ExamNote::upsert();
+            $sNote = ExamNote::where('academic_year_id',$academicYear->id)
+                ->where('exam_id',$exam->id)->where('trimester',$exam->trimester)
+                ->where('subject_id',$teacher->subject_id)
+                ->where('student_id',$studentNote['id'])->first();
+            if($sNote){
+                $countExisting++;
+                if($sNote->teacher_id !== $teacher->id || $sNote->class_id !== $request->input('class')){
+                    $sNote->delete();
+                    $countd++;
+                    ExamNote::create([
+                        'academic_year_id'=>$academicYear->id,'exam_id'=>$exam->id,'trimester'=>$exam->trimester,
+                        'class_id'=> $request->input('class'),'subject_id'=>$teacher->subject_id,
+                        'student_id'=> $studentNote['id'],
+                        'teacher_id'=> $teacher->id,
+                        'note_eval' => $studentNote['note_eval'],
+                        'note_devoir' => $studentNote['note_devoir'],
+                        'note_exam' => $studentNote['note_exam'],
+                        'remarque' => $studentNote['remarque']]);
 
+                }else{
+                    $sNote->note_eval = $studentNote['note_eval'];
+                    $sNote->note_devoir = $studentNote['note_devoir'];
+                    $sNote->note_exam = $studentNote['note_exam'];
+                    $sNote->remarque = $studentNote['remarque'];
+                    $sNote->save();
+                }
+            }else{
+                ExamNote::create([
+                    'academic_year_id'=>$academicYear->id,'exam_id'=>$exam->id,'trimester'=>$exam->trimester,
+                    'class_id'=>$request->input('class'),'subject_id'=>$teacher->subject_id,'student_id'=>$studentNote['id'],
+                    'teacher_id'=>$teacher->id,
+                    'note_eval' =>$studentNote['note_eval'],
+                    'note_devoir' =>$studentNote['note_devoir'],
+                    'note_exam' =>$studentNote['note_exam'],
+                    'remarque' =>$studentNote['remarque']
+                ]);
+            }
+           }
+        if($countExisting === 0){
+            Exam::find($exam->id)->increment('num_notes', 1);
+        }
+        //$exNotes=ExamNote::upsert($examNotes,['id'],['note_exam','note_eval','note_exam','remarque','teacher_id']);
+        return response()->json([
+            'toast' => ['type'=>'success', 'summary'=>'l\'opération a réussi!','detail' => "les notes de la classe $class->name pour le trimestre $exam->trimester ont été soumises avec succès."],
+            'type' => 'success',
+        ]);
     }
 }

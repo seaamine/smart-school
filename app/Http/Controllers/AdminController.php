@@ -440,8 +440,12 @@ class AdminController extends Controller
     public function updateExam(Request $request){
         $academicYear= AppHelper::getAcademicYear();
         if(!isset($academicYear)){
-            session()->flash("toast",['type'=>'error', 'summary'=>'L\'opération a échoué!','detail' => 'L\'année académique n\'est pas encore fixée! Veuillez aller dans les paramètres et le définir.']);
-            return redirect()->route('exam.index');
+            //session()->flash("toast",['type'=>'error', 'summary'=>'L\'opération a échoué!','detail' => 'L\'année académique n\'est pas encore fixée! Veuillez aller dans les paramètres et le définir.']);
+            //return redirect()->route('exam.index');
+            return response()->json([
+                'toast' => ['type'=>'error', 'summary'=>'L\'opération a échoué!','detail' => 'L\'année académique n\'est pas encore fixée! Veuillez aller dans les paramètres et le définir.'],
+                'type' => 'error',
+            ]);
         }
         $validated = $request->validate([
             'trimester' => 'required|in:1,2,3',
@@ -451,24 +455,33 @@ class AdminController extends Controller
         $method = $request->input('method');
         if($method === 'start'){
             $exam = Exam::updateOrCreate(
-                ['trimester' => $request->input('trimester'), 'academic_year_id' => $academicYear->id,'status'=>'1',],
+                ['trimester' => $request->input('trimester'), 'academic_year_id' => $academicYear->id,'status'=>'1'],
                 ['started_at' => now(),'stopped_at'=>null]
             );
+            $msg = "l'examen du trimestre $exam->trimester est commencé pour l'année académique $academicYear->title";
         }elseif ($method === 'stop'){
             $exam = Exam::updateOrCreate(
                 ['trimester' => $request->input('trimester'), 'academic_year_id' => $academicYear->id,'status'=>'1',],
                 ['stopped_at'=>now()]
             );
+            $msg = "l'examen du trimestre $exam->trimester est arrêté pour l'année académique $academicYear->title";
+
         }elseif ($method === 'publish'){
             $exam = Exam::updateOrCreate(
                 ['trimester' => $request->input('trimester'), 'academic_year_id' => $academicYear->id,'status'=>'1',],
                 ['published_at' => now()]
             );
+            $msg = "l'examen du trimestre $exam->trimester est éte publié pour l'année académique $academicYear->title";
+
         }else{
-            session()->flash("toast",['type'=>'error', 'summary'=>'L\'opération a échoué!','detail' => 'Error!']);
-            return redirect()->route('exam.index');
+            return response()->json([
+                'toast' => ['type'=>'error', 'summary'=>'L\'opération a échoué!','detail' => 'Error!'],
+                'type' => 'error',
+            ]);
         }
         return response()->json([
+            'type' => 'success',
+            'toast' => ['type'=>'error', 'summary'=>'l\'opération a réussi','detail' => $msg],
             'exam' => $exam,
         ]);
         return redirect()->route('exam.index');

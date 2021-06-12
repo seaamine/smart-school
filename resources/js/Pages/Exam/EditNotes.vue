@@ -43,7 +43,7 @@
                             </template>
                             <template #footer>
                                 <button :disabled="!trimestersStatus.trimester1.started || trimestersStatus.trimester1.stopped" @click="selectTrimester(1)" class="text-white rounded-md font-medium bg-primary-500 py-2 px-4 hover:bg-primary-800 hover:ring hover:ring-primary-200 inline-flex justify-center items-center">
-                                    Saisir
+                                    {{ trimestersStatus.trimester1.stopped ? 'Voir' : 'Saisir'}}
                                 </button>
                             </template>
                         </Card>
@@ -145,15 +145,28 @@
                                 <span class="pb-2 text-2xl	">{{classe.name}}</span>
                             </template>
                             <template #footer>
-                                <span :class=" 1> 0 ? 'badge-secondary' : 'badge-success'" class="badge">{{1> 0 ? 'Non attribué': 'Complété'}}</span>
+                                <span :class=" classNotesCount[classe.id] < classesStudents[classe.id].length ? 'badge-secondary' : 'badge-success'" class="badge">{{classNotesCount[classe.id] < classesStudents[classe.id].length  ? 'Non attribué': 'Complété'}}</span>
                             </template>
                         </Card>
+                    </div>
+                    <div class="flex justify-evenly mt-4">
+                        <button @click="step='trimester';selectedTrimester=null;" class="text-white py-4 w-1/3 rounded-md font-medium bg-warning-500 py-2 px-4 hover:bg-primary-800 hover:ring hover:ring-primary-200 inline-flex justify-center items-center">
+                            Annuler
+                        </button>
                     </div>
                 </div>
                 <div class="overflow-x-auto	" v-else-if="step === 'notes'">
                     <p class="mb-2"><b>Class:</b> {{selectedClass?.name}}</p>
                     <p class="mb-4"><b>Nombres des étudiants:</b> {{classesStudents[selectedClass.id].length ?? 0}}</p>
-                    <DataTable responsiveLayout="stack" breakpoint="768px" :value="classesStudents[selectedClass.id]" dataKey="id" class="p-datatable-sm">
+                    <DataTable rowGroupMode="rowspan"  sortField="group"  groupRowsBy="group" responsiveLayout="stack" breakpoint="768px" :value="classesStudents[selectedClass.id]" dataKey="id" class="p-datatable-sm">
+                        <Column class="bg-gradient-to-b from-primary-500 to-success-200" :style="{width:'60px'}" field="group" header="Groupe">
+                            <template #body="slotProps">
+                                <div class="text-white text-center h-8 font-bold">
+                                    {{slotProps.data.group}}
+                                </div>
+                            </template>
+                        </Column>
+
                         <Column :style="{width:'150px'}" field="regi_no" header="N d'enregistrement"></Column>
                         <Column :style="{width:'200px'}" header="nom et prénom">
                             <template #body="slotProps">
@@ -162,32 +175,35 @@
                         </Column>
                         <Column :style="{width:'80px'}" field="note_eval" header="Evaluation" :exportable="false">
                             <template #body="slotProps">
-                                <input type="text" class="form-control " v-model="slotProps.data.note_eval" />
+                                <InputNumber inputClass="form-control" :readonly="trimestersStatus['trimester'+selectedTrimester].stopped" v-model="slotProps.data.note_eval" :min="0" :max="20" :useGrouping="false" locale="ar-DZ" mode="decimal" :minFractionDigits="2" :maxFractionDigits="2" />
                             </template>
                         </Column>
                         <Column :style="{width:'80px'}" field="note_devoir" header="Devoir" :exportable="false">
                             <template #body="slotProps">
-                                <input type="text" class="form-control w-4" v-model="slotProps.data.note_devoir" />
+                                <InputNumber inputClass="form-control" :readonly="trimestersStatus['trimester'+selectedTrimester].stopped" v-model="slotProps.data.note_devoir" :min="0" :max="20" :useGrouping="false" locale="ar-DZ" mode="decimal" :minFractionDigits="2" :maxFractionDigits="2" />
                             </template>
                         </Column>
                         <Column :style="{width:'80px'}" field="note_exam" header="Exam" :exportable="false">
                             <template #body="slotProps">
-                                <InputNumber v-model="slotProps.data.note_exam" :min="0" :max="20" :useGrouping="false" locale="ar-DZ" mode="decimal" :minFractionDigits="2" :maxFractionDigits="2" />
-
+                                <InputNumber inputClass="form-control" :readonly="trimestersStatus['trimester'+selectedTrimester].stopped" v-model="slotProps.data.note_exam" :min="0" :max="20" :useGrouping="false" locale="ar-DZ" mode="decimal" :minFractionDigits="2" :maxFractionDigits="2" />
                             </template>
                         </Column>
-                        <Column :style="{width:'250px'}" field="note" header="Remarque" :exportable="false">
+                        <Column :style="{width:'250px'}" field="remarque" header="Remarque" :exportable="false">
                             <template #body="slotProps">
-                                <input type="text" class="form-control w-4" v-model="slotProps.data.note" />
+                                <input type="text" :readonly="trimestersStatus['trimester'+selectedTrimester].stopped" class="form-control w-4" v-model="slotProps.data.remarque" />
                             </template>
                         </Column>
                     </DataTable>
                     <div class="flex justify-evenly mt-4">
-                        <button @click="submitNotes()" class=" mr-4 w-1/3 py-4 text-white rounded-md font-medium bg-primary-500 py-2 px-4 hover:bg-primary-800 hover:ring hover:ring-primary-200 inline-flex justify-center items-center">
-                            Save
+                        <button v-show="!trimestersStatus['trimester'+selectedTrimester].stopped" :disabled="isSubmitting[selectedClass.id]" @click="submitNotes()" class=" mr-4 w-1/3 py-4 text-white rounded-md font-medium bg-primary-500 py-2 px-4 hover:bg-primary-800 hover:ring hover:ring-primary-200 inline-flex justify-center items-center">
+                            <svg v-show="isSubmitting[selectedClass.id]" class="animate-spin h-6 w-6 mr-3 text-warning-500" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-100" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Sauvegarder
                         </button>
-                        <button @click="" class="text-white py-4 w-1/3 rounded-md font-medium bg-warning-500 py-2 px-4 hover:bg-primary-800 hover:ring hover:ring-primary-200 inline-flex justify-center items-center">
-                            Cancel
+                        <button  @click="step='class';selectedClass=null;" class="text-white py-4 w-1/3 rounded-md font-medium bg-warning-500 py-2 px-4 hover:bg-primary-800 hover:ring hover:ring-primary-200 inline-flex justify-center items-center">
+                            Annuler
                         </button>
                     </div>
 
@@ -195,12 +211,6 @@
             </transition>
 
         </div>
-        <button @click="step = 'class'" class="rounded-full text-info-500 font-medium hover:text-info-800  focus:text-info-800 p-0 inline-flex justify-center items-center">
-            step2
-        </button>
-        <button @click="step = 'trimester'" class="rounded-full text-info-500 font-medium hover:text-info-800  focus:text-info-800 p-0 inline-flex justify-center items-center">
-            step1
-        </button>
     </div>
 </template>
 
@@ -225,13 +235,36 @@
             classesStudents: Object,
         },
         methods:{
+            processResponse(response){
+                this.isSubmitting[this.selectedClass.id] = false;
+                if(response.data.type === 'error'){
+                    this.$toast.add({severity:'error', summary: response.data.toast.summary, detail:response.data.toast.detail, life: 5000});
+                }else if (response.data.type === 'success'){
+                    this.$toast.add({severity:'success', summary: response.data.toast.summary, detail:response.data.toast.detail, life: 5000});
+                    this.classNotesCount[this.selectedClass.id] = this.classesStudents[this.selectedClass.id].length;
+                    this.selectedClass= null;
+                    this.step = "class";
+                }
+
+            },
+            handleError(error){
+                this.isSubmitting[this.selectedClass.id] = false;
+                const errorResponse = this.handleFetchError(error)
+                this.$toast.add({severity:'error', summary : 'L\'opération a échoué!',detail:errorResponse.message, life: 5000});
+            },
             submitNotes(){
                 this.isSubmitting[this.selectedClass.id] = true;
+                const self = this;
+                const exam = this.exams.find(e => e.trimester === this.selectedTrimester.toString());
+                console.log(exam);
                 axios.post(this.route('teacher.update-exam-notes'),{'trimester': this.selectedTrimester,
-                    'academicYear': this.academicYear.id, 'class':this.selectedClass.id, 'exam': this.exam.id,'examNotes': this.classesStudents[this.selectedClass.id]})
+                    'academicYear': this.academicYear.id, 'class':this.selectedClass.id, 'exam': exam.id ?? null,'examNotes': this.classesStudents[this.selectedClass.id]})
                     .then((response)=>{
-                        this.isSubmitting[this.selectedClass.id] = false;
+                        self.processResponse(response)
+
                         //this.initTrimester(tri,response.data.exam)
+                    }).catch(function (error) {
+                        self.handleError(error);
                     });
             },
             selectTrimester(tri){
@@ -283,6 +316,7 @@
             },
         },
         data(){
+
             return{
                 trimestersStatus:{
                     'trimester1':{'id':null,'started':false,'stopped':false,'published':false,'numNotes':0},
@@ -293,6 +327,7 @@
                 step: 'trimester',
                 selectedTrimester: null,
                 selectedClass: null,
+                classNotesCount:{}
             };
         },
         created() {
@@ -303,6 +338,20 @@
                 this.trimestersStatus['trimester'+exam.trimester]['stopped']=exam.stopped_at ? true : false;
                 this.trimestersStatus['trimester'+exam.trimester]['published']=exam.published_at ? true : false;
             })
+            Object.keys(this.classesStudents).forEach(classe =>{
+                this.classNotesCount[classe]=0;
+                this.classesStudents[classe].forEach(student => {
+                    if(student.note_exam !== null ){
+                        this.classNotesCount[classe]++;
+                    };
+                    this.classNotesCount[classe.id]
+                    student.note_devoir = Math.floor(Math.random() * 21);
+                    student.note_eval = Math.floor(Math.random() * 21);
+                    student.note_exam = Math.floor(Math.random() * 21);
+                    student.remarque = 'good' ;
+                });
+            });
+
         }
     }
 </script>
@@ -353,4 +402,5 @@
     >>> .p-inputnumber-input{
         @apply w-40 md:w-full;
     }
+
 </style>

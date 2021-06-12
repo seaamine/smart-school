@@ -41,19 +41,19 @@
                         </div>
                     </template>
                     <template #footer>
-                        <button :disabled="trimestersStatus.trimester1.started && !trimestersStatus.trimester1.stopped" @click="startTrimester(1)" class="rounded-full text-success-500 font-medium mr-4 hover:text-primary-200  focus:text-primary-800 p-0 inline-flex justify-center items-center">
+                        <button :disabled="trimestersStatus.trimester1.started && !trimestersStatus.trimester1.stopped" @click="startTrimester(1)" class="rounded-full text-success-500 font-medium mr-4 hover:text-success-800  active:text-primary-800 p-0 inline-flex justify-center items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </button>
-                        <button :disabled="trimestersStatus.trimester1.stopped || !trimestersStatus.trimester1.started" @click="stopTrimester(1)" class="rounded-full text-danger-500 font-medium mr-4 hover:text-danger-800  focus:text-danger-800 p-0 inline-flex justify-center items-center">
+                        <button :disabled="trimestersStatus.trimester1.stopped || !trimestersStatus.trimester1.started" @click="stopTrimester(1)" class="rounded-full text-danger-500 font-medium mr-4 hover:text-danger-800  active:text-danger-800 p-0 inline-flex justify-center items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
                             </svg>
                         </button>
-                        <button :disabled="!trimestersStatus.trimester1.published" @click="publishTrimester(1)" class="rounded-full text-info-500 font-medium hover:text-info-800  focus:text-info-800 p-0 inline-flex justify-center items-center">
+                        <button :disabled="!trimestersStatus.trimester1.published" @click="publishTrimester(1)" class="rounded-full text-info-500 font-medium hover:text-info-800  active:text-info-800 p-0 inline-flex justify-center items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                             </svg>
@@ -99,19 +99,19 @@
                         </div>
                     </template>
                     <template #footer>
-                        <button :disabled="trimestersStatus.trimester2.started && !trimestersStatus.trimester2.stopped" @click="startTrimester(2)" class="rounded-full text-success-500 font-medium mr-4 hover:text-primary-200  focus:text-primary-800 p-0 inline-flex justify-center items-center">
+                        <button :disabled="trimestersStatus.trimester2.started && !trimestersStatus.trimester2.stopped" @click="startTrimester(2)" class="rounded-full text-success-500 font-medium mr-4 hover:text-success-00  active:text-success-800 p-0 inline-flex justify-center items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </button>
-                        <button :disabled="trimestersStatus.trimester2.stopped || !trimestersStatus.trimester2.started" @click="stopTrimester(2)" class="rounded-full text-danger-500 font-medium mr-4 hover:text-danger-800  focus:text-danger-800 p-0 inline-flex justify-center items-center">
+                        <button :disabled="trimestersStatus.trimester2.stopped || !trimestersStatus.trimester2.started" @click="stopTrimester(2)" class="rounded-full text-danger-500 font-medium mr-4 hover:text-danger-800  active:text-danger-800 p-0 inline-flex justify-center items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
                             </svg>
                         </button>
-                        <button :disabled="!trimestersStatus.trimester2.published" @click="publishTrimester(2)" class="rounded-full text-info-500 font-medium hover:text-info-800  focus:text-info-800 p-0 inline-flex justify-center items-center">
+                        <button :disabled="!trimestersStatus.trimester2.published" @click="publishTrimester(2)" class="rounded-full text-info-500 font-medium hover:text-info-800  active:text-info-800 p-0 inline-flex justify-center items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                             </svg>
@@ -160,19 +160,19 @@
                         </div>
                     </template>
                     <template #footer>
-                        <button :disabled="trimestersStatus.trimester3.started && !trimestersStatus.trimester3.stopped" @click="startTrimester(3)" class="rounded-full text-success-500 font-medium mr-4 hover:text-primary-200  focus:text-primary-800 p-0 inline-flex justify-center items-center">
+                        <button :disabled="trimestersStatus.trimester3.started && !trimestersStatus.trimester3.stopped" @click="startTrimester(3)" class="rounded-full text-success-500 font-medium mr-4 hover:text-success-200  active:text-success-800 p-0 inline-flex justify-center items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </button>
-                        <button :disabled="trimestersStatus.trimester3.stopped || !trimestersStatus.trimester3.started" @click="stopTrimester(3)" class="rounded-full text-danger-500 font-medium mr-4 hover:text-danger-800  focus:text-danger-800 p-0 inline-flex justify-center items-center">
+                        <button :disabled="trimestersStatus.trimester3.stopped || !trimestersStatus.trimester3.started" @click="stopTrimester(3)" class="rounded-full text-danger-500 font-medium mr-4 hover:text-danger-800  active:text-danger-800 p-0 inline-flex justify-center items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
                             </svg>
                         </button>
-                        <button :disabled="!trimestersStatus.trimester3.published" @click="publishTrimester(3)" class="rounded-full text-info-500 font-medium hover:text-info-800  focus:text-info-800 p-0 inline-flex justify-center items-center">
+                        <button :disabled="!trimestersStatus.trimester3.published" @click="publishTrimester(3)" class="rounded-full text-info-500 font-medium hover:text-info-800  active:text-info-800 p-0 inline-flex justify-center items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                             </svg>
@@ -235,16 +235,34 @@
                 }
 
             },
+            processResponse(response,tri){
+                this.isSubmitting[tri] = false;
+                if(response.data.type === 'error'){
+                    this.$toast.add({severity:'error', summary: response.data.toast.summary, detail:response.data.toast.detail, life: 5000});
+                }else if (response.data.type === 'success'){
+                    this.$toast.add({severity:'success', summary: response.data.toast.summary, detail:response.data.toast.detail, life: 5000});
+                    this.initTrimester(tri,response.data.exam);
+                }
+
+
+            },
+            handleError(error,tri){
+                this.isSubmitting[tri] = false;
+                const errorResponse = this.handleFetchError(error)
+                this.$toast.add({severity:'error', summary : 'L\'opération a échoué!',detail:errorResponse.message, life: 5000});
+            },
             startTrimester: function(tri){
                 if(this.isSubmitting[tri]){
                     return;
                 }
                 this.isSubmitting[tri] = true;
+                const self = this;
                 axios.post(this.route('exam.update'),{'trimester': tri,'academicYear': this.academicYear.id,'method':'start'})
                     .then((response)=>{
-                        this.isSubmitting[tri] = false;
-                        this.initTrimester(tri,response.data.exam)
-                    });
+                        self.processResponse(response,tri)
+                    }).catch(function (error) {
+                        self.handleError(error,tri);
+                });
             },
             stopTrimester: function(tri){
                 if(this.isSubmitting[tri]){
@@ -253,9 +271,10 @@
                 this.isSubmitting[tri] = true;
                 axios.post(this.route('exam.update'),{'trimester': tri,'academicYear': this.academicYear.id,'method':'stop'})
                     .then((response)=>{
-                        this.isSubmitting[tri] = false;
-                        this.initTrimester(tri,response.data.exam)
-                    });
+                        this.processResponse(response,tri)
+                    }).catch(function(err){
+                    this.handleError(err);
+                });
             },
             publishTrimester: function(tri){
                 if(this.isSubmitting[tri]){
@@ -264,9 +283,10 @@
                 this.isSubmitting[tri] = true;
                 axios.post(this.route('exam.update'),{'trimester': tri,'academicYear': this.academicYear.id,'method':'publish'})
                     .then((response)=>{
-                        this.isSubmitting[tri] = false;
-                        this.initTrimester(tri,response.data.exam)
-                    });
+                        this.processResponse(response,tri)
+                    }).catch(function(err){
+                    this.handleError(err);
+                });
             }
         },
         data(){
