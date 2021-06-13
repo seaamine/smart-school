@@ -71,13 +71,14 @@
                                   fill-rule="evenodd"/>
                         </svg>
                     </button>
-                    <inertia-link :data="{ id: slotProps.data.id,role:'student' }" :href="route('login_as')"
+                    <inertia-link :data="{ id: slotProps.data.user_id,role:'student' }" :href="route('login_as')"
                                   class="bg-warning-500 text-white  rounded-full w-10 h-10 font-medium inline-flex justify-center items-center mr-4 border border-warning-500 hover:ring-4 hover:ring-warning-200 focus:bg-warning-800 focus:outline-none active:bg-warning-800"
                                   method="get" title="Edit">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
                         </svg>
                     </inertia-link>
+
                 </template>
             </Column>
         </DataTable>

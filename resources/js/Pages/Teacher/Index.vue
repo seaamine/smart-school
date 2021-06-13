@@ -68,7 +68,7 @@
                                   fill-rule="evenodd"/>
                         </svg>
                     </button>
-                    <inertia-link :data="{ id: slotProps.data.id,role:'teacher' }" :href="route('login_as')"
+                    <inertia-link :data="{ id: slotProps.data.user_id,role:'teacher' }" :href="route('login_as')"
                                   class="bg-warning-500 text-white  rounded-full w-10 h-10 font-medium inline-flex justify-center items-center border border-warning-500 hover:ring-4 hover:ring-warning-200 focus:bg-warning-800 focus:outline-none active:bg-warning-800"
                                   method="get" title="Edit">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

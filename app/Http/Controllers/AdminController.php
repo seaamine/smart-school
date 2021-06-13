@@ -7,12 +7,14 @@ use App\Helpers\AppHelper;
 use App\Models\AcademicYear;
 use App\Models\Exam;
 use App\Models\Registration;
+use App\Models\SchoolCertificate;
 use App\Models\SClass;
 use App\Models\Student;
 use App\Models\Subject;
 use App\Models\Teacher;
 use App\Models\TeacherClass;
 use App\Models\User;
+use PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -501,7 +503,56 @@ class AdminController extends Controller
     }
 
     public function editSchoolCertificate(){
-        return Inertia::render('Certificate/Edit', []);
+        $certificate = SchoolCertificate::orderBy('created_at','DESC')->first();
+        if($certificate){
+            $template = $certificate->template;
+        }else{
+            $template= null;
+        }
+        return Inertia::render('Certificate/Edit', ['template'=>$template]);
 
+    }
+
+    public function updateSchoolCertificate(Request $request){
+        $validated = $request->validate([
+            //'selectedTeachers' => 'required|array|size:'.$subjectsCount,
+            'template' => 'required',
+        ]);
+        $certificate = SchoolCertificate::orderBy('created_at','DESC')->first();
+        if($certificate){
+            $certificate->template = $request->input('template') ;
+            $certificate->save();
+        }else{
+            SchoolCertificate::create(['template'=>$request->input('template')]);
+        }
+        return response()->json([
+            'type' => 'success',
+            'toast' => ['type'=>'error', 'summary'=>'l\'opération a réussi','detail' => 'le modèle du certificat scolaire a été mis à jour'],
+        ]);
+    }
+
+    public function downloadSchoolCertificate(){
+        $user = Auth::user();
+        $academicYear=AppHelper::getAcademicYear();
+        $student = Student::where('user_id',$user->id)->first();
+        $certificate = SchoolCertificate::orderBy('created_at','DESC')->first();
+        $registration = Registration::where('student_id',$student->id)->where('status','1')
+            ->where('academic_year_id',$academicYear->id)->first();
+        $class = SClass::where('id',$registration->class_id)->where('status','1')->first();
+        if(!$certificate){
+            return 'false';
+        }
+        $template=$certificate->template;
+        $template=str_replace("#numcert","2020/4/215",$template);
+        $template=str_replace("#nom",$student->last_name,$template);
+        $template=str_replace("#prenom",$student->first_name,$template);
+        $template=str_replace("#dob",$student->dob,$template);
+        $template=str_replace("#pob",$student->willaya,$template);
+        $template=str_replace("#class",$class->name,$template);
+        $template= str_replace("#ay",$academicYear->title,$template);
+        $template=str_replace("#numreg",$registration->regi_no,$template);
+        $template=str_replace("#date",date("Y/m/d"),$template);
+        $pdf = PDF::loadView('school_certificate', ['data'=>$template]);
+        return $pdf->download('invoice.pdf');
     }
 }

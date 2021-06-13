@@ -1,9 +1,31 @@
 <?php return array (
+  'barryvdh/laravel-dompdf' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Barryvdh\\DomPDF\\ServiceProvider',
+    ),
+    'aliases' => 
+    array (
+      'PDF' => 'Barryvdh\\DomPDF\\Facade',
+    ),
+  ),
   'barryvdh/laravel-ide-helper' => 
   array (
     'providers' => 
     array (
       0 => 'Barryvdh\\LaravelIdeHelper\\IdeHelperServiceProvider',
+    ),
+  ),
+  'carlos-meneses/laravel-mpdf' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Meneses\\LaravelMpdf\\LaravelMpdfServiceProvider',
+    ),
+    'aliases' => 
+    array (
+      'PDF' => 'Meneses\\LaravelMpdf\\Facades\\LaravelMpdf',
     ),
   ),
   'facade/ignition' => 

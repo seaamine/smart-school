@@ -7,9 +7,7 @@
             <div :class="{'hidden': !toggleSb}" class="z-20 lg:block absolute h-full lg:relative bg-white flex-shrink-0 shadow-csh1" id="sidebar">
                 <side-bar v-if=" $page.props.user.role === 'admin'"></side-bar>
                 <side-bar-teacher v-else-if=" $page.props.user.role === 'teacher'"></side-bar-teacher>
-                <div v-else>
-                    bhg
-                </div>
+                <side-bar-student v-else></side-bar-student>
             </div>
             <div class="flex flex-col flex-grow max-h-full w-full p-8 overflow-y-auto">
                 <Toast />
@@ -26,11 +24,13 @@ import SideBar from "@/Layouts/Partials/SideBar";
 import NavBar from "@/Layouts/Partials/NavBar";
 import Toast from 'primevue/toast';
 import SideBarTeacher from "@/Layouts/Partials/SideBarTeacher";
+import SideBarStudent from "@/Layouts/Partials/SideBarStudent";
 
 export default {
     name: "DashLayout",
     components: {
         SideBarTeacher,
+        SideBarStudent,
         NavBar,
         SideBar,
         Toast,

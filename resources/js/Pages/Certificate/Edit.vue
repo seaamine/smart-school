@@ -13,14 +13,24 @@
         <div class="document-editor">
             <ckeditor style="height: 375px;" @ready="onReady" :editor="editor" v-model="editorData"></ckeditor>
         </div>
+        <div class="flex justify-evenly mt-4">
+            <button :disabled="isSubmitting" @click="submitTemplate()" class=" mr-4 w-1/3 py-4 text-white rounded-md font-medium bg-primary-500 py-2 px-4 hover:bg-primary-800 hover:ring hover:ring-primary-200 inline-flex justify-center items-center">
+                <svg v-show="isSubmitting" class="animate-spin h-6 w-6 mr-3 text-warning-500" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-100" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Sauvegarder
+            </button>
+        </div>
+        <div v-html="finalview()"></div>
     </div>
 </template>
 
 <script>
 import DashLayout from '@/Layouts/DashLayout';
+import Editor from 'ckeditor5-custom-build/build/ckeditor'
 import CKEditor from '@ckeditor/ckeditor5-vue';
 //import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import  DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document'
 export default {
     name: "Edit",
     components: {
@@ -30,26 +40,63 @@ export default {
     layout: DashLayout,
     props:{
         errors: Object,
+        template: String,
     },
     data(){
         return {
-            editor: DecoupledEditor,
-            editorData: '<p>Content of the editor.</p>',
+            editor: Editor ,
+            editorData: this.template,
             editorConfig: {
                 toolbar: {
 
                 }
             },
-            template:null,
+            isSubmitting: false,
         };
     },
-    methods: {
+    methods: {finalview(){
+            this.template.replace('#numcert','2020/4/215');
+            this.template.replace('#nom','Laamari');
+            this.template.replace('#prenom','mohamed');
+            this.template.replace('#dob','1990/05/29');
+            this.template.replace('#pob','Batna');
+            this.template.replace('#class','2AM3');
+            this.template.replace('#ay','2021/2022');
+            this.template.replace('#numreg','455-8584-52145');
+            this.template.replace('#date','13/06/2021');
+        },
         onReady( editor )  {
             // Insert the toolbar before the editable area.
             editor.ui.getEditableElement().parentElement.insertBefore(
                 editor.ui.view.toolbar.element,
                 editor.ui.getEditableElement()
             );
+        },
+        processResponse(response){
+            this.isSubmitting= false;
+            if(response.data.type === 'error'){
+                this.$toast.add({severity:'error', summary: response.data.toast.summary, detail:response.data.toast.detail, life: 5000});
+            }else if (response.data.type === 'success'){
+                this.$toast.add({severity:'success', summary: response.data.toast.summary, detail:response.data.toast.detail, life: 5000});
+            }
+
+        },
+        handleError(error){
+            this.isSubmitting= false;
+            const errorResponse = this.handleFetchError(error)
+            this.$toast.add({severity:'error', summary : 'L\'opération a échoué!',detail:errorResponse.message, life: 5000});
+        },
+        submitTemplate(){
+            this.isSubmitting = true;
+            const self = this;
+            axios.post(this.route('school-certificate.update'),{'template': this.editorData})
+                .then((response)=>{
+                    self.processResponse(response)
+
+                    //this.initTrimester(tri,response.data.exam)
+                }).catch(function (error) {
+                self.handleError(error);
+            });
         }
     }
 
