@@ -36,12 +36,12 @@
                                 </div>
                             </div>
                             <div v-if="trimestersStatus.trimester1.started" class="overflow-hidden h-2 text-xs flex rounded bg-info-200">
-                                <div :style="{width: (trimestersStatus.trimester1.numNotes/totalNotes *100) +'%',}" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-info-500"></div>
+                                <div :style="{width: (trimestersStatus.trimester1.numNotes/totalNotes *100) +'%',}" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-success-800"></div>
                             </div>
                         </div>
                     </template>
                     <template #footer>
-                        <button :disabled="trimestersStatus.trimester1.started && !trimestersStatus.trimester1.stopped" @click="startTrimester(1)" class="rounded-full text-success-500 font-medium mr-4 hover:text-success-800  active:text-primary-800 p-0 inline-flex justify-center items-center">
+                        <button :disabled="trimestersStatus.trimester1.published|| trimestersStatus.trimester1.started && !trimestersStatus.trimester1.stopped" @click="startTrimester(1)" class="rounded-full text-success-500 font-medium mr-4 hover:text-success-800  active:text-primary-800 p-0 inline-flex justify-center items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -53,7 +53,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
                             </svg>
                         </button>
-                        <button :disabled="!trimestersStatus.trimester1.published" @click="publishTrimester(1)" class="rounded-full text-info-500 font-medium hover:text-info-800  active:text-info-800 p-0 inline-flex justify-center items-center">
+                        <button :disabled="trimestersStatus.trimester1.published || !trimestersStatus.trimester1.stopped || trimestersStatus.trimester1.numNotes/totalNotes === 0" @click="publishTrimester(1)" class="rounded-full text-info-500 font-medium hover:text-info-800  active:text-info-800 p-0 inline-flex justify-center items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                             </svg>
@@ -94,7 +94,7 @@
                                 </div>
                             </div>
                             <div v-if="trimestersStatus.trimester2.started" class="overflow-hidden h-2 text-xs flex rounded bg-info-200">
-                                <div :style="{width: (trimestersStatus.trimester2.trimestersStatus.trimester2.numNotes/totalNotes *100) +'%',}" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-info-500"></div>
+                                <div :style="{width: (trimestersStatus.trimester2.numNotes/totalNotes *100) +'%',}" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-success-800"></div>
                             </div>
                         </div>
                     </template>
@@ -111,7 +111,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
                             </svg>
                         </button>
-                        <button :disabled="!trimestersStatus.trimester2.published" @click="publishTrimester(2)" class="rounded-full text-info-500 font-medium hover:text-info-800  active:text-info-800 p-0 inline-flex justify-center items-center">
+                        <button :disabled="trimestersStatus.trimester2.published || !trimestersStatus.trimester2.stopped || trimestersStatus.trimester2.numNotes/totalNotes === 0" @click="publishTrimester(2)" class="rounded-full text-info-500 font-medium hover:text-info-800  active:text-info-800 p-0 inline-flex justify-center items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                             </svg>
@@ -155,7 +155,7 @@
                                 </div>
                             </div>
                             <div v-if="trimestersStatus.trimester3.started" class="overflow-hidden h-2 text-xs flex rounded bg-info-200">
-                                <div :style="{width: (trimestersStatus.trimester3.numNotes/totalNotes *100) +'%',}" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-info-500"></div>
+                                <div :style="{width: (trimestersStatus.trimester3.numNotes/totalNotes *100) +'%',}" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-success-800"></div>
                             </div>
                         </div>
                     </template>
@@ -172,7 +172,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
                             </svg>
                         </button>
-                        <button :disabled="!trimestersStatus.trimester3.published" @click="publishTrimester(3)" class="rounded-full text-info-500 font-medium hover:text-info-800  active:text-info-800 p-0 inline-flex justify-center items-center">
+                        <button :disabled="trimestersStatus.trimester3.published || !trimestersStatus.trimester3.stopped || trimestersStatus.trimester23numNotes/totalNotes === 0" @click="publishTrimester(3)" class="rounded-full text-info-500 font-medium hover:text-info-800  active:text-info-800 p-0 inline-flex justify-center items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                             </svg>

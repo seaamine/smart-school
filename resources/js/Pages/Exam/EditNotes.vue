@@ -42,7 +42,7 @@
                                 </div>
                             </template>
                             <template #footer>
-                                <button :disabled="!trimestersStatus.trimester1.started || trimestersStatus.trimester1.stopped" @click="selectTrimester(1)" class="text-white rounded-md font-medium bg-primary-500 py-2 px-4 hover:bg-primary-800 hover:ring hover:ring-primary-200 inline-flex justify-center items-center">
+                                <button :class="!trimestersStatus.trimester1.stopped ? 'bg-primary-500' : 'bg-success-500' " :disabled="!trimestersStatus.trimester1.started" @click="selectTrimester(1)" class="text-white rounded-md font-medium py-2 px-4 hover:bg-primary-800 hover:ring hover:ring-primary-200 inline-flex justify-center items-center">
                                     {{ trimestersStatus.trimester1.stopped ? 'Voir' : 'Saisir'}}
                                 </button>
                             </template>
@@ -78,13 +78,13 @@
                                         </div>
                                     </div>
                                     <div v-if="trimestersStatus.trimester2.started" class="overflow-hidden h-2 text-xs flex rounded bg-info-200">
-                                        <div :style="{width: (trimestersStatus.trimester2.trimestersStatus.trimester2.numNotes/totalNotes *100) +'%',}" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-info-500"></div>
+                                        <div :style="{width: (trimestersStatus.trimester2.numNotes/totalNotes *100) +'%',}" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-info-500"></div>
                                     </div>
                                 </div>
                             </template>
                             <template #footer>
-                                <button :disabled="!trimestersStatus.trimester2.started || trimestersStatus.trimester2.stopped" @click="selectTrimester(2)" class="text-white rounded-md font-medium bg-primary-500 py-2 px-4 hover:bg-primary-800 hover:ring hover:ring-primary-200 inline-flex justify-center items-center">
-                                    Saisir
+                                <button :class="!trimestersStatus.trimester2.stopped ? 'bg-primary-500' : 'bg-success-500' " :disabled="!trimestersStatus.trimester2.started || trimestersStatus.trimester2.stopped" @click="selectTrimester(2)" class="text-white rounded-md font-medium py-2 px-4 hover:bg-primary-800 hover:ring hover:ring-primary-200 inline-flex justify-center items-center">
+                                    {{ trimestersStatus.trimester2.stopped ? 'Voir' : 'Saisir'}}
                                 </button>
                             </template>
                         </Card>
@@ -123,8 +123,8 @@
                                 </div>
                             </template>
                             <template #footer>
-                                <button :disabled="!trimestersStatus.trimester3.started || trimestersStatus.trimester3.stopped" @click="selectTrimester(3)" class="text-white rounded-md font-medium bg-primary-500 py-2 px-4 hover:bg-primary-800 hover:ring hover:ring-primary-200 inline-flex justify-center items-center">
-                                    Saisir
+                                <button :class="!trimestersStatus.trimester3.stopped ? 'bg-primary-500' : 'bg-success-500' " :disabled="!trimestersStatus.trimester3.started || trimestersStatus.trimester3.stopped" @click="selectTrimester(3)" class="text-white rounded-md font-medium py-2 px-4 hover:bg-primary-800 hover:ring hover:ring-primary-200 inline-flex justify-center items-center">
+                                    {{ trimestersStatus.trimester3.stopped ? 'Voir' : 'Saisir'}}
                                 </button>
                             </template>
                         </Card>
@@ -133,7 +133,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="" v-else-if="step === 'class'">
+                <div class="w-full" v-else-if="step === 'class'">
                     <div v-for="levelclasses in classes" class="pb-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 justify-items-center">
                         <Card v-for="classe in levelclasses" :key="'class-'+classe.id" @click="selectClass(classe)" class="click-card w-52">
                             <template #header>
@@ -145,7 +145,7 @@
                                 <span class="pb-2 text-2xl	">{{classe.name}}</span>
                             </template>
                             <template #footer>
-                                <span :class=" classNotesCount[classe.id] < classesStudents[classe.id].length ? 'badge-secondary' : 'badge-success'" class="badge">{{classNotesCount[classe.id] < classesStudents[classe.id].length  ? 'Non attribué': 'Complété'}}</span>
+                                <span :class=" classNotesCount['trimester'+selectedTrimester][classe.id] < Object.keys(classesStudents[classe.id]).length ? 'badge-secondary' : 'badge-success'" class="badge">{{classNotesCount['trimester'+selectedTrimester][classe.id] < Object.keys(classesStudents[classe.id]).length  ? 'Non attribué': 'Complété'}}</span>
                             </template>
                         </Card>
                     </div>
@@ -157,8 +157,8 @@
                 </div>
                 <div class="overflow-x-auto	" v-else-if="step === 'notes'">
                     <p class="mb-2"><b>Class:</b> {{selectedClass?.name}}</p>
-                    <p class="mb-4"><b>Nombres des étudiants:</b> {{classesStudents[selectedClass.id].length ?? 0}}</p>
-                    <DataTable rowGroupMode="rowspan"  sortField="group"  groupRowsBy="group" responsiveLayout="stack" breakpoint="768px" :value="classesStudents[selectedClass.id]" dataKey="id" class="p-datatable-sm">
+                    <p class="mb-4"><b>Nombres des étudiants:</b> {{Object.keys(classesStudents[selectedClass.id]).length ?? 0}}</p>
+                    <DataTable rowGroupMode="rowspan"  sortField="group"  groupRowsBy="group" responsiveLayout="stack" breakpoint="768px" :value="Object.values(classesStudents[selectedClass.id])" dataKey="id" class="p-datatable-sm">
                         <Column class="bg-gradient-to-b from-primary-500 to-success-200" :style="{width:'60px'}" field="group" header="Groupe">
                             <template #body="slotProps">
                                 <div class="text-white text-center h-8 font-bold">
@@ -173,24 +173,24 @@
                                 {{slotProps.data.last_name}} {{slotProps.data.first_name}}
                             </template>
                         </Column>
-                        <Column :style="{width:'80px'}" field="note_eval" header="Evaluation" :exportable="false">
+                        <Column :style="{width:'80px'}" header="Evaluation" :exportable="false">
                             <template #body="slotProps">
-                                <InputNumber inputClass="form-control" :readonly="trimestersStatus['trimester'+selectedTrimester].stopped" v-model="slotProps.data.note_eval" :min="0" :max="20" :useGrouping="false" locale="ar-DZ" mode="decimal" :minFractionDigits="2" :maxFractionDigits="2" />
+                                <InputNumber inputClass="form-control" :readonly="trimestersStatus['trimester'+selectedTrimester].stopped" v-model="studentsNotes['trimester'+selectedTrimester][selectedClass.id][slotProps.data.id].note_eval" :min="0" :max="20" :useGrouping="false" locale="ar-DZ" mode="decimal" :minFractionDigits="2" :maxFractionDigits="2" />
                             </template>
                         </Column>
-                        <Column :style="{width:'80px'}" field="note_devoir" header="Devoir" :exportable="false">
+                        <Column :style="{width:'80px'}" header="Devoir" :exportable="false">
                             <template #body="slotProps">
-                                <InputNumber inputClass="form-control" :readonly="trimestersStatus['trimester'+selectedTrimester].stopped" v-model="slotProps.data.note_devoir" :min="0" :max="20" :useGrouping="false" locale="ar-DZ" mode="decimal" :minFractionDigits="2" :maxFractionDigits="2" />
+                                <InputNumber inputClass="form-control" :readonly="trimestersStatus['trimester'+selectedTrimester].stopped" v-model="studentsNotes['trimester'+selectedTrimester][selectedClass.id][slotProps.data.id].note_devoir" :min="0" :max="20" :useGrouping="false" locale="ar-DZ" mode="decimal" :minFractionDigits="2" :maxFractionDigits="2" />
                             </template>
                         </Column>
-                        <Column :style="{width:'80px'}" field="note_exam" header="Exam" :exportable="false">
+                        <Column :style="{width:'80px'}" header="Exam" :exportable="false">
                             <template #body="slotProps">
-                                <InputNumber inputClass="form-control" :readonly="trimestersStatus['trimester'+selectedTrimester].stopped" v-model="slotProps.data.note_exam" :min="0" :max="20" :useGrouping="false" locale="ar-DZ" mode="decimal" :minFractionDigits="2" :maxFractionDigits="2" />
+                                <InputNumber inputClass="form-control" :readonly="trimestersStatus['trimester'+selectedTrimester].stopped" v-model="studentsNotes['trimester'+selectedTrimester][selectedClass.id][slotProps.data.id].note_exam" :min="0" :max="20" :useGrouping="false" locale="ar-DZ" mode="decimal" :minFractionDigits="2" :maxFractionDigits="2" />
                             </template>
                         </Column>
-                        <Column :style="{width:'250px'}" field="remarque" header="Remarque" :exportable="false">
+                        <Column :style="{width:'250px'}" header="Remarque" :exportable="false">
                             <template #body="slotProps">
-                                <input type="text" :readonly="trimestersStatus['trimester'+selectedTrimester].stopped" class="form-control w-4" v-model="slotProps.data.remarque" />
+                                <input type="text" :readonly="trimestersStatus['trimester'+selectedTrimester].stopped" class="form-control w-4" v-model="studentsNotes['trimester'+selectedTrimester][selectedClass.id][slotProps.data.id].remarque" />
                             </template>
                         </Column>
                     </DataTable>
@@ -233,6 +233,7 @@
             totalNotes: Number,
             classes: Array,
             classesStudents: Object,
+            examsCount: Object,
         },
         methods:{
             processResponse(response){
@@ -241,7 +242,7 @@
                     this.$toast.add({severity:'error', summary: response.data.toast.summary, detail:response.data.toast.detail, life: 5000});
                 }else if (response.data.type === 'success'){
                     this.$toast.add({severity:'success', summary: response.data.toast.summary, detail:response.data.toast.detail, life: 5000});
-                    this.classNotesCount[this.selectedClass.id] = this.classesStudents[this.selectedClass.id].length;
+                    this.classNotesCount['trimester'+this.selectedTrimester][this.selectedClass.id] = this.classesStudents[this.selectedClass.id].length;
                     this.selectedClass= null;
                     this.step = "class";
                 }
@@ -256,9 +257,8 @@
                 this.isSubmitting[this.selectedClass.id] = true;
                 const self = this;
                 const exam = this.exams.find(e => e.trimester === this.selectedTrimester.toString());
-                console.log(exam);
                 axios.post(this.route('teacher.update-exam-notes'),{'trimester': this.selectedTrimester,
-                    'academicYear': this.academicYear.id, 'class':this.selectedClass.id, 'exam': exam.id ?? null,'examNotes': this.classesStudents[this.selectedClass.id]})
+                    'academicYear': this.academicYear.id, 'class':this.selectedClass.id, 'exam': exam.id ?? null,'examNotes': this.studentsNotes['trimester'+this.selectedTrimester][this.selectedClass.id]})
                     .then((response)=>{
                         self.processResponse(response)
 
@@ -318,6 +318,11 @@
         data(){
 
             return{
+                studentsNotes:{
+                    'trimester1':{},
+                    'trimester2':{},
+                    'trimester3':{},
+                },
                 trimestersStatus:{
                     'trimester1':{'id':null,'started':false,'stopped':false,'published':false,'numNotes':0},
                     'trimester2':{'id':null,'started':false,'stopped':false,'published':false,'numNotes':0},
@@ -327,31 +332,72 @@
                 step: 'trimester',
                 selectedTrimester: null,
                 selectedClass: null,
-                classNotesCount:{}
+                classNotesCount:{trimester1:{},trimester2:{},trimester3:{}}
             };
         },
         created() {
             this.exams.forEach(exam => {
                 this.trimestersStatus['trimester'+exam.trimester]['id']=exam.id;
-                this.trimestersStatus['trimester'+exam.trimester]['numNotes']=exam.num_notes ?? 0;
+                this.trimestersStatus['trimester'+exam.trimester]['numNotes']=this.examsCount[exam.id]?.num_class_completed ?? 0;
                 this.trimestersStatus['trimester'+exam.trimester]['started']=exam.started_at ? true : false;
                 this.trimestersStatus['trimester'+exam.trimester]['stopped']=exam.stopped_at ? true : false;
                 this.trimestersStatus['trimester'+exam.trimester]['published']=exam.published_at ? true : false;
             })
             Object.keys(this.classesStudents).forEach(classe =>{
-                this.classNotesCount[classe]=0;
-                this.classesStudents[classe].forEach(student => {
-                    if(student.note_exam !== null ){
-                        this.classNotesCount[classe]++;
+                this.classNotesCount['trimester1'][classe]=0;
+                this.classNotesCount['trimester2'][classe]=0;
+                this.classNotesCount['trimester3'][classe]=0;
+                this.studentsNotes['trimester1'][classe]={};
+                this.studentsNotes['trimester2'][classe]={};
+                this.studentsNotes['trimester3'][classe]={};
+                Object.keys(this.classesStudents[classe]).forEach(sIndex => {
+                    const student = this.classesStudents[classe][sIndex];
+                    if(student.exams?.[1]?.note_exam !== undefined){
+                        this.classNotesCount['trimester1'][classe]++;
+                        this.studentsNotes['trimester1'][classe][student.id]={
+                            'student_id':student.id,
+                            'note_id':student.exams[1].note_id,'note_eval':student.exams[1].note_eval,
+                            'note_devoir':student.exams[1].note_devoir,'note_exam':student.exams[1].note_exam,
+                            'remarque':student.exams[1].remarque
+                        };
+                    }else{
+                        this.studentsNotes['trimester1'][classe][student.id]={
+                            'student_id':student.id, 'note_id':null,'note_eval':null,'note_devoir':null,'note_exam':null,'remarque':null
+                        };
                     };
-                    this.classNotesCount[classe.id]
+                    if(student.exams?.[2]?.note_exam !== undefined){
+                        this.classNotesCount['trimester2'][classe]++;
+                        this.studentsNotes['trimester2'][classe][student.id]={
+                            'student_id':student.id,
+                            'note_id':student.exams[2].note_id,'note_eval':student.exams[2].note_eval,
+                            'note_devoir':student.exams[2].note_devoir,'note_exam':student.exams[2].note_exam,
+                            'remarque':student.exams[2].remarque
+                        };
+                    }else{
+                        this.studentsNotes['trimester2'][classe][student.id]={
+                            'student_id':student.id, 'note_id':null,note_eval:null,'note_devoir':null,'note_exam':null,'remarque':null
+                        };
+                    };
+                    if(student.exams?.[3]?.note_exam !== undefined){
+                        this.classNotesCount['trimester3'][classe]++;
+                        this.studentsNotes['trimester3'][classe][student.id]={
+                            'student_id':student.id,
+                            'note_id':student.exams[3].note_id,'note_eval':student.exams[3].note_eval,
+                            'note_devoir':student.exams[3].note_devoir,'note_exam':student.exams[3].note_exam,
+                            'remarque':student.exams[3].remarque
+                        };
+                    }else{
+                        this.studentsNotes['trimester3'][classe][student.id]={
+                            'student_id':student.id,'note_id':null,'note_eval':null,'note_devoir':null,'note_exam':null,'remarque':null
+                        };
+                    };
                     student.note_devoir = Math.floor(Math.random() * 21);
                     student.note_eval = Math.floor(Math.random() * 21);
                     student.note_exam = Math.floor(Math.random() * 21);
                     student.remarque = 'good' ;
                 });
             });
-
+            console.log( this.studentsNotes['trimester2'][10][361].note_eval);
         }
     }
 </script>

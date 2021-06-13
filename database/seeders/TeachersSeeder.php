@@ -18,7 +18,7 @@ class TeachersSeeder extends Seeder
      */
     public function run()
     {
-        $faker = Factory::create();
+        $faker = Factory::create('ar_SA');
         $subjects = Subject::where('status','1')->get();
         foreach ($subjects as $subject){
             for($i=0;$i<4;$i++){
@@ -29,6 +29,7 @@ class TeachersSeeder extends Seeder
                 $first_name=$faker->firstName($gender);
                 $last_name=$faker->lastName($gender);
                 $email=$faker->unique()->email;
+                $email = substr_replace($email, rand(0,100).' ', strpos($email,'@'), 0);
                 $user=User::create(['email'=>$email,'name'=>"$last_name $first_name",'status'=>'1','username'=>$faker->unique()->userName.'_'.str::random(3),'password'=>bcrypt('123456'),'gender'=>$genderTog[$gender],'role'=>'teacher']);
                 Teacher::create(['user_id'=>$user->id,'subject_id'=>$subject->id,'status'=>'1','first_name'=>$first_name, 'last_name'=>$last_name,
                     'commune'=>'alger','willaya'=>'Alger','paye'=>'Algeria', 'qualification'=>$qualificationArray[array_rand($qualificationArray)],

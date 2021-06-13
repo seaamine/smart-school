@@ -58,26 +58,65 @@ class TeacherController extends Controller
                 $levelsSubjects[4][$subject->id]=$subject;
             }
         }
-        $subject=$teacher->subject;
+        $teacherSubject=$teacher->subject;
         $classesStudents=[];
+        $examsCount=[];
+        $examsCompleted=[];
+        foreach ($exams as $key=>$exam){
+           $examsCount[$exam->id]['num_class_completed'] = 0;
+        }
         foreach ($classes as $class){
-            $classesStudents[$class->id]=Student::join('registrations',function($join) use($academicYear,$class){
+            $students=Student::join('registrations',function($join) use($academicYear,$class){
                 $join->on('students.id','=','registrations.student_id')
                     ->where('registrations.academic_year_id','=',$academicYear->id)
                     ->where('registrations.class_id','=',$class->id)
-                    ->where('registrations.status','1');})
-                ->leftJoin('exams_notes',function($join) use($academicYear,$class,$teacher,$subject){
+                    ->where('registrations.status','1')
+                    ->whereNull('registrations.deleted_at')
+                ;})
+                ->leftJoin('exams_notes',function($join) use($academicYear,$class,$teacher,$teacherSubject){
                     $join->on('students.id','=','exams_notes.student_id')
                         ->where('exams_notes.academic_year_id','=',$academicYear->id)
                         ->where('exams_notes.class_id','=',$class->id)
-                        ->where('exams_notes.subject_id','=',$subject->id)
-                        ->where('exams_notes.teacher_id',$teacher->id);})
-                ->select('students.*','registrations.group','registrations.regi_no','exams_notes.id as note_id','exams_notes.note_eval','exams_notes.note_devoir','exams_notes.note_exam','exams_notes.remarque')
+                        ->where('exams_notes.subject_id','=',$teacherSubject->id)
+                        ->where('exams_notes.teacher_id',$teacher->id)
+                        ->whereNull('exams_notes.deleted_at');})
+                ->select('students.*','registrations.group','registrations.regi_no','exams_notes.trimester','exams_notes.exam_id','exams_notes.id as note_id','exams_notes.note_eval','exams_notes.note_devoir','exams_notes.note_exam','exams_notes.remarque')
                 ->get();
+            foreach ($students as $student){
+                if($student->trimester === '2' && $student->exam_id == null){
+                    dd($student,"level 2");
+                };
+                if(!isset($classesStudents[$class->id][$student->id])){
+                    $classesStudents[$class->id][$student->id]=[
+                        'id'=>$student->id,
+                        'first_name'=>$student->first_name,
+                        'last_name'=>$student->last_name,
+                        'group' => $student->group,
+                        'regi_no' => $student->regi_no,
+                        'exams'=>[],
+                    ];
+                }
+                if(isset($student->exam_id)){
+                    if(!isset($examsCompleted[$student->exam_id][$class->id])){
+                        $examsCompleted[$student->exam_id][$class->id] = true;
+                        $examsCount[$student->exam_id]['num_class_completed']++;
+                    }
+                    $classesStudents[$class->id][$student->id]['exams'][$student->trimester]=[
+                        'exams_notes.exam_id' => $student->exam_id,
+                        'note_id' => $student->note_id,
+                        'note_eval' => $student->note_eval,
+                        'note_devoir' =>$student->note_devoir,
+                        'note_exam'=>$student->note_exam,
+                        'remarque' => $student->remarque,
+                    ];
+                }else{
+                }
+            }
+
+
         }
-        //dd($classesStudents,$subject,$classes,$levelsSubjects,$teacher);
         return Inertia::render('Exam/EditNotes',
-            ['classesStudents'=>$classesStudents,'subject'=>$subject,'classes'=>$classes->groupBy('level'),'totalNotes'=>$count,'exams'=>$exams,'academicYear'=>$academicYear]);
+            ['examsCount'=>$examsCount,'classesStudents'=>$classesStudents,'subject'=>$subject,'classes'=>$classes->groupBy('level'),'totalNotes'=>$count,'exams'=>$exams,'academicYear'=>$academicYear]);
 
     }
     public function updateExamNotes(Request $request){
@@ -95,6 +134,7 @@ class TeacherController extends Controller
             'class' => 'required',
             'exam' => 'required',
             'examNotes' => 'required',
+            'examNotes.*.student_id' => 'required',
             'examNotes.*.note_eval' => 'required|numeric|min:0|max:20',
             'examNotes.*.note_devoir' => 'required|numeric|min:0|max:20',
             'examNotes.*.note_exam' => 'required|numeric|min:0|max:20',
@@ -122,9 +162,9 @@ class TeacherController extends Controller
         $countd=0;
         foreach ($request->input('examNotes') as $studentNote){
             $sNote = ExamNote::where('academic_year_id',$academicYear->id)
-                ->where('exam_id',$exam->id)->where('trimester',$exam->trimester)
+                ->where('exam_id',$exam->id)->where('trimester',$request->input('trimester'))
                 ->where('subject_id',$teacher->subject_id)
-                ->where('student_id',$studentNote['id'])->first();
+                ->where('student_id',$studentNote['student_id'])->first();
             if($sNote){
                 $countExisting++;
                 if($sNote->teacher_id !== $teacher->id || $sNote->class_id !== $request->input('class')){
@@ -133,7 +173,7 @@ class TeacherController extends Controller
                     ExamNote::create([
                         'academic_year_id'=>$academicYear->id,'exam_id'=>$exam->id,'trimester'=>$exam->trimester,
                         'class_id'=> $request->input('class'),'subject_id'=>$teacher->subject_id,
-                        'student_id'=> $studentNote['id'],
+                        'student_id'=> $studentNote['student_id'],
                         'teacher_id'=> $teacher->id,
                         'note_eval' => $studentNote['note_eval'],
                         'note_devoir' => $studentNote['note_devoir'],
@@ -150,7 +190,7 @@ class TeacherController extends Controller
             }else{
                 ExamNote::create([
                     'academic_year_id'=>$academicYear->id,'exam_id'=>$exam->id,'trimester'=>$exam->trimester,
-                    'class_id'=>$request->input('class'),'subject_id'=>$teacher->subject_id,'student_id'=>$studentNote['id'],
+                    'class_id'=>$request->input('class'),'subject_id'=>$teacher->subject_id,'student_id'=>$studentNote['student_id'],
                     'teacher_id'=>$teacher->id,
                     'note_eval' =>$studentNote['note_eval'],
                     'note_devoir' =>$studentNote['note_devoir'],

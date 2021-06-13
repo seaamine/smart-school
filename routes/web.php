@@ -59,7 +59,10 @@ Route::get('/teachers',  [\App\Http\Controllers\AdminController::class,'indexTea
 Route::get('/teachers/add',  [\App\Http\Controllers\AdminController::class,'addTeacher'])
     ->name('teacher.add')->middleware('auth');;
 Route::post('/teachers/add',  [\App\Http\Controllers\AdminController::class,'storeTeacher'])
-    ->name('teacher.store')->middleware('auth');;
+    ->name('teacher.store')->middleware('auth');
+
+Route::get('/school-certificate/tempalte',  [\App\Http\Controllers\AdminController::class,'editSchoolCertificate'])
+    ->name('school-certificate.edit')->middleware('auth');
 
 Route::get('/teachers-classes',  [\App\Http\Controllers\AdminController::class,'indexTeachersClasses'])
     ->name('teacher-class.index')->middleware('auth');

@@ -6,9 +6,9 @@
         <div class="flex-1 flex flex-row" style="max-height: 94%;">
             <div :class="{'hidden': !toggleSb}" class="z-20 lg:block absolute h-full lg:relative bg-white flex-shrink-0 shadow-csh1" id="sidebar">
                 <side-bar v-if=" $page.props.user.role === 'admin'"></side-bar>
-                <side-bar-teacher v-if=" $page.props.user.role === 'teacher'"></side-bar-teacher>
+                <side-bar-teacher v-else-if=" $page.props.user.role === 'teacher'"></side-bar-teacher>
                 <div v-else>
-                    Not A/B/C
+                    bhg
                 </div>
             </div>
             <div class="flex flex-col flex-grow max-h-full w-full p-8 overflow-y-auto">

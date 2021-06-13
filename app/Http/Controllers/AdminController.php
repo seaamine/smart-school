@@ -266,7 +266,7 @@ class AdminController extends Controller
     }
     public function addTeacher(){
         $subjects= Subject::where('status',1)->get();
-        return Inertia::render('Teacher/Add', ['subjects'=>$subjects]);
+        return Inertia::render('Teacher/Add', ['$subjectssubjects'=>$subjects]);
     }
     public function storeTeacher(Request $request){
         $validated = $request->validate([
@@ -498,5 +498,10 @@ class AdminController extends Controller
         }
         Auth::login($user);
         return redirect()->route('dashboard');
+    }
+
+    public function editSchoolCertificate(){
+        return Inertia::render('Certificate/Edit', []);
+
     }
 }

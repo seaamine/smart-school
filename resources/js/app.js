@@ -6,6 +6,7 @@ import {App as InertiaApp, plugin as InertiaPlugin} from '@inertiajs/inertia-vue
 import {InertiaProgress} from '@inertiajs/progress';
 import PrimeVue from 'primevue/config';
 import ToastService from 'primevue/toastservice';
+import Vue2Editor from "vue2-editor";
 
 //import Quasar from 'quasar/dist/quasar.umd.prod.js';
 const el = document.getElementById('app');
