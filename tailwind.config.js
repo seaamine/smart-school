@@ -63,8 +63,9 @@ module.exports = {
                 sans: ['Nunito', ...defaultTheme.fontFamily.sans],
             },
             boxShadow:{
-                csh1: '0 14px 15px 0 rgb(34 41 47 / 5%)',
-                csh2: '0 4px 24px 0 rgb(34 41 47 / 10%)',
+                //csh1: '0 14px 15px 0 rgb(34 41 47 / 5%)',
+                csh2: '0 4px 24px 0 rgb(34 41 47 / 40%)',
+                csh1: '2px 28px 20px 3px rgb(34 41 47 / 29%)',
             }
         },
     },

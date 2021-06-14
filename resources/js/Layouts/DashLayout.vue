@@ -9,7 +9,7 @@
                 <side-bar-teacher v-else-if=" $page.props.user.role === 'teacher'"></side-bar-teacher>
                 <side-bar-student v-else></side-bar-student>
             </div>
-            <div class="flex flex-col flex-grow max-h-full w-full p-8 overflow-y-auto">
+            <div class="flex flex-col flex-grow max-h-full w-full p-8 overflow-y-auto" style="background-image: url('images/background-2.png');background-size: 40%;">
                 <Toast />
 
                 <!-- Page Content -->
