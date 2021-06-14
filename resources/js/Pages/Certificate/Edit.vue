@@ -11,7 +11,18 @@
     </div>
     <div class="card p-6" >
         <div class="document-editor">
-            <ckeditor style="height: 375px;" @ready="onReady" :editor="editor" v-model="editorData"></ckeditor>
+            <editor
+                v-model="editorData"
+            :init="{
+            height: 500,
+            skin:false,
+            content_css:false,
+            menubar: false,
+              plugins: 'print preview paste importcss searchreplace save directionality visualblocks visualchars fullscreen charmap hr pagebreak nonbreaking  toc insertdatetime advlist lists wordcount textpattern noneditable charmap quickbars',
+             toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap | fullscreen preview print | ltr rtl',
+
+            }"
+            />
         </div>
         <div class="flex justify-evenly mt-4">
             <button :disabled="isSubmitting" @click="submitTemplate()" class=" mr-4 w-1/3 py-4 text-white rounded-md font-medium bg-primary-500 py-2 px-4 hover:bg-primary-800 hover:ring hover:ring-primary-200 inline-flex justify-center items-center">
@@ -22,20 +33,56 @@
                 Sauvegarder
             </button>
         </div>
-        <div v-html="finalview()"></div>
     </div>
 </template>
 
 <script>
 import DashLayout from '@/Layouts/DashLayout';
-import Editor from 'ckeditor5-custom-build/build/ckeditor'
-import CKEditor from '@ckeditor/ckeditor5-vue';
+//import Editor from 'ckeditor5-custom-build/build/ckeditor'
+//import CKEditor from '@ckeditor/ckeditor5-vue';
 //import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import "tinymce/tinymce";
+import "tinymce/themes/silver";
+import "tinymce/icons/default";
+import 'tinymce/skins/ui/oxide/skin.min.css';
+import 'tinymce/skins/ui/oxide/content.min.css';
+import 'tinymce/skins/content/default/content.min.css';
+
+// Default icons are required for TinyMCE 5.3 or above
+// Any plugins you want to use has to be imported
+import 'tinymce/plugins/save';
+import 'tinymce/plugins/directionality';
+import 'tinymce/plugins/visualblocks';
+import 'tinymce/plugins/visualchars';
+import 'tinymce/plugins/fullscreen';
+import 'tinymce/plugins/paste';
+import 'tinymce/plugins/link';
+import 'tinymce/plugins/preview';
+import 'tinymce/plugins/print';
+import 'tinymce/plugins/paste';
+import 'tinymce/plugins/importcss';
+import 'tinymce/plugins/searchreplace';
+import 'tinymce/plugins/table';
+import 'tinymce/plugins/hr';
+import 'tinymce/plugins/pagebreak';
+import 'tinymce/plugins/nonbreaking';
+import 'tinymce/plugins/toc';
+import 'tinymce/plugins/insertdatetime';
+import 'tinymce/plugins/lists';
+import 'tinymce/plugins/wordcount';
+import 'tinymce/plugins/textpattern';
+import 'tinymce/plugins/noneditable';
+import 'tinymce/plugins/quickbars';
+import 'tinymce/plugins/charmap';
+import 'tinymce/plugins/advlist';
+
+import Editor from '@tinymce/tinymce-vue'
+
 export default {
     name: "Edit",
     components: {
         // Use the <ckeditor> component in this view.
-        ckeditor: CKEditor.component
+        'editor': Editor,
     },
     layout: DashLayout,
     props:{
@@ -44,8 +91,7 @@ export default {
     },
     data(){
         return {
-            editor: Editor ,
-            editorData: this.template,
+            editorData: this.template ?? '',
             editorConfig: {
                 toolbar: {
 
@@ -55,15 +101,6 @@ export default {
         };
     },
     methods: {finalview(){
-            this.template.replace('#numcert','2020/4/215');
-            this.template.replace('#nom','Laamari');
-            this.template.replace('#prenom','mohamed');
-            this.template.replace('#dob','1990/05/29');
-            this.template.replace('#pob','Batna');
-            this.template.replace('#class','2AM3');
-            this.template.replace('#ay','2021/2022');
-            this.template.replace('#numreg','455-8584-52145');
-            this.template.replace('#date','13/06/2021');
         },
         onReady( editor )  {
             // Insert the toolbar before the editable area.
@@ -102,32 +139,7 @@ export default {
 
 }
 </script>
-<style scoped>
-.document-editor {
-    border: 1px solid var(--ck-color-base-border);
-    border-radius: var(--ck-border-radius);
+<style  scoped>
 
-    /* Set vertical boundaries for the document editor. */
-    max-height: 700px;
 
-    /* This element is a flex container for easier rendering. */
-    display: flex;
-    flex-flow: column nowrap;
-}
-.document-editor__toolbar {
-    /* Make sure the toolbar container is always above the editable. */
-    z-index: 1;
-
-    /* Create the illusion of the toolbar floating over the editable. */
-    box-shadow: 0 0 5px hsla( 0,0%,0%,.2 );
-
-    /* Use the CKEditor CSS variables to keep the UI consistent. */
-    border-bottom: 1px solid var(--ck-color-toolbar-border);
-}
-
-/* Adjust the look of the toolbar inside the container. */
-.document-editor__toolbar .ck-toolbar {
-    border: 0;
-    border-radius: 0;
-}
 </style>

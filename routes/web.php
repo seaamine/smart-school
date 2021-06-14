@@ -65,6 +65,9 @@ Route::get('/school-certificate/tempalte',  [\App\Http\Controllers\AdminControll
     ->name('school-certificate.edit')->middleware('auth');
 Route::post('/school-certificate/template',  [\App\Http\Controllers\AdminController::class,'updateSchoolCertificate'])
     ->name('school-certificate.update')->middleware('auth');
+Route::get('/school-certificate/request',  [\App\Http\Controllers\StudentController::class,'requestCertifciate'])
+    ->name('school-certificate.request')->middleware('auth');
+
 Route::get('/school-certificate/download',  [\App\Http\Controllers\AdminController::class,'downloadSchoolCertificate'])
     ->name('school-certificate.download')->middleware('auth');
 
