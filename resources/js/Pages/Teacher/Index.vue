@@ -47,7 +47,7 @@
             </Column>
             <Column :exportable="false">
                 <template #body="slotProps">
-                    <inertia-link :data="{ id: slotProps.data.id }" :href="route('class.edit')" as="button"
+                    <inertia-link :data="{ id: slotProps.data.id }" :href="route('teacher.edit',{'id':slotProps.data.id})" as="button"
                                   class="bg-primary-500 text-white  rounded-full w-10 h-10 font-medium inline-flex justify-center items-center mr-4 border border-primary-500 hover:ring-4 hover:ring-primary-100 focus:bg-primary-600 focus:outline-none active:bg-primary-600"
                                   method="get" title="Edit"
                                   type="button">

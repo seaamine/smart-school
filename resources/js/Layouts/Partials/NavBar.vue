@@ -23,7 +23,7 @@
                         <span class="text-sm leading-3">{{ $page.props.user.role }}</span>
                     </div>
                     <span>
-                        <img style="width: 40px; height: 40px" :src="$page.props.user.gender == 'm'? $page.props.appUrl+'/images/male_avatar.png' : $page.props.appUrl+'/images/female_avatar.png'">
+                        <img style="width: 40px; height: 40px" :src="$page.props.user.profile_photo_path">
                     </span>
                 </MenuButton>
                 <MenuItems as="ul" class="bg-white w-52 bg-clip-padding rounded border border-gray-800 border-opacity-5 absolute top-16 left-auto right-0 z-10">

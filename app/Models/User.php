@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
@@ -61,4 +62,15 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function getProfilePhotoPathAttribute($value){
+        //$page.props.user.gender == 'm'? $page.props.appUrl+'/images/male_avatar.png' : $page.props.appUrl+'/images/female_avatar.png'
+        $image = asset('images/male_avatar.png');
+        if(isset($value) && !empty($value)){
+            if(Storage::disk('public')->exists($value)){
+                $image = Storage::disk('public')->url($value);
+            }
+        }
+        return $image;
+    }
 }

@@ -147,5 +147,7 @@
 </script>
 
 <style scoped>
-
+    .form-control {
+        padding: 0rem 0rem;
+    }
 </style>

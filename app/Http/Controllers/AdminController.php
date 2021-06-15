@@ -136,31 +136,30 @@ class AdminController extends Controller
     }
     public function editClass(Request $request){
         $class = SClass::findOrFail($request->input('id'));
+        if(!$class){
+            session()->flash("toast",['type'=>'error','summary'=>'L\'opération a échoué!','detail'=>'Désolé, la ressource que vous recherchez n\'a pas pu être trouvée.']);
+            return redirect()->route('class.index');
+        }
         return Inertia::render('Class/Edit', ['classe'=>$class]);
     }
     public function patchClass(Request $request){
-        $subject = Subject::findOrFail($request->input('id'));
+        $class = SClass::findOrFail($request->input('id'));
+        if(!$class){
+            session()->flash("toast",['type'=>'error','summary'=>'L\'opération a échoué!','detail'=>'Désolé, la ressource que vous recherchez n\'a pas pu être trouvée.']);
+            return redirect()->route('class.index');
+        }
         $validated = $request->validate([
             'name' => ['required', 'max:255',
-                Rule::unique('subjects','name')->ignore($subject->id),
+                Rule::unique('subjects','name')->ignore($class->id),
             ],
-            'levels' => 'required|array|min:1',
-            'levels.*' => 'required|in:1,2,3,4',
-            'selectedType' => 'required|in:1,2',
-            'subjectImage' => 'file|image|max:2048'
+            'level' => 'required|in:1,2,3,4',
         ]);
-        $subjectImage = $request->file('subjectImage');
-        $file_name = time().'_'.$subjectImage->getClientOriginalName();
-        $file_path = $subjectImage->storeAs('subject_images', $file_name, 'public');
+        $class->name=$request->input('name');
+        $class->level = $request->input('level');
+        $class->save();
+        session()->flash("toast",['type'=>'success','summary'=>'Opération réussie','detail'=>'la Classe a été modifée.']);
 
-        $subject->name=$request->input('name');
-        $subject->type = $request->input('selectedType');
-        $subject->level = implode(',',$request->input('levels'));
-        $subject->image_path = 'storage/'.$file_path;
-        $subject->save();
-        session()->flash("toast",['type'=>'success','summary'=>'Opération réussie','detail'=>'la Matière a été modifée.']);
-
-        return redirect()->route('subject.patch',['id'=>$subject->id]);
+        return redirect()->route('class.patch',['id'=>$class->id]);
     }
 
     public function indexStudent(){
@@ -194,7 +193,7 @@ class AdminController extends Controller
             'group' => 'required'
         ]);
         $classR= $request->get("classR");
-        $sClass = SClass::where('id', $classR['id'] )->where('status', 1)->first();
+        $sClass = SClass::where('id', $classR['id'] )->where('status', '1')->first();
         if(!$sClass){
             session()->flash("toast",['type'=>'error', 'summary'=>'L\'opération a échoué!','detail' => 'Mauvaise sélection de classe!']);
 
@@ -271,8 +270,8 @@ class AdminController extends Controller
         return Inertia::render('Teacher/Index', ['teachers'=>$teachers]);
     }
     public function addTeacher(){
-        $subjects= Subject::where('status',1)->get();
-        return Inertia::render('Teacher/Add', ['$subjectssubjects'=>$subjects]);
+        $subjects= Subject::where('status','1')->get();
+        return Inertia::render('Teacher/Add', ['subjects'=>$subjects]);
     }
     public function storeTeacher(Request $request){
         $validated = $request->validate([
@@ -291,7 +290,7 @@ class AdminController extends Controller
             'subject' => 'required',
             'qualification' => 'required|in:B,L,M',
         ]);
-        $subject = Subject::where('id', $request->input('subject') )->where('status', 1)->first();
+        $subject = Subject::where('id', $request->input('subject') )->where('status', '1')->first();
         if(!$subject){
             session()->flash("toast",['type'=>'error', 'summary'=>'L\'opération a échoué!','detail' => 'Mauvaise sélection de Matière!']);
             return redirect()->route('teacher.add');
@@ -340,6 +339,64 @@ class AdminController extends Controller
         session()->flash("toast",['type'=>'success','summary'=>'Opération réussie','detail'=>'Nouvel Enseignant ajouté avec succès']);
 
         return redirect()->route('student.add');
+    }
+    public function editTeacher(Request $request){
+        $teacher = Teacher::findOrFail($request->input('id'));
+        $subjects= Subject::where('status','1')->get();
+        return Inertia::render('Teacher/Edit', ['subjects'=>$subjects,'teacher'=>$teacher]);
+    }
+    public function updateTeacher(Request $request){
+        $teacher = Teacher::findOrFail($request->input('id'));
+        $teacherUser = User::findOrFail($teacher->user_id);
+        $validated = $request->validate([
+            'lastName' => 'required|max:80',
+            'firstName' => 'required|max:80',
+            'gender' => 'required|in:m,f',
+            'dob' => 'required|date',
+            'join' => 'required|date',
+            'commune'=>'required',
+            'willaya'=>'required',
+            "paye" => "required",
+            "email"=>[
+                'required',
+                Rule::unique('teachers','email')->ignore($teacher->id),
+                Rule::unique('users','email')->ignore($teacherUser->id),
+            ],
+            'address'=> 'required|max:500',
+            'subject' => 'required',
+            'qualification' => 'required|in:B,L,M',
+        ]);
+        $subject = Subject::where('id', $request->input('subject') )->where('status', '1')->first();
+        if(!$subject){
+            session()->flash("toast",['type'=>'error', 'summary'=>'L\'opération a échoué!','detail' => 'Mauvaise sélection de Matière!']);
+            return redirect()->route('teacher.edit',['id'=>$teacher->id]);
+        }
+
+        if($request->hasFile('photo')) {
+            $imgStorePath = "teacher";
+            $storagepath = $request->file('photo')->store($imgStorePath,'public');
+            $teacher->photo = 'storage/'.$storagepath;
+            $teacherUser->profile_photo_path = $storagepath;
+        }
+        $teacherUser->email = $request->input('email');
+        $teacherUser->name = $request->input('lastName')." ".$request->input('firstName');
+        $teacherUser->gender = $request->input('gender');
+        $teacherUser->save();
+        $teacher->first_name = $request->input('firstName');
+        $teacher->last_name = $request->input('lastName');
+        $teacher->commune = $request->input('commune');
+        $teacher->willaya = $request->input('willaya');
+        $teacher->paye = $request->input('paye');
+        $teacher->qualification = $request->input('qualification');
+        $teacher->dob = $request->input('dob');
+        $teacher->gender = $request->input('gender');
+        $teacher->address = $request->input('address');
+        $teacher->joining_date = $request->input('join');
+        $teacher->email = $request->input('email');
+
+        $teacher->save();
+        session()->flash("toast",['type'=>'success','summary'=>'Opération réussie','detail'=>'les informations de l\'enseignant ont été mises à jo']);
+        return redirect()->route('teacher.edit',['id'=>$teacher->id]);
     }
 
     public function indexTeachersClasses(){

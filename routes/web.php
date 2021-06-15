@@ -60,6 +60,10 @@ Route::get('/teachers/add',  [\App\Http\Controllers\AdminController::class,'addT
     ->name('teacher.add')->middleware('auth');;
 Route::post('/teachers/add',  [\App\Http\Controllers\AdminController::class,'storeTeacher'])
     ->name('teacher.store')->middleware('auth');
+Route::get('/teachers/edit',  [\App\Http\Controllers\AdminController::class,'editTeacher'])
+    ->name('teacher.edit')->middleware('auth');;
+Route::post('/teachers/edit',  [\App\Http\Controllers\AdminController::class,'updateTeacher'])
+    ->name('teacher.patch')->middleware('auth');
 
 Route::get('/school-certificate/tempalte',  [\App\Http\Controllers\AdminController::class,'editSchoolCertificate'])
     ->name('school-certificate.edit')->middleware('auth');
