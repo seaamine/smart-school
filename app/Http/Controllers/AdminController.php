@@ -87,21 +87,23 @@ class AdminController extends Controller
         $subject = Subject::findOrFail($request->input('id'));
         $validated = $request->validate([
             'name' => ['required', 'max:255',
-                Rule::unique('subjects',name)->ignore($subject->id),
+                Rule::unique('subjects',"name")->ignore($subject->id),
                 ],
             'levels' => 'required|array|min:1',
             'levels.*' => 'required|in:1,2,3,4',
             'selectedType' => 'required|in:1,2',
             'subjectImage' => 'file|image|max:2048'
         ]);
-        $subjectImage = $request->file('subjectImage');
-        $file_name = time().'_'.$subjectImage->getClientOriginalName();
-        $file_path = $subjectImage->storeAs('subject_images', $file_name, 'public');
+        if($request->hasFile('subjectImage')){
+            $subjectImage = $request->file('subjectImage');
+            $file_name = time().'_'.$subjectImage->getClientOriginalName();
+            $file_path = $subjectImage->storeAs('subject_images', $file_name, 'public');
+            $subject->image_path = 'storage/'.$file_path;
+        }
 
         $subject->name=$request->input('name');
         $subject->type = $request->input('selectedType');
         $subject->level = implode(',',$request->input('levels'));
-        $subject->image_path = 'storage/'.$file_path;
         $subject->save();
         session()->flash("toast",['type'=>'success','summary'=>'Opération réussie','detail'=>'la Matière a été modifée.']);
 
@@ -140,7 +142,7 @@ class AdminController extends Controller
         $subject = Subject::findOrFail($request->input('id'));
         $validated = $request->validate([
             'name' => ['required', 'max:255',
-                Rule::unique('subjects',name)->ignore($subject->id),
+                Rule::unique('subjects','name')->ignore($subject->id),
             ],
             'levels' => 'required|array|min:1',
             'levels.*' => 'required|in:1,2,3,4',
