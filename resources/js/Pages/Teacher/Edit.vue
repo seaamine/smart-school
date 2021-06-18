@@ -146,8 +146,6 @@
                 paye: props.teacher.paye,
                 email: props.teacher.email,
                 address: props.teacher.address,
-                username: null,
-                password: null,
                 subject: props.teacher.subject_id,
                 qualification: props.teacher.qualification,
 

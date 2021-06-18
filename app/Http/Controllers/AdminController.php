@@ -264,6 +264,13 @@ class AdminController extends Controller
         return redirect()->route('student.add');
     }
 
+    public function editStudent(Request $request){
+        $classes=SClass::all();
+        $student = Student::findOrFail($request->input('id'));
+        return Inertia::render('Student/Edit', ["classes"=>$classes,'student'=>$student]);
+
+    }
+
     public function indexTeacher(){
         $teachers = Teacher::with('subject')->get();
         //dd($teachers);

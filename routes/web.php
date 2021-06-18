@@ -53,6 +53,7 @@ Route::patch('/classes/edit',  [\App\Http\Controllers\AdminController::class,'pa
 Route::get('/students',  [\App\Http\Controllers\AdminController::class,'indexStudent'])->name('student.index');
 Route::get('/students/add',  [\App\Http\Controllers\AdminController::class,'addStudent'])->name('student.add');
 Route::post('/students/add',  [\App\Http\Controllers\AdminController::class,'storeStudent'])->name('student.store');
+Route::get('/students/edit',  [\App\Http\Controllers\AdminController::class,'editStudent'])->name('student.edit');
 
 Route::get('/teachers',  [\App\Http\Controllers\AdminController::class,'indexTeacher'])
     ->name('teacher.index')->middleware('auth');;

@@ -94,7 +94,10 @@ export default {
         const onSubmit = handleSubmit(values => {
             //Inertia.patch(route('subject.patch',{'id':props.subject.id}), values);
             values._method = 'patch';
-            Inertia.post(route('subject.patch',{'id':props.subject.id}), values);
+            Inertia.post(route('subject.patch',{'id':props.subject.id}), {
+                _method: 'patch',
+                ...values
+            });
         });
         const { value: name } = useField('name');
         const { value: levels } = useField('levels')
