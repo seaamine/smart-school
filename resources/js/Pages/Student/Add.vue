@@ -220,7 +220,6 @@ export default {
         });
         const veeErrors = errors;
         const onSubmit = handleSubmit(values => {
-            console.log(isSubmitting);
             return Inertia.post(route('student.store'), values);
         });
         const { value: lastName } = useField('lastName');

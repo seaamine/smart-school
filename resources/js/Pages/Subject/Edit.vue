@@ -93,7 +93,6 @@ export default {
         const veeErrors = errors;
         const onSubmit = handleSubmit(values => {
             //Inertia.patch(route('subject.patch',{'id':props.subject.id}), values);
-            values._method = 'patch';
             Inertia.post(route('subject.patch',{'id':props.subject.id}), {
                 _method: 'patch',
                 ...values

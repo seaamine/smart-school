@@ -34,6 +34,9 @@ Route::get('/student/create', function () {
     ]);
 })->name('student.create');
 
+Route::get('/users/credentials',  [\App\Http\Controllers\AdminController::class,'userCredentials'])->name('user.credentials');
+Route::patch('/users/credentials',  [\App\Http\Controllers\AdminController::class,'updateUserCredentials'])->name('user.update');
+
 Route::get('/academic-years',  [\App\Http\Controllers\AdminController::class,'indexAcademicYear'])->name('academicYear.index');
 Route::get('/academic-years/create', [\App\Http\Controllers\AdminController::class,'createAcademicYear'])->name('academicYear.create');
 Route::post('/academic-years/create', [\App\Http\Controllers\AdminController::class,'storeAcademicYear'])->name('academicYear.store');
@@ -54,6 +57,7 @@ Route::get('/students',  [\App\Http\Controllers\AdminController::class,'indexStu
 Route::get('/students/add',  [\App\Http\Controllers\AdminController::class,'addStudent'])->name('student.add');
 Route::post('/students/add',  [\App\Http\Controllers\AdminController::class,'storeStudent'])->name('student.store');
 Route::get('/students/edit',  [\App\Http\Controllers\AdminController::class,'editStudent'])->name('student.edit');
+Route::patch('/students/edit',  [\App\Http\Controllers\AdminController::class,'updateStudent'])->name('student.update');
 
 Route::get('/teachers',  [\App\Http\Controllers\AdminController::class,'indexTeacher'])
     ->name('teacher.index')->middleware('auth');;

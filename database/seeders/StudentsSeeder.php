@@ -32,14 +32,14 @@ class StudentsSeeder extends Seeder
                 $first_name=$faker->firstName($gender);
                 $last_name=$faker->lastName($gender);
                 $email=$faker->unique()->email;
-                $email = substr_replace($email, rand(0,100).' ', strpos($email,'@'), 0);
+                $email = substr_replace($email, rand(0,100).'', strpos($email,'@'), 0);
                 $user=User::create(['email'=>$email,'name'=>"$last_name $first_name",'status'=>'1','username'=>$faker->unique()->userName.'_'.Str::random(3),'password'=>bcrypt('123456'),'gender'=>$genderTog[$gender],'role'=>'student']);
                 $student=Student::create(['user_id'=>$user->id,'status'=>'1','first_name'=>$first_name, 'last_name'=>$last_name,
                     'commune'=>'alger','willaya'=>'Alger','paye'=>'Algeria',
                     'dob'=>$faker->date($format = 'Y-m-d', $max = 'now'),'gender'=>$genderTog[$gender],
                     'email'=>$email,
                     'photo'=>$faker->imageUrl(),
-                    'father_name'=>$faker->firstName('male'),'mother_full_name'=>"$faker->lastName('female') $faker->firstName('female')",
+                    'father_name'=>$faker->firstName('male'),'mother_full_name'=>$faker->lastName('female').' '.$faker->firstName('female'),
                     'father_phone_no'=>$faker->e164PhoneNumber,'mother_phone_no'=>$faker->e164PhoneNumber,
                 ]);
                 $regiNo = $currentAYear->start_date->format('y') . (string)$classe->name;

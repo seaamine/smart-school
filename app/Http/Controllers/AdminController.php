@@ -15,6 +15,7 @@ use App\Models\Subject;
 use App\Models\Teacher;
 use App\Models\TeacherClass;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,6 +27,30 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class AdminController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except('loginAs');
+        $this->middleware('role:admin')->except('loginAs');
+    }
+
+    public function userCredentials(Request $request){
+        $user = User::findOrFail($request->input('id'));
+        return Inertia::render('User/Credentials', ['userC'=>$user
+        ]);
+    }
+    public function updateUserCredentials(Request $request){
+        $user = User::findOrFail($request->input('id'));
+        $validated = $request->validate([
+            'password' => 'required',
+        ]);
+        $user->forceFill([
+            'password' => Hash::make($request->input('password')),
+        ])->save();
+        session()->flash("toast",['type'=>'success','summary'=>'Opération réussie','detail'=>'Les identifiants de l\'utilisateur ont été mis à jour']);
+
+        return Redirect::route('user.credentials',['id'=>$user->id]);
+    }
+
     public function indexAcademicYear(){
         $academicYears=AcademicYear::select('title','start_date','end_date','status')->get();
         return Inertia::render('AcademicYear/Index', ['yearsData'=>$academicYears
@@ -270,6 +295,59 @@ class AdminController extends Controller
         return Inertia::render('Student/Edit', ["classes"=>$classes,'student'=>$student]);
 
     }
+    public function updateStudent(Request $request){
+        $student = Student::findOrFail($request->input('id'));
+        $studentUser = User::findOrFail($student->user_id);
+        $validated = $request->validate([
+            'lastName' => 'required|max:80',
+            'firstName' => 'required|max:80',
+            'gender' => 'required|in:m,f',
+            'dob' => 'required|date',
+            'commune'=>'required',
+            'willaya'=>'required',
+            "paye" => "required",
+            "email"=>[
+                'required',
+                Rule::unique('students','email')->ignore($student->id),
+                Rule::unique('users','email')->ignore($studentUser->id),
+            ],
+            'address'=> 'required|max:500',
+            'fatherFirstName' => 'required|max:80',
+            'fatherPhone' => "required|numeric",
+            'motherName' => 'required|max:100',
+            'motherPhone' => "required|numeric",
+        ]);
+
+
+        if($request->hasFile('photo')) {
+            $imgStorePath = "student";
+            $storagepath = $request->file('photo')->store($imgStorePath,'public');
+            $student->photo = 'storage/'.$storagepath;
+            $studentUser->profile_photo_path = $storagepath;
+        }
+        $studentUser->email = $request->input('email');
+        $studentUser->name = $request->input('lastName')." ".$request->input('firstName');
+        $studentUser->gender = $request->input('gender');
+        $studentUser->save();
+        $student->first_name = $request->input('firstName');
+        $student->last_name = $request->input('lastName');
+        $student->commune = $request->input('commune');
+        $student->willaya = $request->input('willaya');
+        $student->paye = $request->input('paye');
+        $student->address = $request->input('address');
+        $student->email = $request->input('email');
+        $student->gender = $request->input('gender');
+        $student->note = $request->input('note');
+        $student->father_name = $request->input('fatherFirstName');
+        $student->father_phone_no = $request->input('fatherPhone');
+        $student->mother_full_name = $request->input('motherName');
+        $student->mother_phone_no = $request->input('motherPhone');
+
+        $student->save();
+        session()->flash("toast",['type'=>'success','summary'=>'Opération réussie','detail'=>'les informations de l\'éleve ont été mises à jour']);
+        return redirect()->route('student.edit',['id'=>$student->id]);
+    }
+
 
     public function indexTeacher(){
         $teachers = Teacher::with('subject')->get();

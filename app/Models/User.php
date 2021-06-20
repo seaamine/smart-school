@@ -61,16 +61,27 @@ class User extends Authenticatable
      */
     protected $appends = [
         'profile_photo_url',
+        'photo_url'
     ];
 
-    public function getProfilePhotoPathAttribute($value){
+
+    public function getPhotoUrlAttribute(){
         //$page.props.user.gender == 'm'? $page.props.appUrl+'/images/male_avatar.png' : $page.props.appUrl+'/images/female_avatar.png'
-        $image = asset('images/male_avatar.png');
-        if(isset($value) && !empty($value)){
-            if(Storage::disk('public')->exists($value)){
-                $image = Storage::disk('public')->url($value);
+
+        $image = $this->gender ==='m'?asset('images/male_avatar.png'):asset('images/female_avatar.png');
+        if(isset($this->profile_photo_path) && !empty($this->profile_photo_path)){
+            if(Storage::disk('public')->exists($this->profile_photo_path)){
+                $image = Storage::disk('public')->url($this->profile_photo_path);
             }
         }
+
         return $image;
+    }
+    public function hasRole($role): bool
+    {
+        if ($this->role === $role) {
+            return true;
+        }
+        return false;
     }
 }

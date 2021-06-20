@@ -1,6 +1,6 @@
 <template>
     <div class="content-header mb-5">
-        <h2>Nouveau Etudiant</h2>
+        <h2>Modifier l'élève</h2>
     </div>
     <div v-if="Object.keys(errors).length" class="card card-danger p-6 mb-4 text-white">
         <ul class="list-disc">
@@ -105,68 +105,12 @@
                 <div class="flex gap-x-7 flex-col md:flex-row">
                     <div class="form-group md:w-1/3">
                         <Label>Adresse</Label>
-                        <textarea v-model="address" class="form-control h-auto" rows="2"></textarea>
+                        <textarea v-model="address" :class="{ 'is-invalid': veeErrors.address }"  class="form-control h-auto" rows="2"></textarea>
                         <span class="text-danger-500">{{ veeErrors.address }}</span>
                     </div>
                 </div>
             </div>
-            <div>
-                <h4 class="my-4">informations Academeics</h4>
-                <div class="flex gap-x-7 flex-col md:flex-row">
-                    <div class="form-group md:w-1/4">
-                        <Label>N° d'enregistrement</Label>
-                        <input disabled="disabled" class="form-control" type="text" placeholder="N° d'enregistrement">
-                    </div>
-                    <div class="form-group md:w-1/4">
-                        <Label>Niveau</Label>
-                        <select name="level" v-model="level" class="form-control">
-                            <option value="1">
-                                1<sup>er</sup> année
-                            </option>
-                            <option value="2">
-                                2<sup>éme</sup> année
-                            </option>
-                            <option value="3">
-                                3<sup>éme</sup> année
-                            </option>
-                            <option value="4">
-                                4<sup>éme</sup> année
-                            </option>
-                        </select>
-                    </div>
-                    <div class="form-group md:w-1/4">
-                        <Label>Classe</Label>
-                        <select name="classR" :disabled="level == null" v-model="classR" class="form-control">
-                            <option v-for="classe in levelClasses" :value="classe" :key="classe.id">
-                                {{classe.name}}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="form-group md:w-1/4">
-                        <Label>Groupe</Label>
-                        <select name="group" v-model="group" :disabled="classR == null" class="form-control">
-                            <option v-for="g in classGroups" :value="g" :key="'g'+g">
-                                {{'Groupe '+g}}
-                            </option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <h4 class="my-4">informations d'identification</h4>
-                <div class="flex gap-x-7 flex-col md:flex-row">
-                    <div class="form-group md:w-1/2">
-                        <Label>Nom d'utilisateur</Label>
-                        <input name="username" v-model="username" class="form-control" :class="{ 'is-invalid': veeErrors.username }" type="text" placeholder="Nom d'utilisateur">
-                        <span class="text-danger-500">{{ veeErrors.username }}</span>
-                    </div>
-                    <div class="form-group md:w-1/2">
-                        <Label>Mot de pass</Label>
-                        <input name="password" v-model="password" class="form-control" :class="{ 'is-invalid': veeErrors.password }" type="text" placeholder="Mot de pass">
-                        <span class="text-danger-500">{{ veeErrors.password }}</span>
-                    </div>
-                </div>
-            </div>
+
             <div class="flex py-4">
                 <button type="submit" :disabled="isSubmitting" class="inline-flex items-center py-3 px-6 rounded-md text-white font-semibold bg-primary-500 border border-primary-500 mr-4 focus:bg-primary-600 focus:outline-none active:bg-primary-600">
                     <svg v-show="isSubmitting" class="animate-spin h-5 w-5 mr-3 text-white" viewBox="0 0 24 24">
@@ -194,7 +138,7 @@
         name: "Edit",
         components:{ Label, RadioButton, Form, ErrorMessage, Calendar},
         layout: DashLayout,
-        setup() {
+        setup(props) {
             const formValues = {
                 lastName: props.student.last_name,
                 firstName: props.student.first_name,
@@ -210,9 +154,6 @@
                 motherName: props.student.mother_full_name,
                 motherPhone: props.student.mother_phone_no,
                 note: props.student.note,
-                level: props.teacher.level,
-                classR: props.student.willaya,
-                group: props.student.willaya,
             };
             const schema = yup.object({
                 lastName: yup.string().required(),
@@ -228,11 +169,6 @@
                 motherName: yup.string().required(),
                 motherPhone: yup.number().required().positive().integer(),
                 address: yup.string().required(),
-                level: yup.number().required().oneOf([1, 2, 3, 4]),
-                classR: yup.mixed().required(),
-                group: yup.number().required().positive().integer(),
-                username: yup.string().required(),
-                password: yup.string().required().min(6),
             });
             const { errors,handleSubmit,isSubmitting } = useForm({
                 validationSchema: schema,initialValues: formValues,
@@ -240,7 +176,10 @@
             const veeErrors = errors;
             const onSubmit = handleSubmit(values => {
                 console.log(isSubmitting);
-                return Inertia.post(route('student.store'), values);
+                return Inertia.post(route('student.update',{'id':props.student.id}), {
+                    _method: 'patch',
+                    ...values
+                });
             });
             const { value: lastName } = useField('lastName');
             const { value: firstName } = useField('firstName');
@@ -289,81 +228,6 @@
             errors: Object,
             classes: Array,
             student: Object,
-        },setup() {
-            const schema = yup.object({
-                lastName: yup.string().required(),
-                firstName: yup.string().required(),
-                gender: yup.string().required().oneOf(['m', 'f']),
-                dob: yup.date().required(),
-                commune: yup.string().required(),
-                willaya: yup.string().required(),
-                paye: yup.string().required(),
-                email: yup.string().email(),
-                fatherFirstName: yup.string().required(),
-                fatherPhone: yup.number().required().positive().integer(),
-                motherName: yup.string().required(),
-                motherPhone: yup.number().required().positive().integer(),
-                address: yup.string().required(),
-                level: yup.number().required().oneOf([1, 2, 3, 4]),
-                classR: yup.mixed().required(),
-                group: yup.number().required().positive().integer(),
-                username: yup.string().required(),
-                password: yup.string().required().min(6),
-            });
-            const { errors,handleSubmit,isSubmitting } = useForm({
-                validationSchema: schema,
-            });
-            const veeErrors = errors;
-            const onSubmit = handleSubmit(values => {
-                console.log(isSubmitting);
-                return Inertia.post(route('student.update'), values);
-            });
-            const { value: lastName } = useField('lastName');
-            const { value: firstName } = useField('firstName');
-            const { value: gender } = useField('gender');
-            const { value: level } = useField('level');
-            const { value: group } = useField('group');
-            const { value: classR } = useField('classR');
-            const { value: dob } = useField('dob');
-            const { value: commune } = useField('commune');
-            const { value: willaya } = useField('willaya');
-            const { value: paye } = useField('paye');
-            const { value: email } = useField('email');
-            const { value: note } = useField('note');
-            const { value: fatherFirstName } = useField('fatherFirstName');
-            const { value: fatherPhone } = useField('fatherPhone');
-            const { value: motherName } = useField('motherName');
-            const { value: motherPhone } = useField('motherPhone');
-            const { value: address } = useField('address');
-            const { value: username } = useField('username');
-            const { value: password } = useField('password');
-            const { value: photo } = useField('photo');
-            return {veeErrors, lastName, onSubmit,isSubmitting,firstName,level,group,classR,gender,dob,commune,willaya,
-                paye,email,note,fatherFirstName,fatherPhone,motherName,motherPhone,address,username,password,photo
-            };
-        },
-        computed:{
-            levelClasses: function(){
-                return this.classes.filter(classe => classe.level === this.level );
-            },
-            classGroups: function(){
-                return this.classR?.groups;
-            },
-        },
-        methods:{
-            dobRange: function(){
-                let date = new Date();
-                let maxY = date.getFullYear();
-                let minY = maxY - 20;
-                return minY + ':' + maxY;
-            },
-            onFileSelect(event) {
-                this.photo = event.target.files[0];
-            }
-        },
-        props: {
-            errors: Object,
-            classes: Array,
         },
     }
 </script>
