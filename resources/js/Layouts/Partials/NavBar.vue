@@ -28,28 +28,12 @@
                 </MenuButton>
                 <MenuItems as="ul" class="bg-white w-52 bg-clip-padding rounded border border-gray-800 border-opacity-5 absolute top-16 left-auto right-0 z-10">
                     <MenuItem as="li" v-slot="{ active }">
-                        <a :class='{ "bg-primary-100": active }' class="w-auto flex items-center dropdown-item" href="/account-settings">
-                            Profile
-                        </a>
-                    </MenuItem>
-                    <MenuItem as="li" v-slot="{ active }">
-                        <a :class='{ "bg-primary-100": active }'  class="w-auto flex items-center dropdown-item" href="/account-settings">
-                            Settings
-                        </a>
-                    </MenuItem>
-                    <MenuItem as="li" v-slot="{ active }">
-                        <hr>
-                    </MenuItem>
-                    <MenuItem as="li" v-slot="{ active }">
-                        <a :class='{ "bg-primary-100": active }' class="w-auto flex items-center dropdown-item" href="/account-settings">
+                        <inertia-link :href="route('logout')" method="post"  :class='{ "bg-primary-100": active }' class="w-auto flex items-center dropdown-item" >
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                             </svg>
-                             Logout
-                        </a>
-                    </MenuItem>
-                    <MenuItem as="li" disabled>
-                        <span class="opacity-75 dropdown-item">Invite a friend (coming soon!)</span>
+                            Logout
+                        </inertia-link>
                     </MenuItem>
                 </MenuItems>
             </Menu>

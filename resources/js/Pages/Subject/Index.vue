@@ -1,7 +1,7 @@
 <template>
     <div class="grid grid-cols-12 content-header mb-5">
         <div class="content-header-left col-span-9">
-            <h2>Subjects</h2>
+            <h2>Matières</h2>
         </div>
         <div class="content-header-right col-span-3 justify-self-end">
             <inertia-link :href="route('subject.add')" method="get" as="button" type="button" class="py-3 px-6 rounded-md text-white font-semibold bg-primary-500 border border-primary-500 mr-4 focus:bg-primary-600 focus:outline-none active:bg-primary-600">Nouveau Matière</inertia-link>

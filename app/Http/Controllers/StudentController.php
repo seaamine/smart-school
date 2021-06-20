@@ -91,8 +91,12 @@ class StudentController extends Controller
         $subjects=Subject::where('status','=','1')->where('level','like','%'.$class->level.'%')->get();
         $studentNotes = ExamNote::where('student_id',$student->id)
             ->where('academic_year_id',$academicYear->id)->get();
+        $studentN=[];
+        foreach ($studentNotes as $note){
+            $studentN[$note->trimester][$note->subject_id]=$note;
+        }
         return Inertia::render('Student/Notes',
-            ['student'=>$student,'exams'=>$exams,'subjects'=>$subjects,'class'=>$class,'academicYear'=>$academicYear]);
+            ['studentNotes'=>$studentN,'student'=>$student,'exams'=>$exams,'subjects'=>$subjects,'classe'=>$class,'academicYear'=>$academicYear]);
 
 
     }

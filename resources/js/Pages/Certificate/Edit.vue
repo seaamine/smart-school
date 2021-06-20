@@ -10,6 +10,18 @@
         </ul>
     </div>
     <div class="card p-6" >
+        <p>Utilisez le code suivant pour les remplacer par leurs valeurs:</p>
+        <p><b>#numcert</b> : numéro de certificat</p>
+        <p><b>#nom</b> : nom d'étudiant</p>
+        <p><b>#prenom</b> : prénom d'étudiant</p>
+        <p><b>#dob</b> : date de naissance de l'étudiant</p>
+        <p><b>#pob</b> : lieu de naissance de l'étudiant</p>
+        <p><b>#class</b> : classe d'étudiant</p>
+        <p><b>#ay</b> : année académique</p>
+        <p><b>#numreg</b> : numéro d'enregistrement</p>
+        <p><b>#date</b> : la date d'aujourd'hui</p>
+        <p class="mb-4"><b>#signateur</b> : signataire électronique</p>
+
         <div class="document-editor">
             <editor
                 v-model="editorData"
@@ -139,7 +151,6 @@ export default {
 
 }
 </script>
-<style  scoped>
-
+<style scoped>
 
 </style>

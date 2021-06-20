@@ -18,7 +18,7 @@
         <link href="https://unpkg.com/primeicons@4.1.0/primeicons.css" rel="stylesheet" type="text/css">
 
     </head>
-    <body class="bg-gray-100 font-sans antialiased">
+    <body class="bg-gray-100 font-sans antialiased m-0">
 
     <!-- Scripts -->
     @routes
