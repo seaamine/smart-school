@@ -175,7 +175,6 @@
             });
             const veeErrors = errors;
             const onSubmit = handleSubmit(values => {
-                console.log(isSubmitting);
                 return Inertia.post(route('student.update',{'id':props.student.id}), {
                     _method: 'patch',
                     ...values

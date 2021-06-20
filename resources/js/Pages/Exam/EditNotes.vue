@@ -397,7 +397,6 @@
                     student.remarque = 'good' ;
                 });
             });
-            console.log( this.studentsNotes['trimester2'][10][361].note_eval);
         }
     }
 </script>

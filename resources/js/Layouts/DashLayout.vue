@@ -51,7 +51,6 @@ export default {
     },
     watch: {
         pageToast: function(newVal, oldVal) { // watch it
-            console.log(newVal);console.log(oldVal);
             if(Object.keys(newVal).length){
                 this.$toast.add({severity:newVal.type, summary: newVal.message, detail:newVal.detail, life: 3000});
             }

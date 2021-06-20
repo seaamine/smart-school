@@ -18,14 +18,6 @@
 
         </li>
 
-        <li class="nav-item">
-            <inertia-link class="flex items-center" @click="changeActiveLink('class.*')" :class="{ 'active': activeLink == 'class.*' }" :href="route('class.index')">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-4 flex-shrink" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                </svg>
-                <span>Classes</span>
-            </inertia-link>
-        </li>
         <li class="nav-item"  >
             <inertia-link class="flex items-center" @click="changeActiveLink('teacher.exam-notes')" :class="{ 'active': activeLink == 'teacher.exam-notes' }" :href="route('teacher.exam-notes')">
                 <svg class="h-6 w-6 mr-4 flex-shrink font-bold" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -87,7 +79,6 @@
         },
         methods:{
             changeActiveLink: function(routeName) {
-                console.log(routeName);
                 this.activeLink = routeName;
             },
         },

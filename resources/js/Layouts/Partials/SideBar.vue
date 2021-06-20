@@ -137,7 +137,6 @@
     },
         methods:{
             changeActiveLink: function(routeName) {
-                console.log(routeName);
                 this.activeLink = routeName;
             },
         },

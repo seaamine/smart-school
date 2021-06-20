@@ -18,6 +18,11 @@ use Inertia\Inertia;
 class TeacherController extends Controller
 {
     //
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('role:teacher');
+    }
     public function indexExam(){
         $academicYear= AppHelper::getAcademicYear();
         if(!isset($academicYear)){
@@ -83,9 +88,7 @@ class TeacherController extends Controller
                 ->select('students.*','registrations.group','registrations.regi_no','exams_notes.trimester','exams_notes.exam_id','exams_notes.id as note_id','exams_notes.note_eval','exams_notes.note_devoir','exams_notes.note_exam','exams_notes.remarque')
                 ->get();
             foreach ($students as $student){
-                if($student->trimester === '2' && $student->exam_id == null){
-                    dd($student,"level 2");
-                };
+
                 if(!isset($classesStudents[$class->id][$student->id])){
                     $classesStudents[$class->id][$student->id]=[
                         'id'=>$student->id,

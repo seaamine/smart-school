@@ -60,46 +60,48 @@ Route::get('/students/edit',  [\App\Http\Controllers\AdminController::class,'edi
 Route::patch('/students/edit',  [\App\Http\Controllers\AdminController::class,'updateStudent'])->name('student.update');
 
 Route::get('/teachers',  [\App\Http\Controllers\AdminController::class,'indexTeacher'])
-    ->name('teacher.index')->middleware('auth');;
+    ->name('teacher.index');
 Route::get('/teachers/add',  [\App\Http\Controllers\AdminController::class,'addTeacher'])
-    ->name('teacher.add')->middleware('auth');;
+    ->name('teacher.add');
 Route::post('/teachers/add',  [\App\Http\Controllers\AdminController::class,'storeTeacher'])
-    ->name('teacher.store')->middleware('auth');
+    ->name('teacher.store');
 Route::get('/teachers/edit',  [\App\Http\Controllers\AdminController::class,'editTeacher'])
-    ->name('teacher.edit')->middleware('auth');;
+    ->name('teacher.edit');
 Route::post('/teachers/edit',  [\App\Http\Controllers\AdminController::class,'updateTeacher'])
-    ->name('teacher.patch')->middleware('auth');
+    ->name('teacher.patch');
 
 Route::get('/school-certificate/tempalte',  [\App\Http\Controllers\AdminController::class,'editSchoolCertificate'])
-    ->name('school-certificate.edit')->middleware('auth');
+    ->name('school-certificate.edit');
 Route::post('/school-certificate/template',  [\App\Http\Controllers\AdminController::class,'updateSchoolCertificate'])
-    ->name('school-certificate.update')->middleware('auth');
+    ->name('school-certificate.update');
 Route::get('/school-certificate/request',  [\App\Http\Controllers\StudentController::class,'requestCertifciate'])
-    ->name('school-certificate.request')->middleware('auth');
+    ->name('school-certificate.request');
 
-Route::get('/school-certificate/download',  [\App\Http\Controllers\AdminController::class,'downloadSchoolCertificate'])
-    ->name('school-certificate.download')->middleware('auth');
+Route::get('/school-certificate/download',  [\App\Http\Controllers\StudentController::class,'downloadSchoolCertificate'])
+    ->name('school-certificate.download');
 
 Route::get('/teachers-classes',  [\App\Http\Controllers\AdminController::class,'indexTeachersClasses'])
-    ->name('teacher-class.index')->middleware('auth');
+    ->name('teacher-class.index');
 Route::get('/teachers-classes/update-class-teachers',  [\App\Http\Controllers\AdminController::class,'updateTeachersClasses'])
-    ->name('teacher-class.update')->middleware('auth');
+    ->name('teacher-class.update');
 Route::post('/teachers-classes/update-class-teachers',  [\App\Http\Controllers\AdminController::class,'storeUpdateTeachersClasses'])
-    ->name('teacher-class.storeUpdate')->middleware('auth');
+    ->name('teacher-class.storeUpdate');
 
 Route::get('/exams',  [\App\Http\Controllers\AdminController::class,'indexExam'])
-    ->name('exam.index')->middleware('auth');
+    ->name('exam.index');
 Route::post('/exams',  [\App\Http\Controllers\AdminController::class,'updateExam'])
-    ->name('exam.update')->middleware('auth');
+    ->name('exam.update');
 
 Route::get('/login-as',  [\App\Http\Controllers\AdminController::class,'loginAs'])
     ->name('login_as');
 
 Route::get('/teacher/exams',  [\App\Http\Controllers\TeacherController::class,'indexExam'])
-    ->name('teacher.exam-notes')->middleware('auth');
+    ->name('teacher.exam-notes');
 Route::post('/teacher/exams/update-notes',  [\App\Http\Controllers\TeacherController::class,'updateExamNotes'])
-    ->name('teacher.update-exam-notes')->middleware('auth');
+    ->name('teacher.update-exam-notes');
 
+Route::get('/exams/student-notes',  [\App\Http\Controllers\StudentController::class,'examNotes'])
+    ->name('student.exams-notes');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');
