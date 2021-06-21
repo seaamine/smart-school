@@ -52,7 +52,7 @@ class AdminController extends Controller
     }
 
     public function indexAcademicYear(){
-        $academicYears=AcademicYear::select('title','start_date','end_date','status')->get();
+        $academicYears=AcademicYear::select('id','title','start_date','end_date','status')->get();
         return Inertia::render('AcademicYear/Index', ['yearsData'=>$academicYears
         ]);
     }
@@ -62,6 +62,16 @@ class AdminController extends Controller
     }
     public function storeAcademicYear(Request $request)
     {
+        $validated = $request->validate([
+            'title' => 'required|unique:App\Models\AcademicYear,title|max:255',
+            'sdate' => 'required|date',
+            'edate' => 'required|date|after:sdate',
+        ]);
+        $conflictingAY=AcademicYear::where('end_date','>',$request->input('sdate'))->where('start_date','<',$request->input('sdate'))->first();
+        if($conflictingAY){
+            session()->flash("toast",['type'=>'error','summary'=>'Opération a échoué','detail'=>'la date de début de la nouvelle année académique est en conflit avec les dates de l\'année académique '.$conflictingAY->title]);
+            return redirect()->route('academicYear.create');
+        }
         $aYear = new AcademicYear;
         $aYear->title=$request->input('title');
         $aYear->start_date=$request->input('sdate');
@@ -76,7 +86,18 @@ class AdminController extends Controller
         $aYear->save();
         return Redirect::route('academicYear.index');
     }
+    public function changeCurrentAcademicYear(Request $request){
+        $validated = $request->validate([
+            'id' => 'required|exists:App\Models\AcademicYear,id',
+        ]);
+        AcademicYear::where('status','1')->update(['status'=>'0']);
 
+        AcademicYear::where('id',$request->input('id'))->update(['status'=>'1']);
+        return response()->json([
+            'toast' => ['type'=>'success', 'summary'=>'L\'opération réussie','detail' => 'l\'année académique a été définie comme année académique active'],
+            'type' => 'success',
+        ]);
+    }
     public function indexSubjects(){
         $subjects= Subject::all();
         return Inertia::render('Subject/Index', ['subjects'=>$subjects

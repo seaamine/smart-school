@@ -35,6 +35,7 @@ Route::patch('/users/credentials',  [\App\Http\Controllers\AdminController::clas
 Route::get('/academic-years',  [\App\Http\Controllers\AdminController::class,'indexAcademicYear'])->name('academicYear.index');
 Route::get('/academic-years/create', [\App\Http\Controllers\AdminController::class,'createAcademicYear'])->name('academicYear.create');
 Route::post('/academic-years/create', [\App\Http\Controllers\AdminController::class,'storeAcademicYear'])->name('academicYear.store');
+Route::post('/academic-years/change-current', [\App\Http\Controllers\AdminController::class,'changeCurrentAcademicYear'])->name('academicYear.change-current');
 
 Route::get('/subjects',  [\App\Http\Controllers\AdminController::class,'indexSubjects'])->name('subject.index');
 Route::get('/subjects/add',  [\App\Http\Controllers\AdminController::class,'addSubject'])->name('subject.add');
