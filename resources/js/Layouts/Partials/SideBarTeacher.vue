@@ -65,7 +65,7 @@
 				c-3.336-3.337-8.73-3.337-12.066,0s-3.337,8.73,0,12.066L121.951,321.766z"/>
 
                 </svg>
-                <span>Exames</span>
+                <span>Examens</span>
             </inertia-link>
         </li>
     </ul>

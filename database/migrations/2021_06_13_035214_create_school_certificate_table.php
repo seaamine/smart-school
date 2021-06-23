@@ -14,7 +14,7 @@ class CreateSchoolCertificateTable extends Migration
     public function up()
     {
         Schema::create('school_certificate', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->text('template')->nullable();
             $table->string('school_seal')->nullable();
             $table->softDeletes();

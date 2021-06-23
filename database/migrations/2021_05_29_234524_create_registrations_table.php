@@ -14,7 +14,7 @@ class CreateRegistrationsTable extends Migration
     public function up()
     {
         Schema::create('registrations', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->string('regi_no',20);
             $table->unsignedInteger('student_id');
             $table->enum('level', [1,2,3,4])->default(1);

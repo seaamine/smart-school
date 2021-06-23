@@ -115,7 +115,7 @@
 
                 </svg>
 
-                <span>Exames</span>
+                <span>Examens</span>
             </inertia-link>
         </li>
         <li class="nav-item">

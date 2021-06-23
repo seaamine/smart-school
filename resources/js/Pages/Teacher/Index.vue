@@ -15,13 +15,15 @@
     <div class="card p-6">
         <DataTable :sortOrder="1" :value="teachers" groupRowsBy="subject.name"
                    responsiveLayout="scroll" rowGroupMode="subheader" sortField="subject.name" sortOrder="1" scrollable scrollHeight="65vh" class=""
-                   :loading="loading1" v-model:filters="filters1" :globalFilterFields="['first_anme', 'last_anme', 'dob', 'qualification','subject.name']"
-                   :paginator="true" :rows="10"
+                   :loading="loading1" v-model:filters="filters1" :globalFilterFields="['first_name', 'last_name', 'dob', 'qualification','subject.name']"
+                   :paginator="true" :rows="50"
         >
             <template #header>
                 <div class="flex justify-end">
                     <span class="p-input-icon-left">
-                            <i class="pi pi-search" />
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
                             <input class="form-control" style="padding-left: 30px;" type="text" v-model="filters1['global'].value" placeholder="Keyword Search" />
                         </span>
                 </div>

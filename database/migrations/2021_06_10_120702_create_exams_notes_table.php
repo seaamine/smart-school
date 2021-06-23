@@ -14,7 +14,7 @@ class CreateExamsNotesTable extends Migration
     public function up()
     {
         Schema::create('exams_notes', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->unsignedInteger('academic_year_id')->nullable();
             $table->unsignedInteger('exam_id')->nullable();
             $table->enum('trimester', [1,2,3])->default('1');

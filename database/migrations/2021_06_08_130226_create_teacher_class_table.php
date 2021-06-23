@@ -14,7 +14,7 @@ class CreateTeacherClassTable extends Migration
     public function up()
     {
         Schema::create('teacher_class', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->unsignedInteger('teacher_id')->nullable();
             $table->unsignedInteger('class_id')->nullable();
             $table->unsignedInteger('subject_id')->nullable();

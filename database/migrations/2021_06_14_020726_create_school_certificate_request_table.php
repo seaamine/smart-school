@@ -14,7 +14,7 @@ class CreateSchoolCertificateRequestTable extends Migration
     public function up()
     {
         Schema::create('school_certificate_request', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->string('certificate_no',20);
             $table->enum('level', [1,2,3,4])->default(1);
             $table->unsignedInteger('student_id');

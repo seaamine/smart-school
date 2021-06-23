@@ -9,8 +9,9 @@
         </div>
     </div>
     <div class="card p-6">
-        <DataTable dataKey="id"  :loading="loading" :paginator="true" :rows="25" :sortOrder="1" :value="students" groupRowsBy="level"
-                   responsiveLayout="scroll" rowGroupMode="rowspan" sortField="level" sortMode="single">
+        <DataTable dataKey="id"  :paginator="true" :rows="25" :sortOrder="1" :value="students" groupRowsBy="level"
+                   responsiveLayout="scroll" rowGroupMode="rowspan" sortField="level" sortMode="single"
+                   :loading="loading1" v-model:filters="filters1" :globalFilterFields="['first_name', 'last_name', 'dob']">
             <template #loading>
                 Chargement des données des étudiants. S'il vous plaît, attendez.
             </template>
@@ -20,8 +21,10 @@
             <template #header>
                 <div class="flex justify-end">
                         <span class="p-input-icon-left ">
-                            <i class="pi pi-search" />
-                            <input type="text" v-model="search" class="form-control" style="padding-left: 30px;" placeholder="Keyword Search">
+                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                            <input v-model="filters1['global'].value" type="text" class="form-control" style="padding-left: 30px;" placeholder="Keyword Search">
                         </span>
                 </div>
             </template>
@@ -95,6 +98,9 @@
 import DashLayout from '@/Layouts/DashLayout';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
+import {FilterMatchMode,FilterOperator} from 'primevue/api';
+import { ref  } from 'vue';
+
 export default {
     name: "index",
     layout: DashLayout,
@@ -108,6 +114,28 @@ export default {
     },
     methods: {},
     components: {DataTable, Column},
+    setup(props){
+        const filters1 = ref({
+            'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+            'first_name': {operator: FilterOperator.AND, constraints: [{value: null, matchMode: FilterMatchMode.CONTAINS}]},
+            'last_name': {operator: FilterOperator.AND, constraints: [{value: null, matchMode: FilterMatchMode.CONTAINS}]},
+            'dob': {operator: FilterOperator.AND, constraints: [{value: null, matchMode: FilterMatchMode.DATE_IS}]},
+        });
+        const loading1 = ref(false);
+        const clearFilter1 = () => {
+            initFilters1();
+        };
+        const initFilters1 = () => {
+            filters1.value = {
+                'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+                'first_name': {operator: FilterOperator.AND, constraints: [{value: null, matchMode: FilterMatchMode.CONTAINS}]},
+                'last_name': {operator: FilterOperator.AND, constraints: [{value: null, matchMode: FilterMatchMode.CONTAINS}]},
+                'dob': {operator: FilterOperator.AND, constraints: [{value: null, matchMode: FilterMatchMode.DATE_IS}]},
+            }
+        };
+
+        return { filters1,loading1, clearFilter1, initFilters1}
+    },
 }
 </script>
 

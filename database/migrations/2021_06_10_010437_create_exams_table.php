@@ -14,7 +14,7 @@ class CreateExamsTable extends Migration
     public function up()
     {
         Schema::create('exams', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->enum('trimester', [1,2,3])->default('1');
             $table->unsignedInteger('academic_year_id')->nullable();
             $table->enum('status', [0,1])->default('1');
