@@ -36,9 +36,6 @@
             <Column field="last_name" header="Nom" :sortable="true"></Column>
             <Column field="first_name" header="Prénom" :sortable="true"></Column>
             <Column field="dob" header="Date de naissaince" :sortable="true">
-                <template #body="slotProps">
-                    {{ formatDate(slotProps.data.dob) }}
-                </template>
             </Column>
             <Column field="status" header="Status" :sortable="true">
                 <template #body="slotProps">
@@ -114,12 +111,17 @@ export default {
     },
     methods: {},
     components: {DataTable, Column},
+    mounted() {
+        this.students.forEach(student =>{
+            student.dob = this.formatDate(student.dob);
+        });
+    },
     setup(props){
         const filters1 = ref({
             'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
             'first_name': {operator: FilterOperator.AND, constraints: [{value: null, matchMode: FilterMatchMode.CONTAINS}]},
             'last_name': {operator: FilterOperator.AND, constraints: [{value: null, matchMode: FilterMatchMode.CONTAINS}]},
-            'dob': {operator: FilterOperator.AND, constraints: [{value: null, matchMode: FilterMatchMode.DATE_IS}]},
+            'dob': {operator: FilterOperator.AND, constraints: [{value: null, matchMode: FilterMatchMode.CONTAINS}]},
         });
         const loading1 = ref(false);
         const clearFilter1 = () => {
@@ -130,7 +132,7 @@ export default {
                 'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
                 'first_name': {operator: FilterOperator.AND, constraints: [{value: null, matchMode: FilterMatchMode.CONTAINS}]},
                 'last_name': {operator: FilterOperator.AND, constraints: [{value: null, matchMode: FilterMatchMode.CONTAINS}]},
-                'dob': {operator: FilterOperator.AND, constraints: [{value: null, matchMode: FilterMatchMode.DATE_IS}]},
+                'dob': {operator: FilterOperator.AND, constraints: [{value: null, matchMode: FilterMatchMode.CONTAINS}]},
             }
         };
 

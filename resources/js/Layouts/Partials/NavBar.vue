@@ -20,7 +20,7 @@
                 <MenuButton class="relative flex content-center">
                     <div class="text-right mr-3 flex flex-col">
                         <p class="font-semibold">{{ $page.props.user.name }}</p>
-                        <span class="text-sm leading-3">{{ $page.props.user.role }}</span>
+                        <span class="text-sm leading-3">{{ roleText($page.props.user.role) }}</span>
                     </div>
                     <span>
                         <img style="width: 40px; height: 40px" :src="$page.props.user.photo_url">
@@ -51,6 +51,19 @@ export default {
         MenuButton,
         MenuItems,
         MenuItem,
+    },
+    methods:{
+      roleText(role){
+          if(role === 'student'){
+              return 'étudiant';
+          }else if(role === 'teacher'){
+              return 'enseignant';
+          }else if(role === 'admin'){
+              return 'administrateur';
+          }else{
+              return '';
+          }
+      }
     },
 }
 </script>
