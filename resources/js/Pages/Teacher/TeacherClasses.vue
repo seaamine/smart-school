@@ -10,6 +10,7 @@
         </ul>
     </div>
     <div class="card p-6">
+        <p class="mb-4"><b>Année Academic: </b>{{academicYear.title}}</p>
         <div v-for="levelclasses in classes" class="pb-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 justify-items-center">
             <Card v-for="classe in levelclasses" @click="updateClassTeachers(classe.id)" class="click-card w-52">
                 <template #header>
@@ -41,6 +42,7 @@ export default {
         selectedTeachersCount: Object,
         errors: Object,
         classes: Array,
+        academicYear: Object,
     },
     methods: {
         levelName: function(level){
